@@ -60,11 +60,12 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("user", user);
 			
 			String site = request.getContextPath();
-			 
-	        response.setStatus(response.SC_MOVED_TEMPORARILY);
-	        response.setHeader("Location", site);
+//			 
+//	        response.setStatus(response.SC_MOVED_TEMPORARILY);
+//	        response.setHeader("Location", site);
 			
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
+//			request.getRequestDispatcher("/index.jsp").forward(request, response);
+			response.sendRedirect(site);
 			return;
 		} else {
 			request.setAttribute("errMessage", "Tên đăng nhập hoặc mật khẩu không đúng");

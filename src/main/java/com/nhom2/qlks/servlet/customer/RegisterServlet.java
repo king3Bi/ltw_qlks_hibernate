@@ -38,7 +38,7 @@ public class RegisterServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
-		request.setAttribute("errMessage", "");
+//		request.setAttribute("errMessage", "");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/customer/register.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -75,7 +75,7 @@ public class RegisterServlet extends HttpServlet {
 		}
 		
 		if (!matKhau.equals(matKhau2)) {
-			err_msg = "Xác nhận mật khẩu không đùng";
+			err_msg = "Xác nhận mật khẩu không đúng";
 			request.setAttribute("errMessage", err_msg);
 			request.getRequestDispatcher("/WEB-INF/views/customer/register.jsp").forward(request, response);
 			return;
@@ -89,9 +89,18 @@ public class RegisterServlet extends HttpServlet {
 		user.setEmail(email);
 		user.setSdt(sdt);
 		user.setTenDangNhap(tenDangNhap);
-		user.setMatKhau(new Utils().strToMD5(matKhau));
+		user.setMatKhau(matKhau);
 		user.setIdQuyen(idQuyen);
 		user.setKichHoat(kichHoat);
+		
+		String errCheckUser = new Utils().checkRegister(user);
+		if (errCheckUser != null) {
+			request.setAttribute("errMessage", errCheckUser);
+			request.getRequestDispatcher("/WEB-INF/views/customer/register.jsp").forward(request, response);
+			return;
+		}
+		
+		user.setMatKhau(new Utils().strToMD5(matKhau));
 		
 		UserDao userDao = new UserDao();
 		
@@ -102,10 +111,11 @@ public class RegisterServlet extends HttpServlet {
 			
 			String site = request.getContextPath();
 			 
-	        response.setStatus(response.SC_MOVED_TEMPORARILY);
-	        response.setHeader("Location", site);
-			
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
+//	        response.setStatus(response.SC_MOVED_TEMPORARILY);
+//	        response.setHeader("Location", site);
+//			
+//			request.getRequestDispatcher("/index.jsp").forward(request, response);
+			response.sendRedirect(site);
 			return;
 		} else {
 			request.setAttribute("errMessage", err_msg);

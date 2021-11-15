@@ -1,0 +1,73 @@
+package com.nhom2.qlks.hibernate.pojo;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "khach_hang")
+public class KhachHang implements Serializable {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_khach", nullable = false)
+	private int idKhach;
+	
+	@Column(name = "ho_ten", nullable = false)
+	private String ho_ten;
+	
+	@Column(name = "cmnd", nullable = false, unique = true)
+	private String cmnd;
+	
+	@Column(name = "dia_chi", nullable = false)
+	private String diaChi;
+	
+	@Column(name = "id_booking")
+	private int idBooking;
+
+	public int getIdKhach() {
+		return idKhach;
+	}
+
+	public void setIdKhach(int idKhach) {
+		this.idKhach = idKhach;
+	}
+
+	public String getHo_ten() {
+		return ho_ten;
+	}
+
+	public void setHo_ten(String ho_ten) {
+		this.ho_ten = ho_ten;
+	}
+
+	public String getCmnd() {
+		return cmnd;
+	}
+
+	public void setCmnd(String cmnd) {
+		this.cmnd = cmnd;
+	}
+
+	public String getDiaChi() {
+		return diaChi;
+	}
+
+	public void setDiaChi(String diaChi) {
+		this.diaChi = diaChi;
+	}
+
+	public int getIdBooking() {
+		return idBooking;
+	}
+
+	public void setIdBooking(int idBooking) {
+		this.idBooking = idBooking;
+	}
+
+}

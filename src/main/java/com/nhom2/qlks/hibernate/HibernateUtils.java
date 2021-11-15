@@ -8,6 +8,13 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
+import com.nhom2.qlks.hibernate.pojo.Booking;
+import com.nhom2.qlks.hibernate.pojo.HoaDon;
+import com.nhom2.qlks.hibernate.pojo.KhachHang;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.pojo.Phong;
+import com.nhom2.qlks.hibernate.pojo.Quyen;
+import com.nhom2.qlks.hibernate.pojo.TrangThai;
 import com.nhom2.qlks.hibernate.pojo.User;
 
 public class HibernateUtils {
@@ -27,6 +34,13 @@ public class HibernateUtils {
 //		
 //		conf.setProperties(props);
 		conf.addAnnotatedClass(User.class);
+		conf.addAnnotatedClass(LoaiPhong.class);
+		conf.addAnnotatedClass(Booking.class);
+		conf.addAnnotatedClass(HoaDon.class);
+		conf.addAnnotatedClass(KhachHang.class);
+		conf.addAnnotatedClass(Phong.class);
+		conf.addAnnotatedClass(Quyen.class);
+		conf.addAnnotatedClass(TrangThai.class);
 		
 		ServiceRegistry registry =  new StandardServiceRegistryBuilder()
 				.applySettings(conf.getProperties()).build();

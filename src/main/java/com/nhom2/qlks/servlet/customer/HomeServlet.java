@@ -1,24 +1,29 @@
 package com.nhom2.qlks.servlet.customer;
 
 import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import com.nhom2.qlks.hibernate.daos.LoaiPhongDao;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 
 /**
- * Servlet implementation class LogoutServlet
+ * Servlet implementation class HomeServlet
  */
-@WebServlet("/logout")
-public class LogoutServlet extends HttpServlet {
+@WebServlet("")
+public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LogoutServlet() {
+    public HomeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,19 +34,13 @@ public class LogoutServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
-		request.setCharacterEncoding("UTF-8");
 		
-		HttpSession session =  request.getSession();
-		session.invalidate();
+		List<LoaiPhong> loaiPhongs = new LoaiPhongDao().getAllLoaiPhong();
 		
-		String site = request.getContextPath();
+		request.setAttribute("loaiPhongs", loaiPhongs);
 		
-//		response.setStatus(response.SC_MOVED_TEMPORARILY);
-//        response.setHeader("Location", site);
-		
-//		request.getRequestDispatcher("/index.jsp").forward(request, response);
-		response.sendRedirect(site);
-		return;
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**

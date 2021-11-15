@@ -59,6 +59,43 @@ public class UserDao {
         return err_msg;
 	}
 	
+	public String resetPassword(String username, String newPassword) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            Query query = session.createQuery("UPDATE User SET matKhau=:newPassword"
+            		+ " WHERE tenDangNhap=:username");
+			query.setParameter("newPassword", newPassword);
+			query.setParameter("username", username);
+			int result = query.executeUpdate();
+			
+            System.out.println("update user");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
 	private boolean checkUsername(String username) {
 		if (getUserByUsername(username) != null) {
 			return true;

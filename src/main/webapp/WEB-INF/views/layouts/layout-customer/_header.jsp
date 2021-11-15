@@ -19,7 +19,7 @@
     		<%User user = (User) session.getAttribute("user");%>
     		<% if (user != null) { %>
     			<a class="fas fa-shopping-cart" href=""></a>
-    			<a href="<%=request.getContextPath()%>/">
+    			<a href="<%=request.getContextPath()%>/<%=user.getTenDangNhap()%>/">
 	              <%= user.getHoTen() %>  
 	            </a>
     			<a href="<%=request.getContextPath()%>/logout">Đăng xuất</a>
