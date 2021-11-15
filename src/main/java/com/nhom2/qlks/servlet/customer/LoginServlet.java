@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.nhom2.qlks.hibernate.daos.UserDao;
 import com.nhom2.qlks.hibernate.pojo.User;
+import com.nhom2.qlks.utils.Utils;
 
 /**
  * Servlet implementation class LoginServlet
@@ -48,10 +49,11 @@ public class LoginServlet extends HttpServlet {
 		String err_msg = "";
 		
 		String tenDangNhap = request.getParameter("username");
-		String matKhau = request.getParameter("password");
+		String matKhau = new Utils().strToMD5(request.getParameter("password"));
+		int idQuyen = 3;
 		
 		UserDao userDao = new UserDao();
-		if (userDao.loginUser(tenDangNhap, matKhau)) {
+		if (userDao.loginUser(tenDangNhap, matKhau, idQuyen)) {
 			User user = userDao.getUserByUsername(tenDangNhap);
 			
 			HttpSession session = request.getSession(true);

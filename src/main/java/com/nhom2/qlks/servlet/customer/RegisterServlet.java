@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import com.nhom2.qlks.hibernate.daos.UserDao;
 import com.nhom2.qlks.hibernate.pojo.User;
+import com.nhom2.qlks.utils.Utils;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -88,7 +89,7 @@ public class RegisterServlet extends HttpServlet {
 		user.setEmail(email);
 		user.setSdt(sdt);
 		user.setTenDangNhap(tenDangNhap);
-		user.setMatKhau(matKhau);
+		user.setMatKhau(new Utils().strToMD5(matKhau));
 		user.setIdQuyen(idQuyen);
 		user.setKichHoat(kichHoat);
 		

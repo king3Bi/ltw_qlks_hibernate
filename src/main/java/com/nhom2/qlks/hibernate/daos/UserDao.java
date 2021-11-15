@@ -155,13 +155,16 @@ public class UserDao {
 		return null;
 	}
 
-	public boolean loginUser(String username, String password) {
+	public boolean loginUser(String username, String password, int idQuyen) {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.
-				createQuery("FROM User WHERE tenDangNhap=:username AND matKhau=:password AND idQuyen=3");//HQL
+				createQuery("FROM User WHERE tenDangNhap=:username "
+						+ "AND matKhau=:password "
+						+ "AND idQuyen=:idQuyen");//HQL
 		
 		q.setParameter("username", username);
 		q.setParameter("password", password);
+		q.setParameter("idQuyen", idQuyen);
 		q.setFirstResult(0);
 		q.setMaxResults(1);
 		
