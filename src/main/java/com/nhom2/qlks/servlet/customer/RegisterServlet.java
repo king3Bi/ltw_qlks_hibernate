@@ -100,6 +100,11 @@ public class RegisterServlet extends HttpServlet {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("user", user);
 			
+			String site = request.getContextPath();
+			 
+	        response.setStatus(response.SC_MOVED_TEMPORARILY);
+	        response.setHeader("Location", site);
+			
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 			return;
 		} else {

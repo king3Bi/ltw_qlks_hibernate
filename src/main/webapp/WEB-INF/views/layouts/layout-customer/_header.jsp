@@ -1,3 +1,4 @@
+<%@page import="com.nhom2.qlks.hibernate.pojo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
@@ -15,6 +16,14 @@
     </nav>
 
     <nav class="navbar">
+    		<%User user = (User) session.getAttribute("user");%>
+    		<% if (user != null) { %>
+    			<a class="fas fa-shopping-cart" href=""></a>
+    			<a href="<%=request.getContextPath()%>/">
+	              <%= user.getHoTen() %>  
+	            </a>
+    			<a href="<%=request.getContextPath()%>/logout">Đăng xuất</a>
+    		<% } else { %>
      <!--   <!--  {% if current_user.is_authenticated %} 
             <a class="fas fa-shopping-cart" href=""></a>
             <a href="/">
@@ -22,8 +31,10 @@
             </a>
             <a class="nav-link" href="/logout">Đăng xuất</a> -->
        <!--  {% else %} -->
+       		
             <a href="<%=request.getContextPath()%>/login">Đăng nhập</a>
             <a href="<%=request.getContextPath()%>/register">Đăng ký</a>
+            <% } %>
        <!--  {% endif %} -->
     </nav>
 
