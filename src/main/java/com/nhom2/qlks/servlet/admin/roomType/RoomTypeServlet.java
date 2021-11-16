@@ -1,6 +1,7 @@
-package com.nhom2.qlks.servlet.admin;
+package com.nhom2.qlks.servlet.admin.roomType;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,17 +10,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nhom2.qlks.hibernate.daos.LoaiPhongDao;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+
 /**
- * Servlet implementation class AdminServlet
+ * Servlet implementation class RoomType
  */
-@WebServlet("/admin")
-public class AdminServlet extends HttpServlet {
+@WebServlet("/room-type")
+public class RoomTypeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AdminServlet() {
+    public RoomTypeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,7 +35,11 @@ public class AdminServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/home-admin.jsp");
+		List<LoaiPhong> lps = new LoaiPhongDao().getAllLoaiPhong();
+		
+		request.setAttribute("loaiPhongs", lps);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-type-admin/room-type-admin.jsp");
 		dispatcher.forward(request, response);
 	}
 
