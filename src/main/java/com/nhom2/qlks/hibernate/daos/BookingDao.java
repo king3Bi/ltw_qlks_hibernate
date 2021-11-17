@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 
 import com.nhom2.qlks.hibernate.HibernateUtils;
 import com.nhom2.qlks.hibernate.pojo.Booking;
+import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
 
 public class BookingDao {
@@ -67,6 +68,23 @@ public class BookingDao {
         	   session.close();
         }
         return err_msg;
+	}
+	
+	public Booking getBookingById(int id) {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE idBooking=:id");//HQL
+		
+		q.setParameter("id", id);
+		q.setFirstResult(0);
+		q.setMaxResults(1);
+		
+		List<Booking> bookings = q.getResultList();
+		
+		if (bookings.size() > 0) {
+			return bookings.get(0);
+		}
+		
+		return null;
 	}
 	
 	private boolean checkCheckIn(Date checkin) {
