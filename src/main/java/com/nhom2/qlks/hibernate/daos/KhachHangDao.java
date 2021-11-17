@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.nhom2.qlks.hibernate.HibernateUtils;
+import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.KhachHang;
 
 public class KhachHangDao {
@@ -18,15 +19,15 @@ public class KhachHangDao {
 		
         
         if (checkHoTen(khachhang.getHo_ten())) {
-        	return err_msg = "Họ Tên đã tồn tại";
+        	return err_msg = "Ho ten da ton tai";
         }
         
         if (checkCmnd(khachhang.getCmnd())) {
-        	return err_msg = "Cmnd đã tồn tại";
+        	return err_msg = "Cmnd da ton tai";
         }
         
         if (checkDiaChi(khachhang.getDiaChi())) {
-        	return err_msg = "Địa chỉ đã tồn tại";
+        	return err_msg = "Dia chi da ton tai";
         }
         
 
@@ -40,7 +41,7 @@ public class KhachHangDao {
             
             // save the student object
             session.save(khachhang);       
-            System.out.println("saved user");
+            System.out.println("saved khachhang");
             // commit transaction
             transaction.commit();
             System.out.println("commited transaction");
@@ -59,7 +60,88 @@ public class KhachHangDao {
         return err_msg;
 	}
 	
+	public String updateKhachHang(int id,String hoten,String cmnd,String diachi) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            Query query = session.createQuery("UPDATE KhachHang SET ho_ten=:hoten,cmnd=:cmnd,diaChi=:diachi"
+            		+ " WHERE idKhach=:id");
+			query.setParameter("hoten", hoten);
+			query.setParameter("cmnd", cmnd);
+			query.setParameter("diachi", diachi);
+			query.setParameter("id", id);
+			int result = query.executeUpdate();
+			
+            System.out.println("update khachhang");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
 	
+	public String deleteKhachHang(int id) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            Query query = session.createQuery("DELETE FROM KhachHang WHERE idKhach=:id");
+			query.setParameter("id", id);
+			int result = query.executeUpdate();
+			
+            System.out.println("delete Khach");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
+	public List<KhachHang> getAllKhachHang() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM KhachHang");//HQL
+		
+		List<KhachHang> khachhangs = q.getResultList();
+		
+		return khachhangs;
+	}
 	
 	public KhachHang getIdKhach(int idkhach) {
 		Session session = HibernateUtils.getFactory().openSession();
