@@ -11,6 +11,7 @@ import org.hibernate.Transaction;
 import com.nhom2.qlks.hibernate.HibernateUtils;
 import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
 
 public class BookingDao {
@@ -18,27 +19,27 @@ public class BookingDao {
 		String err_msg = "";
 		
 		if (checkCheckIn(booking.getCheckIn())) {
-    		return err_msg = "Check in đã tồn tại";
+    		return err_msg = "Check in da ton tai";
         }
         
         if (checkCheckOut(booking.getCheckOut())) {
-        	return err_msg = "Check out đã tồn tại";
+        	return err_msg = "Check out da ton tai";
         }
         
         if (checkDonGia(booking.getDonGia())) {
-        	return err_msg = "Đơn giá đã tồn tại";
+        	return err_msg = "Don gia da ton tai";
         }
         
         if (checkSoNguoi(booking.getSoNguoi())) {
-        	return err_msg = "Đơn giá đã tồn tại";
+        	return err_msg = "So nguoi da ton tai";
         }
         
 //        if (checkCoNguoiNuocNgoai(booking.isCoNguoiNuocNgoai())) {
-//        	return err_msg = "Có người nước ngoài";
+//        	return err_msg = "CÃ³ ngÆ°á»�i nÆ°á»›c ngoÃ i";
 //        }
 //        
 //        if (checkDatOnline(booking.setDatOnline())) {
-//        	return err_msg = "Có đặt online";
+//        	return err_msg = "CÃ³ Ä‘áº·t online";
 //        }
 		
 		Transaction transaction = null;
@@ -68,6 +69,87 @@ public class BookingDao {
         	   session.close();
         }
         return err_msg;
+	}
+	
+	public String updateBooking(int id,int songuoi,boolean conguoinuocngoai,Date checkin,Date checkout) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            Query query = session.createQuery("UPDATE Booking SET soNguoi=:songuoi,coNguoiNuocNgoai=:conguoinuocngoai,checkIn=:checkin,CheckOut=:checkout"
+            		+ " WHERE idBooking=:id");
+			query.setParameter("songuoi", songuoi);
+			query.setParameter("id", id);
+			int result = query.executeUpdate();
+			
+            System.out.println("update Booking");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
+	public String deleteBooking(int id) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            Query query = session.createQuery("DELETE FROM Booking WHERE idBooking=:id");
+			query.setParameter("id", id);
+			int result = query.executeUpdate();
+			
+            System.out.println("delete Booking");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
+	public List<Booking> getAllBooking() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking");//HQL
+		
+		List<Booking> bookings = q.getResultList();
+		
+		return bookings;
 	}
 	
 	public Booking getBookingById(int id) {

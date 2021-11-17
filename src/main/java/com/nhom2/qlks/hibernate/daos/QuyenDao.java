@@ -48,6 +48,78 @@ public class QuyenDao {
         return err_msg;
 	}
 	
+	public String updateQuyen(int id,String tenquyen) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            Query query = session.createQuery("UPDATE Quyen SET tenQuyen=:tenquyen"
+            		+ " WHERE idQuyen=:id");
+			query.setParameter("tenquyen", tenquyen);
+			query.setParameter("id", id);
+			int result = query.executeUpdate();
+			
+            System.out.println("update quyen");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
+	public String deleteQuyen(int id) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            Query query = session.createQuery("DELETE FROM Quyen WHERE idPhong=:id");
+			query.setParameter("id", id);
+			int result = query.executeUpdate();
+			
+            System.out.println("delete quyen");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
 	public List<Quyen> getAllQuyen() {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM Quyen");//HQL
