@@ -1,3 +1,6 @@
+<%@page import="com.nhom2.qlks.hibernate.pojo.TrangThai"%>
+<%@page import="com.nhom2.qlks.hibernate.pojo.LoaiPhong"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -19,5 +22,53 @@
 	</head>
 	<body>
 		<jsp:include page="/WEB-INF/views/layouts/layout-admin/_header-admin.jsp"></jsp:include>
+		
+		<div class="container">
+			<ul class="nav nav-tabs">
+				<%  %>
+			  <li class="nav-item">
+			    <a class="nav-link" href="<%=request.getContextPath()%>/room">All</a>
+			  </li>
+			  <% List<LoaiPhong> lps = (List<LoaiPhong>) request.getAttribute("loaiPhongs"); %>
+			  <% for (LoaiPhong lp : lps) { %>
+			  <li class="nav-item">
+			    <a class="nav-link" href="<%=request.getContextPath()%>/room?room-type=<%= lp.getIdLoaiPhong() %>"><%= lp.getTenLoaiPhong() %></a>
+			  </li>
+			  <% } %>
+			  <li class="nav-item">
+			    <a class="nav-link active" href="<%=request.getContextPath()%>/room/insert">Create</a>
+			  </li>
+			</ul>
+		
+			<form action="" method="post">
+			  <div class="form-group">
+			    <label for="room-name">Tên phòng:</label>
+			    <input type="text" id="room-name" class="form-control" placeholder="Nhập tên phòng" name="room-name">
+			  </div>
+			  <div class="form-group">
+			    <label for="room-type">Loại phòng:</label>
+			    <select id="room-type" name="room-type" class="custom-select">
+				    <option disabled>Chọn loại phòng</option>
+					<% for (LoaiPhong lp : lps) { %>
+					
+					<option value="<%= lp.getIdLoaiPhong() %>"><%= lp.getTenLoaiPhong() %></option>
+		      		<% } %>
+		      	</select>
+			  </div>
+			  <div class="form-group">
+			    <label for="room-status">Trạng thái:</label>
+			    <select id="room-status" name="room-status" class="custom-select">
+				    <option disabled>Chọn trạng thái</option>
+				    <% List<TrangThai> tts = (List<TrangThai>) request.getAttribute("trangThais"); %>
+					<% for (TrangThai tt : tts) { %>
+					
+					<option value="<%= tt.getIdTrangThai() %>"><%= tt.getTenTrangThai() %></option>
+		      		<% } %>
+		      	</select>
+			  </div>
+			  <button type="submit" class="btn btn-primary">Lưu</button>
+			</form>
+		</div>
+		
 	</body>
 </html>

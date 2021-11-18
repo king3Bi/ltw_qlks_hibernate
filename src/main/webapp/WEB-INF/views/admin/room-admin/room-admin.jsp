@@ -1,3 +1,7 @@
+<%@page import="com.nhom2.qlks.hibernate.pojo.TrangThai"%>
+<%@page import="com.nhom2.qlks.hibernate.pojo.LoaiPhong"%>
+<%@page import="com.nhom2.qlks.hibernate.pojo.Phong"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,37 +17,72 @@
 	        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 	        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 	        <!-- custom css file link  -->
-	        <link rel="stylesheet" href="static/css/style.css">
+	        <!-- <link rel="stylesheet" href="static/css/style.css">  -->
 	        <link href="https://fonts.googleapis.com/css?family=Poppins:100;300;400;500;600&display=swap" rel="stylesheet">
 	        <script src="static/js/script.js"></script>
 	</head>
 	<body>
 		<jsp:include page="/WEB-INF/views/layouts/layout-admin/_header-admin.jsp"></jsp:include>
-		<table border=1>
-			<thead>
-				<tr>
-					<th>id</th>
-					<th>Name</th>
-					<th>Address</th>
-					<th>Edit</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${studentList}" var="student">
-	         		<tr>
-	         			<td>${student.id}</td>
-	         			<td>${student.name}</td>
-	         			<td>${student.address}</td>
-	         			<td>
-	         				<a href="editStudent?id=${student.id}">Edit</a>
-	         			</td>
-	         			<td>
-	         				<a>Delete</a>
-	         			</td>
-	         		</tr>
-	      		</c:forEach>
-			</tbody>
-		</table>
+		
+		<div class="container">
+			<% String idLoaiPhongStr = request.getParameter("room-type"); %>
+			<% int idLoaiPhong; %>
+			<ul class="nav nav-tabs">
+			  <li class="nav-item">
+			  	<% if (idLoaiPhongStr == null || idLoaiPhongStr.equals("")) { %>
+			  	<% idLoaiPhong = -1; %>
+			    <a class="nav-link active" href="<%=request.getContextPath()%>/room">All</a>
+			    <% } else { %>
+			    <% idLoaiPhong = Integer.parseInt(idLoaiPhongStr); %>
+			    <a class="nav-link" href="<%=request.getContextPath()%>/room">All</a>
+			    <% } %>
+			  </li>
+			  
+			  <% List<LoaiPhong> lps = (List<LoaiPhong>) request.getAttribute("loaiPhongs"); %>
+			  <% List<TrangThai> tts = (List<TrangThai>) request.getAttribute("trangThais"); %>
+			  <% for (LoaiPhong lp : lps) { %>
+			  <li class="nav-item">
+			  	<% if (idLoaiPhong == lp.getIdLoaiPhong()) { %>
+			    <a class="nav-link active" href="<%=request.getContextPath()%>/room?room-type=<%= lp.getIdLoaiPhong() %>"><%= lp.getTenLoaiPhong() %></a>
+			    <% } else {%>
+			    <a class="nav-link" href="<%=request.getContextPath()%>/room?room-type=<%= lp.getIdLoaiPhong() %>"><%= lp.getTenLoaiPhong() %></a>
+			    <% } %>
+			  </li>
+			  <% } %>
+			  <li class="nav-item">
+			    <a class="nav-link" href="<%=request.getContextPath()%>/room/insert">Create</a>
+			  </li>
+			</ul>
+			
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Tên phòng</th>
+						<th>Loại phòng</th>
+						<th>Trạng thái</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% List<Phong> phongs = (List<Phong>) request.getAttribute("phongs"); %>
+					<% for (Phong p : phongs) { %>
+		         	<tr>
+		         		<% LoaiPhong lp = lps.stream().filter(x -> x.getIdLoaiPhong() == p.getIdLoaiPhong()).findFirst().get(); %>
+		         		<% TrangThai tt = tts.stream().filter(x -> x.getIdTrangThai() == p.getIdTrangThai()).findFirst().get(); %>
+		         		<td><%= p.getIdPhong() %></td>
+		         		<td><%= p.getTenPhong() %></td>
+		         		<td><%= lp.getTenLoaiPhong() %></td>
+		         		<td><%= tt.getTenTrangThai() %></td>
+		         		<td>
+		         			<a href="<%=request.getContextPath()%>/room/edit?room-id=<%= p.getIdPhong() %>">Edit</a>
+		         			<a href="<%=request.getContextPath()%>/room/delete?room-id=<%= p.getIdPhong() %>">Delete</a>
+		         		</td>
+		         	</tr>
+		      		<% } %>
+				</tbody>
+			</table>
+		</div>
+		
 	</body>
 </html>

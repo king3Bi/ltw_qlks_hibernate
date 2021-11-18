@@ -22,44 +22,46 @@
 	<body>
 		<jsp:include page="/WEB-INF/views/layouts/layout-admin/_header-admin.jsp"></jsp:include>
 		
-		<ul class="nav nav-tabs">
-		  <li class="nav-item">
-		    <a class="nav-link active" href="<%=request.getContextPath()%>/room-type">List</a>
-		  </li>
-		  <li class="nav-item">
-		    <a class="nav-link" href="<%=request.getContextPath()%>/room-type/insert">Create</a>
-		  </li>
-		</ul>
-		
-		<table  class="table table-striped">
-			<thead>
-				<tr>
-					<th>id</th>
-					<th>Tên loại phòng</th>
-					<th>Hình ảnh</th>
-					<th>Đơn giá</th>
-					<th>Số người</th>
-					<th>Ghi chú</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<% List<LoaiPhong> loaiPhongs = (List<LoaiPhong>) request.getAttribute("loaiPhongs"); %>
-				<% for (LoaiPhong lp : loaiPhongs) { %>
-	         	<tr>
-	         		<td><%= lp.getIdLoaiPhong() %></td>
-	         		<td><%= lp.getTenLoaiPhong() %></td>
-	         		<td><%= lp.getHinhAnh() %></td>
-	         		<td><%= lp.getDonGia() %></td>
-	         		<td><%= lp.getSoNguoi() %></td>
-	         		<td><%= lp.getGhiChu() %></td>
-	         		<td>
-	         			<a href="<%=request.getContextPath()%>/room-type/edit?room-type-id=<%= lp.getIdLoaiPhong() %>">Edit</a>
-	         			<a href="<%=request.getContextPath()%>/room-type/delete?room-type-id=<%= lp.getIdLoaiPhong() %>">Delete</a>
-	         		</td>
-	         	</tr>
-	      		<% } %>
-			</tbody>
-		</table>
+		<div class="container">
+			<ul class="nav nav-tabs">
+			  <li class="nav-item">
+			    <a class="nav-link active" href="<%=request.getContextPath()%>/room-type">List</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link" href="<%=request.getContextPath()%>/room-type/insert">Create</a>
+			  </li>
+			</ul>
+			
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>Tên loại phòng</th>
+						<th>Hình ảnh</th>
+						<th>Đơn giá</th>
+						<th>Số người</th>
+						<th>Ghi chú</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% List<LoaiPhong> loaiPhongs = (List<LoaiPhong>) request.getAttribute("loaiPhongs"); %>
+					<% for (LoaiPhong lp : loaiPhongs) { %>
+		         	<tr>
+		         		<td><%= lp.getIdLoaiPhong() %></td>
+		         		<td><%= lp.getTenLoaiPhong() %></td>
+		         		<td><%= lp.getHinhAnh() %></td>
+		         		<td><%= lp.getDonGia() %></td>
+		         		<td><%= lp.getSoNguoi() %></td>
+		         		<td><%= lp.getGhiChu() %></td>
+		         		<td>
+		         			<a href="<%=request.getContextPath()%>/room-type/edit?room-type-id=<%= lp.getIdLoaiPhong() %>">Edit</a>
+		         			<a href="<%=request.getContextPath()%>/room-type/delete?room-type-id=<%= lp.getIdLoaiPhong() %>">Delete</a>
+		         		</td>
+		         	</tr>
+		      		<% } %>
+				</tbody>
+			</table>
+		</div>
 	</body>
 </html>

@@ -11,23 +11,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.nhom2.qlks.hibernate.daos.LoaiPhongDao;
-import com.nhom2.qlks.hibernate.daos.PhongDao;
 import com.nhom2.qlks.hibernate.daos.TrangThaiDao;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
-import com.nhom2.qlks.hibernate.pojo.Phong;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
 
 /**
- * Servlet implementation class Room
+ * Servlet implementation class InsertRoomServlet
  */
-@WebServlet("/room")
-public class RoomServlet extends HttpServlet {
+@WebServlet("/room/insert")
+public class InsertRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RoomServlet() {
+    public InsertRoomServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -45,19 +43,7 @@ public class RoomServlet extends HttpServlet {
 		List<TrangThai> tts = new TrangThaiDao().getAllTrangThai();
 		request.setAttribute("trangThais", tts);
 		
-		String idLoaiPhongStr = request.getParameter("room-type");
-		
-		List<Phong> phongs;
-		
-		if (idLoaiPhongStr == null || idLoaiPhongStr.equals("")) {
-			phongs = new PhongDao().getALLPhong();
-		} else {
-			phongs = new PhongDao().getPhongByIdLoaiPhong(Integer.parseInt(idLoaiPhongStr));
-		}
-		
-		request.setAttribute("phongs", phongs);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/room-admin.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/create-room-admin.jsp");
 		dispatcher.forward(request, response);
 	}
 

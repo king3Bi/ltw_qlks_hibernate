@@ -39,7 +39,7 @@ public class InsertRoomTypeServlet extends HttpServlet {
 		
 		request.setAttribute("loaiPhongs", lps);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-type-admin/room-type-admin.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-type-admin/create-room-type-admin.jsp");
 		dispatcher.forward(request, response);
 	}
 
