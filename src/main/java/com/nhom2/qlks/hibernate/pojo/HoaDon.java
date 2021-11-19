@@ -2,12 +2,16 @@ package com.nhom2.qlks.hibernate.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -22,8 +26,12 @@ public class HoaDon implements Serializable {
 	@Column(name = "ngay_tao")
 	private Date ngayTao;
 	
-	@Column(name = "id_user", nullable = false)
-	private int idUser;
+	@ManyToOne
+	@JoinColumn(name = "id_user", nullable = false)
+	private User user;
+	
+	@OneToMany(mappedBy = "hoaDon")
+	private List<Booking> bookings;
 
 	public int getIdHD() {
 		return idHD;
@@ -41,12 +49,20 @@ public class HoaDon implements Serializable {
 		this.ngayTao = ngayTao;
 	}
 
-	public int getIdUser() {
-		return idUser;
+	public User getUser() {
+		return user;
 	}
 
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
 	}
 	
 }

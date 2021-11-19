@@ -1,12 +1,16 @@
 package com.nhom2.qlks.hibernate.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,11 +25,16 @@ public class Phong implements Serializable {
 	@Column(name = "ten_phong", nullable = false)
 	private String tenPhong;
 	
-	@Column(name = "id_loai_phong", nullable = false)
-	private int idLoaiPhong;
+	@ManyToOne
+	@JoinColumn(name = "id_loai_phong", nullable = false)
+	private LoaiPhong loaiPhong;
 	
-	@Column(name = "id_trang_thai", nullable = false)
-	private int idTrangThai;
+	@ManyToOne
+	@JoinColumn(name = "id_trang_thai", nullable = false)
+	private TrangThai trangThai;
+	
+	@OneToMany(mappedBy = "phong")
+	private List<Booking> bookings;
 
 	public int getIdPhong() {
 		return idPhong;
@@ -43,19 +52,28 @@ public class Phong implements Serializable {
 		this.tenPhong = tenPhong;
 	}
 
-	public int getIdLoaiPhong() {
-		return idLoaiPhong;
+	public LoaiPhong getLoaiPhong() {
+		return loaiPhong;
 	}
 
-	public void setIdLoaiPhong(int idLoaiPhong) {
-		this.idLoaiPhong = idLoaiPhong;
+	public void setLoaiPhong(LoaiPhong loaiPhong) {
+		this.loaiPhong = loaiPhong;
 	}
 
-	public int getIdTrangThai() {
-		return idTrangThai;
+	public TrangThai getTrangThai() {
+		return trangThai;
 	}
 
-	public void setIdTrangThai(int idTrangThai) {
-		this.idTrangThai = idTrangThai;
+	public void setTrangThai(TrangThai trangThai) {
+		this.trangThai = trangThai;
 	}
+
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
+	}
+	
 }

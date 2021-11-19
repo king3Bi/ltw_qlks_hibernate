@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 
 import com.nhom2.qlks.hibernate.HibernateUtils;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 import com.nhom2.qlks.hibernate.pojo.Phong;
 
 public class PhongDao {
@@ -129,11 +130,11 @@ public class PhongDao {
 		return phongs;
 	}
 	
-	public List<Phong> getPhongByIdLoaiPhong(int idLoaiPhong) {
+	public List<Phong> getPhongByLoaiPhong(LoaiPhong loaiPhong) {
 		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM Phong WHERE idLoaiPhong=:idLoaiPhong");//HQL
+		Query q = session.createQuery("FROM Phong WHERE loaiPhong=:loaiPhong");//HQL
 		
-		q.setParameter("idLoaiPhong", idLoaiPhong);
+		q.setParameter("loaiPhong", loaiPhong);
 		
 		List<Phong> phongs = q.getResultList();
 		

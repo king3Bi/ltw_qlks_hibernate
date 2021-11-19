@@ -52,7 +52,8 @@ public class RoomServlet extends HttpServlet {
 		if (idLoaiPhongStr == null || idLoaiPhongStr.equals("")) {
 			phongs = new PhongDao().getALLPhong();
 		} else {
-			phongs = new PhongDao().getPhongByIdLoaiPhong(Integer.parseInt(idLoaiPhongStr));
+			LoaiPhong loaiPhong = new LoaiPhongDao().getLoaiPhongById(Integer.parseInt(idLoaiPhongStr));
+			phongs = new PhongDao().getPhongByLoaiPhong(loaiPhong);
 		}
 		
 		request.setAttribute("phongs", phongs);
