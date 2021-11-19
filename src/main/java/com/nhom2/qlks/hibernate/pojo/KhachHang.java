@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,8 +29,9 @@ public class KhachHang implements Serializable {
 	@Column(name = "dia_chi", nullable = false)
 	private String diaChi;
 	
-	@Column(name = "id_booking")
-	private int idBooking;
+	@ManyToOne
+	@JoinColumn(name = "id_booking")
+	private Booking booking;
 
 	public int getIdKhach() {
 		return idKhach;
@@ -62,12 +65,12 @@ public class KhachHang implements Serializable {
 		this.diaChi = diaChi;
 	}
 
-	public int getIdBooking() {
-		return idBooking;
+	public Booking getBooking() {
+		return booking;
 	}
 
-	public void setIdBooking(int idBooking) {
-		this.idBooking = idBooking;
+	public void setBooking(Booking booking) {
+		this.booking = booking;
 	}
-
+	
 }

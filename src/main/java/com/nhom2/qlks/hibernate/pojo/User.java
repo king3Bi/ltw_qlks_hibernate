@@ -2,12 +2,16 @@ package com.nhom2.qlks.hibernate.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -46,8 +50,15 @@ public class User implements Serializable {
 	@Column(name = "kich_hoat", nullable = false)
 	private boolean kichHoat;
 	
-	@Column(name = "id_quyen")
-	private int idQuyen;
+	@ManyToOne
+	@JoinColumn(name = "id_quyen")
+	private Quyen quyen;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Booking> bookings;
+	
+	@OneToMany(mappedBy = "user")
+	private List<HoaDon> hoaDons;
 
 	public int getId() {
 		return id;
@@ -129,11 +140,28 @@ public class User implements Serializable {
 		this.kichHoat = kichHoat;
 	}
 
-	public int getIdQuyen() {
-		return idQuyen;
+	public Quyen getQuyen() {
+		return quyen;
 	}
 
-	public void setIdQuyen(int idQuyen) {
-		this.idQuyen = idQuyen;
+	public void setQuyen(Quyen quyen) {
+		this.quyen = quyen;
 	}
+
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+	public List<HoaDon> getHoaDons() {
+		return hoaDons;
+	}
+
+	public void setHoaDons(List<HoaDon> hoaDons) {
+		this.hoaDons = hoaDons;
+	}
+	
 }

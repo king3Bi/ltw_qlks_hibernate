@@ -55,31 +55,26 @@
 			  </div>
 			  <div class="form-group">
 			    <label for="room-type">Loại phòng:</label>
-			    <select id="room-type" name="room-type" class="custom-select">
+			    <select id="roomType" name="room-type" class="custom-select">
 				    <option disabled>Chọn loại phòng</option>
 					<% for (LoaiPhong lp : lps) { %>
-					<% if (phong.getIdLoaiPhong() == lp.getIdLoaiPhong()) { %>
-					<option value="<%= lp.getIdLoaiPhong() %>" selected><%= lp.getTenLoaiPhong() %></option>
-					<% } else { %>
 					<option value="<%= lp.getIdLoaiPhong() %>"><%= lp.getTenLoaiPhong() %></option>
-					<% } %>
 		      		<% } %>
 		      	</select>
 			  </div>
 			  <div class="form-group">
 			    <label for="room-status">Trạng thái:</label>
-			    <select id="room-status" name="room-status" class="custom-select" 
-			    	value="<%= phong.getIdTrangThai() %>">
+			    <select id="roomStatus" name="room-status" class="custom-select">
 				    <option disabled>Chọn trạng thái</option>
 				    <% List<TrangThai> tts = (List<TrangThai>) request.getAttribute("trangThais"); %>
 					<% for (TrangThai tt : tts) { %>
-					<% if (phong.getIdTrangThai() == tt.getIdTrangThai()) { %>
-					<option value="<%= tt.getIdTrangThai() %>" selected><%= tt.getTenTrangThai() %></option>
-					<% } else { %>
 					<option value="<%= tt.getIdTrangThai() %>"><%= tt.getTenTrangThai() %></option>
-					<% } %>
 		      		<% } %>
 		      	</select>
+		      	<script type="text/javascript">
+		      		roomType.value = <%= phong.getLoaiPhong().getIdLoaiPhong()%>;
+		      		roomStatus.value = <%= phong.getTrangThai().getIdTrangThai()%>
+		      		</script>
 			  </div>
 			  <button type="submit" class="btn btn-primary">Lưu</button>
 			</form>

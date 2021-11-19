@@ -2,12 +2,16 @@ package com.nhom2.qlks.hibernate.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -37,14 +41,20 @@ public class Booking implements Serializable {
 	@Column(name = "dat_online")
 	private boolean datOnline;
 	
-	@Column(name = "id_KH")
-	private int idKH;
+	@ManyToOne
+	@JoinColumn(name = "id_KH")
+	private User user;
 	
-	@Column(name = "id_HD")
-	private int idHD;
+	@ManyToOne
+	@JoinColumn(name = "id_HD")
+	private HoaDon hoaDon;
 	
-	@Column(name = "id_phong", nullable = false)
-	private int idPhong;
+	@ManyToOne
+	@JoinColumn(name = "id_phong", nullable = false)
+	private Phong phong;
+	
+	@OneToMany(mappedBy = "booking")
+	private List<KhachHang> khachHangs;
 
 	public int getIdBooking() {
 		return idBooking;
@@ -101,29 +111,37 @@ public class Booking implements Serializable {
 	public void setDatOnline(boolean datOnline) {
 		this.datOnline = datOnline;
 	}
-
-	public int getIdHD() {
-		return idHD;
+	
+	public HoaDon getHoaDon() {
+		return hoaDon;
 	}
 
-	public void setIdHD(int idHD) {
-		this.idHD = idHD;
+	public void setHoaDon(HoaDon hoaDon) {
+		this.hoaDon = hoaDon;
 	}
 
-	public int getIdPhong() {
-		return idPhong;
+	public Phong getPhong() {
+		return phong;
 	}
 
-	public void setIdPhong(int idPhong) {
-		this.idPhong = idPhong;
+	public void setPhong(Phong phong) {
+		this.phong = phong;
+	}
+	
+	public User getUser() {
+		return user;
 	}
 
-	public int getIdKH() {
-		return idKH;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public void setIdKH(int idKH) {
-		this.idKH = idKH;
+	public List<KhachHang> getKhachHangs() {
+		return khachHangs;
+	}
+
+	public void setKhachHangs(List<KhachHang> khachHangs) {
+		this.khachHangs = khachHangs;
 	}
 	
 }

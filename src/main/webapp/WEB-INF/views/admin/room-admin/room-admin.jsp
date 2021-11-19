@@ -68,12 +68,10 @@
 					<% List<Phong> phongs = (List<Phong>) request.getAttribute("phongs"); %>
 					<% for (Phong p : phongs) { %>
 		         	<tr>
-		         		<% LoaiPhong lp = lps.stream().filter(x -> x.getIdLoaiPhong() == p.getIdLoaiPhong()).findFirst().get(); %>
-		         		<% TrangThai tt = tts.stream().filter(x -> x.getIdTrangThai() == p.getIdTrangThai()).findFirst().get(); %>
 		         		<td><%= p.getIdPhong() %></td>
 		         		<td><%= p.getTenPhong() %></td>
-		         		<td><%= lp.getTenLoaiPhong() %></td>
-		         		<td><%= tt.getTenTrangThai() %></td>
+		         		<td><%= p.getLoaiPhong().getTenLoaiPhong() %></td>
+		         		<td><%= p.getTrangThai().getTenTrangThai() %></td>
 		         		<td>
 		         			<a href="<%=request.getContextPath()%>/room/edit?room-id=<%= p.getIdPhong() %>">Edit</a>
 		         			<a href="<%=request.getContextPath()%>/room/delete?room-id=<%= p.getIdPhong() %>">Delete</a>

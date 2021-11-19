@@ -1,12 +1,14 @@
 package com.nhom2.qlks.hibernate.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,6 +22,9 @@ public class TrangThai implements Serializable {
 	
 	@Column(name = "ten_trang_thai", nullable = false)
 	private String tenTrangThai;
+	
+	@OneToMany(mappedBy = "trangThai")
+	private List<Phong> phongs;
 
 	public int getIdTrangThai() {
 		return idTrangThai;
@@ -37,5 +42,13 @@ public class TrangThai implements Serializable {
 		this.tenTrangThai = tenTrangThai;
 	}
 
+	public List<Phong> getPhongs() {
+		return phongs;
+	}
+
+	public void setPhongs(List<Phong> phongs) {
+		this.phongs = phongs;
+	}
+	
 
 }
