@@ -1,4 +1,4 @@
-package com.nhom2.qlks.servlet.admin.employee;
+package com.nhom2.qlks.servlet.admin.booking;
 
 import java.io.IOException;
 
@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class EmployeeServlet
+ * Servlet implementation class BookingServlet
  */
-@WebServlet("/employee")
-public class EmployeeServlet extends HttpServlet {
+@WebServlet("/booking")
+public class BookingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EmployeeServlet() {
+    public BookingServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,7 +31,7 @@ public class EmployeeServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/employee-admin/employee-admin.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/room-admin.jsp");
 		dispatcher.forward(request, response);
 	}
 

@@ -22,44 +22,50 @@
 	<body>
 		<jsp:include page="/WEB-INF/views/layouts/layout-admin/_header-admin.jsp"></jsp:include>
 		
-		<ul class="nav nav-tabs">
-		  <li class="nav-item">
-		    <a class="nav-link active" href="<%=request.getContextPath()%>/room-type">List</a>
-		  </li>
-		  <li class="nav-item">
-		    <a class="nav-link" href="<%=request.getContextPath()%>/room-type/insert">Create</a>
-		  </li>
-		</ul>
+		<div class="container">
+			<ul class="nav nav-tabs">
+			  <li class="nav-item">
+			    <a class="nav-link" href="<%=request.getContextPath()%>/room-type">List</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link active" href="<%=request.getContextPath()%>/room-type/insert">Create</a>
+			  </li>
+			</ul>
 		
-		<table  class="table table-striped">
-			<thead>
-				<tr>
-					<th>id</th>
-					<th>Tên loại phòng</th>
-					<th>Hình ảnh</th>
-					<th>Đơn giá</th>
-					<th>Số người</th>
-					<th>Ghi chú</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<% List<LoaiPhong> loaiPhongs = (List<LoaiPhong>) request.getAttribute("loaiPhongs"); %>
-				<% for (LoaiPhong lp : loaiPhongs) { %>
-	         	<tr>
-	         		<td><%= lp.getIdLoaiPhong() %></td>
-	         		<td><%= lp.getTenLoaiPhong() %></td>
-	         		<td><%= lp.getHinhAnh() %></td>
-	         		<td><%= lp.getDonGia() %></td>
-	         		<td><%= lp.getSoNguoi() %></td>
-	         		<td><%= lp.getGhiChu() %></td>
-	         		<td>
-	         			<a href="<%=request.getContextPath()%>/room-type/edit?room-type-id=<%= lp.getIdLoaiPhong() %>">Edit</a>
-	         			<a href="<%=request.getContextPath()%>/room-type/delete?room-type-id=<%= lp.getIdLoaiPhong() %>">Delete</a>
-	         		</td>
-	         	</tr>
-	      		<% } %>
-			</tbody>
-		</table>
+			<form action="" method="post" enctype="multipart/form-data">
+			  <div class="form-group">
+			    <label for="name">Tên Loại phòng:</label>
+			    <input type="text" id="name" class="form-control" placeholder="Nhập tên phòng" name="name">
+			  </div>
+			  <div class="form-group">
+			    <label for="image">Hình ảnh:</label>
+			    <input type="file" id="image" class="form-control-file border" accept="image/png, image/gif, image/jpeg" name="image">
+			  </div>
+			  <img class="card-img-top" style="width: 200px; height: auto;"
+			  	src="<%=request.getContextPath()%>/static/image/banner-hotel.jpg" alt="Hình ảnh loại phòng" id="showImage">
+			  <div class="form-group">
+			    <label for="price">Đơn giá:</label>
+			    <input type="text" id="price" class="form-control" placeholder="Nhập tên phòng" name="price">
+			  </div>
+			  <div class="form-group">
+			    <label for="quantity">Số người:</label>
+			    <input type="text" id="quantity" class="form-control" placeholder="Nhập tên phòng" name="quantity">
+			  </div>
+			  <div class="form-group">
+			  	<label for="note">Ghi chú:</label>
+				<textarea class="form-control" rows="5" id="note" name="note"></textarea>
+			  </div>
+			  <button type="submit" class="btn btn-primary">Lưu</button>
+			</form>
+			<script>
+				image.onchange = evt => {
+					  const [file] = image.files
+					  if (file) {
+						  showImage.src = URL.createObjectURL(file)
+					  }
+					}
+			</script>
+		</div>
+		
 	</body>
 </html>

@@ -7,7 +7,7 @@
 	      <a href="<%=request.getContextPath()%>/admin">Trang chủ</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/create-bill">Lập hóa đơn</a>
+	      <a href="<%=request.getContextPath()%>/bill/insert">Lập hóa đơn</a>
 	    </li>
 	    <li class="nav-item">
 	      <a href="<%=request.getContextPath()%>/room">Phòng</a>
@@ -19,10 +19,7 @@
 	      <a href="<%=request.getContextPath()%>/room-type">Trạng thái phòng</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/online-booking">Đơn hàng online</a>
-	    </li>
-	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/offline-booking">Đơn hàng offline</a>
+	      <a href="<%=request.getContextPath()%>/booking">Booking</a>
 	    </li>
 	    <li class="nav-item">
 	      <a href="<%=request.getContextPath()%>/bill">Hóa đơn</a>

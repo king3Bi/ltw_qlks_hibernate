@@ -120,9 +120,20 @@ public class PhongDao {
         return err_msg;
 	}
 	
-	public List<Phong> getAllHoaDon() {
+	public List<Phong> getALLPhong() {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM Phong");//HQL
+		
+		List<Phong> phongs = q.getResultList();
+		
+		return phongs;
+	}
+	
+	public List<Phong> getPhongByIdLoaiPhong(int idLoaiPhong) {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Phong WHERE idLoaiPhong=:idLoaiPhong");//HQL
+		
+		q.setParameter("idLoaiPhong", idLoaiPhong);
 		
 		List<Phong> phongs = q.getResultList();
 		

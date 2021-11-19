@@ -18,16 +18,16 @@ import com.nhom2.qlks.hibernate.pojo.Phong;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
 
 /**
- * Servlet implementation class Room
+ * Servlet implementation class EditRoomServlet
  */
-@WebServlet("/room")
-public class RoomServlet extends HttpServlet {
+@WebServlet("/room/edit")
+public class EditRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RoomServlet() {
+    public EditRoomServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,27 +37,22 @@ public class RoomServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html; charset=UTF-8");
-		
 		List<LoaiPhong> lps = new LoaiPhongDao().getAllLoaiPhong();
 		request.setAttribute("loaiPhongs", lps);
+		
+		String idPhongStr =request.getParameter("room-id");
+		Phong phong;
+		if (idPhongStr == null || idPhongStr.equals("")) {
+			phong = null;
+		} else {
+			phong = new PhongDao().getPhongById(Integer.parseInt(idPhongStr));
+		}
+		request.setAttribute("phong", phong);
 		
 		List<TrangThai> tts = new TrangThaiDao().getAllTrangThai();
 		request.setAttribute("trangThais", tts);
 		
-		String idLoaiPhongStr = request.getParameter("room-type");
-		
-		List<Phong> phongs;
-		
-		if (idLoaiPhongStr == null || idLoaiPhongStr.equals("")) {
-			phongs = new PhongDao().getALLPhong();
-		} else {
-			phongs = new PhongDao().getPhongByIdLoaiPhong(Integer.parseInt(idLoaiPhongStr));
-		}
-		
-		request.setAttribute("phongs", phongs);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/room-admin.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/edit-room-admin.jsp");
 		dispatcher.forward(request, response);
 	}
 

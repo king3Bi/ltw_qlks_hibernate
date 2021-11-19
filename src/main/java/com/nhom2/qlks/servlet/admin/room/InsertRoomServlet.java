@@ -1,6 +1,7 @@
-package com.nhom2.qlks.servlet.admin.employee;
+package com.nhom2.qlks.servlet.admin.room;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,17 +10,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nhom2.qlks.hibernate.daos.LoaiPhongDao;
+import com.nhom2.qlks.hibernate.daos.TrangThaiDao;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.pojo.TrangThai;
+
 /**
- * Servlet implementation class EmployeeServlet
+ * Servlet implementation class InsertRoomServlet
  */
-@WebServlet("/employee")
-public class EmployeeServlet extends HttpServlet {
+@WebServlet("/room/insert")
+public class InsertRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EmployeeServlet() {
+    public InsertRoomServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,7 +37,13 @@ public class EmployeeServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/employee-admin/employee-admin.jsp");
+		List<LoaiPhong> lps = new LoaiPhongDao().getAllLoaiPhong();
+		request.setAttribute("loaiPhongs", lps);
+		
+		List<TrangThai> tts = new TrangThaiDao().getAllTrangThai();
+		request.setAttribute("trangThais", tts);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/create-room-admin.jsp");
 		dispatcher.forward(request, response);
 	}
 
