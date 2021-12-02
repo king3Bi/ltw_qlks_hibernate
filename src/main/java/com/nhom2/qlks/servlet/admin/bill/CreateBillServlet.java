@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class CreateBill
  */
-@WebServlet("/bill/insert")
+@WebServlet("/admin/bill/insert")
 public class CreateBillServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
