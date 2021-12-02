@@ -20,7 +20,7 @@ import com.nhom2.qlks.hibernate.pojo.TrangThai;
 /**
  * Servlet implementation class EditRoomServlet
  */
-@WebServlet("/room/edit")
+@WebServlet("/admin/room/edit")
 public class EditRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

@@ -1,6 +1,8 @@
 package com.nhom2.qlks.api;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,8 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.nhom2.qlks.hibernate.daos.LoaiPhongDao;
+import com.nhom2.qlks.hibernate.daos.PhongDao;
 import com.nhom2.qlks.hibernate.daos.UserDao;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.pojo.Phong;
 import com.nhom2.qlks.hibernate.pojo.User;
 
 /**
@@ -21,6 +25,8 @@ import com.nhom2.qlks.hibernate.pojo.User;
 @WebServlet("/api")
 public class DemoAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private Gson gson;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -28,6 +34,7 @@ public class DemoAPI extends HttpServlet {
     public DemoAPI() {
         super();
         // TODO Auto-generated constructor stub
+        this.gson = new Gson();
     }
 
 	/**
@@ -38,12 +45,18 @@ public class DemoAPI extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		
-		User user = new UserDao().getUserByUsername("kh1");
+		Hashtable<String, Object> my_dict = new Hashtable<String, Object>();
 		
-		String rs = new Gson().toJson(user);
+		my_dict.put("01", "Apple");
+        my_dict.put("10", "Banana");
+        my_dict.put("20", 1);
 		
-		response.getWriter().println(rs);
-		response.getWriter().flush();
+		PrintWriter out = response.getWriter();
+		
+		String rs = this.gson.toJson(my_dict);
+		
+		out.write(rs);
+		out.flush();
 	}
 
 	/**

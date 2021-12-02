@@ -16,7 +16,7 @@ import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 /**
  * Servlet implementation class RoomType
  */
-@WebServlet("/room-type/insert")
+@WebServlet("/admin/room-type/insert")
 public class InsertRoomTypeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

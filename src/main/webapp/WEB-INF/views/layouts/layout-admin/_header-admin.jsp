@@ -1,46 +1,46 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
 	  <ul class="navbar-nav">
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/admin">Trang chủ</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin">Trang chủ</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/bill/insert">Lập hóa đơn</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/bill/insert">Lập hóa đơn</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/room">Phòng</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/room">Phòng</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/room-type">Loại Phòng</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/room-type">Loại Phòng</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/room-type">Trạng thái phòng</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/room-type">Trạng thái phòng</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/booking">Booking</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/booking">Booking</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/bill">Hóa đơn</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/bill">Hóa đơn</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/online-customer">Khách hàng online</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/online-customer">Khách hàng online</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/offline-customer">Khách hàng offline</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/offline-customer">Khách hàng offline</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/employee">Nhân viên</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/employee">Nhân viên</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/role">Quyền</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/role">Quyền</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/stats">Thống kê</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/stats">Thống kê</a>
 	    </li>
 	    <li class="nav-item">
-	      <a href="<%=request.getContextPath()%>/login">Đăng nhập</a>
+	      <a class="nav-link" href="<%=request.getContextPath()%>/admin/login">Đăng nhập</a>
 	    </li>
 	  </ul>
 	</nav>

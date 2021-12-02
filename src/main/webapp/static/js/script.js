@@ -112,3 +112,22 @@ function createBooking() {
 
     })
 }
+
+// ----------------- Phòng ---------------------
+function openEditPhong(id_phong) {
+	
+}
+
+function openCreatePhong(id_phong) {
+	
+}
+
+function saveEditPhong() {
+	
+}
+
+function saveCreatePhong() {
+	$( "#room-form" ).submit();
+}
+
+// ----------------- End Phòng -----------------
