@@ -16,6 +16,68 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 		<script src="<%=request.getContextPath()%>/static/js/script.js"></script>
+		<script type="text/javascript">
+			function openEditPhong(id_phong) {
+				var url = "<%=request.getContextPath()%>/admin/room/edit?room-id=" + id_phong;
+				$.ajax({
+					type: "GET",
+			    	url: url,
+			     	success: function(data)
+			    	{
+			        	if (data.code == 200) {
+			        		console.log(data);
+			        		document.querySelector("#room-name").value = data.data.tenPhong;
+			        		document.querySelector("#room-type").value = data.data.idLoaiPhong;
+			        		document.querySelector("#room-status").value = data.data.idTrangThai;
+			        		   
+			        		$("#room-form").attr("action", url);
+			   				$("#myModal").modal();
+			        	} else {
+			        		alert(data.msg);
+			       		}
+			     	}
+				});
+			}
+	
+			function openCreatePhong() {
+				$("#room-form").attr("action", "<%=request.getContextPath()%>/admin/room/insert");
+				$("#myModal").modal();
+			}
+	
+			function saveEditPhong() {
+				
+			}
+	
+			function saveCreatePhong(btn) {
+				const spinner = btn.firstElementChild;
+				spinner.classList.add("spinner-border");
+				spinner.classList.add("spinner-border-sm");
+				
+				btn.disabled = true;
+				
+				var form = $("#room-form");
+				var url = form.attr('action');
+				
+				$.ajax({
+			           type: "POST",
+			           url: url,
+			           data: form.serialize(), // serializes the form's elements.
+			           success: function(data)
+			           {
+			        	   if (data.code == 200) {
+			        		   alert(data.msg);
+			        		   location.reload();
+			        	   } else {
+			        		   alert(data.msg);
+			        	   }
+			           }				    
+				});
+				
+				spinner.classList.remove("spinner-border");
+				spinner.classList.remove("spinner-border-sm");
+			    btn.disabled = false;
+			}
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -59,7 +121,8 @@
 				  </li>
 				  <% } %>
 				  <li class="nav-item">
-				    <a class="nav-link" data-toggle="modal" href="#myModal">Create</a>
+				  <a class="nav-link" href="javascript:void(0)" onclick="openCreatePhong()">Create</a>
+				  <!-- <a class="nav-link" data-toggle="modal" href="#myModal">Create</a> -->
 				  </li>
 				</ul>
 			
@@ -83,7 +146,7 @@
 				         		<td><%= p.getLoaiPhong().getTenLoaiPhong() %></td>
 				         		<td><%= p.getTrangThai().getTenTrangThai() %></td>
 				         		<td>
-				         			<a href="<%=request.getContextPath()%>/admin/room/edit?room-id=<%= p.getIdPhong() %>">Edit</a>
+				         			<a href="javascript:void(0)" onclick="openEditPhong(<%= p.getIdPhong() %>)">Edit</a>
 				         			<a href="<%=request.getContextPath()%>/admin/room/delete?room-id=<%= p.getIdPhong() %>">Delete</a>
 				         		</td>
 				         	</tr>
@@ -107,10 +170,10 @@
 				        
 				  	<!-- Modal body -->
 				  	<div class="modal-body">
-				   		<form action="" id="room-form">
+				   		<form action="" method="post" id="room-form">
 				   			<div class="form-group">
 						    <label for="room-name">Tên phòng:</label>
-						    <input type="text" id="room-name" class="form-control" placeholder="Nhập tên phòng" name="room-name">
+						    <input type="text" id="room-name" class="form-control" placeholder="Nhập tên phòng" name="room-name" required>
 						  </div>
 						  <div class="form-group">
 						    <label for="room-type">Loại phòng:</label>
@@ -137,7 +200,10 @@
 				        
 				   	<!-- Modal footer -->
 				  	<div class="modal-footer">
-				  		<button type="button" class="btn btn-primary" onclick="saveCreatePhong()">Lưu</button>
+				  		<button type="button" class="btn btn-primary" onclick="saveCreatePhong(this)">
+				  			<span></span>
+				  			Lưu
+				  		</button>
 				     	<button type="button" class="btn btn-danger" data-dismiss="modal">Thoát</button>
 				   	</div>
 			        
