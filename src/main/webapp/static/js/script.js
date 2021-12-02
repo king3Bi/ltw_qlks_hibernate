@@ -1,5 +1,5 @@
 function showResult(str) {
-
+	console.log("hello");
 }
 
 function roomSearch() {
