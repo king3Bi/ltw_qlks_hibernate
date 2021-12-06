@@ -133,7 +133,7 @@ public class LoaiPhongDao {
 
 	public List<LoaiPhong> getAllLoaiPhong() {
 		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM LoaiPhong");//HQL
+		Query q = session.createQuery("FROM LoaiPhong");//HQL1
 		
 		List<LoaiPhong> loaiPhongs = q.getResultList();
 		
