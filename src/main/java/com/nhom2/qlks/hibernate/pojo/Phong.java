@@ -36,6 +36,16 @@ public class Phong implements Serializable {
 	@OneToMany(mappedBy = "phong")
 	private List<Booking> bookings;
 
+	
+	public Phong() {}
+	
+	public Phong(String roomName, LoaiPhong roomType, TrangThai roomStatus) {
+		super();
+		this.tenPhong = roomName;
+		this.loaiPhong = roomType;
+		this.trangThai = roomStatus;
+	}
+
 	public int getIdPhong() {
 		return idPhong;
 	}
@@ -75,5 +85,4 @@ public class Phong implements Serializable {
 	public void setBookings(List<Booking> bookings) {
 		this.bookings = bookings;
 	}
-	
 }

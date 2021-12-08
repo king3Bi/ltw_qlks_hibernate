@@ -22,6 +22,7 @@
                     <img class="card-img-top" src="static/image/banner-hotel.jpg" alt="Card image">
                     <div class="card-body">
                         <h3 class="card-title"><%= lp.getTenLoaiPhong() %></h3>
+                        <h3 class="card-title">Số người: <%= lp.getSoNguoi() %></h3>                        
                         <h4 class="card-title"><%= lp.getDonGia() %> VND / 1 đêm</h4>
                         <a href="#" class="btn">Đặt phòng</a>
                     </div>

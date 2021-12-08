@@ -126,8 +126,8 @@ function saveEditPhong() {
 	
 }
 
-function saveCreatePhong() {
+/*function saveCreatePhong() {
 	$( "#room-form" ).submit();
-}
+}*/
 
 // ----------------- End Phòng -----------------

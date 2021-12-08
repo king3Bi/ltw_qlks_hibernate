@@ -12,30 +12,20 @@
         <a href="#room-type">Loại phòng</a>
         <a href="#features">Đặc trưng</a>
         <a href="#contact">Liên hệ</a>
-
     </nav>
 
     <nav class="navbar">
-    		<%User user = (User) session.getAttribute("user");%>
-    		<% if (user != null) { %>
-    			<a class="fas fa-shopping-cart" href=""></a>
-    			<a href="<%=request.getContextPath()%>/<%=user.getTenDangNhap()%>/">
-	              <%= user.getHoTen() %>  
-	            </a>
-    			<a href="<%=request.getContextPath()%>/logout">Đăng xuất</a>
-    		<% } else { %>
-     <!--   <!--  {% if current_user.is_authenticated %} 
-            <a class="fas fa-shopping-cart" href=""></a>
-            <a href="/">
-              {{ current_user.ho_ten }}  
+   		<%User user = (User) session.getAttribute("user");%>
+   		<% if (user != null) { %>
+   			<a class="fas fa-shopping-cart" href=""></a>
+   			<a href="<%=request.getContextPath()%>/<%=user.getTenDangNhap()%>/">
+              <%= user.getHoTen() %>  
             </a>
-            <a class="nav-link" href="/logout">Đăng xuất</a> -->
-       <!--  {% else %} -->
-       		
+   			<a href="<%=request.getContextPath()%>/logout">Đăng xuất</a>
+   		<% } else { %>       		
             <a href="<%=request.getContextPath()%>/login">Đăng nhập</a>
             <a href="<%=request.getContextPath()%>/register">Đăng ký</a>
-            <% } %>
-       <!--  {% endif %} -->
+        <% } %>
     </nav>
 
 </header>

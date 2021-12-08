@@ -10,13 +10,13 @@ import org.hibernate.Transaction;
 import com.nhom2.qlks.hibernate.HibernateUtils;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.pojo.TrangThai;
 import com.nhom2.qlks.hibernate.pojo.Phong;
 
 public class PhongDao {
 	public String insertPhong(Phong phong) {
 		String err_msg = "";
 		
-        
         if (checkTenPhong(phong.getTenPhong())) {
         	return err_msg = "Ten phong da ton tai";
         }
@@ -49,7 +49,7 @@ public class PhongDao {
         return err_msg;
 	}
 	
-	public String updatePhong(int id,String tenphong) {
+	public String updatePhong(int roomId, String roomName, LoaiPhong roomType, TrangThai roomStatus) {
 		String err_msg = "";
 		
 		Transaction transaction = null;
@@ -60,12 +60,17 @@ public class PhongDao {
             transaction = session.beginTransaction();            
             System.out.println("created transaction");
             
-            Query query = session.createQuery("UPDATE Phong SET tenPhong=:tenphong"
-            		+ " WHERE idPhong=:id");
-			query.setParameter("tenphong", tenphong);
-			query.setParameter("id", id);
-			int result = query.executeUpdate();
+			/*
+			 * Query query = session.createQuery("UPDATE Phong SET tenPhong=:tenphong" +
+			 * " WHERE idPhong=:id"); query.setParameter("tenphong", tenphong);
+			 * query.setParameter("id", id); int result = query.executeUpdate();
+			 */
 			
+			Phong room = (Phong)session.get(Phong.class, roomId);
+			room.setTenPhong(roomName);
+			room.setLoaiPhong(roomType);
+			room.setTrangThai(roomStatus);
+            session.update(room);
             System.out.println("update phong");
             
             // commit transaction

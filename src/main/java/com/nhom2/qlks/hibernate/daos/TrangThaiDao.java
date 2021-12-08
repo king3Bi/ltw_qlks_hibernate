@@ -135,7 +135,7 @@ public class TrangThaiDao {
 		return trangthais;
 	}
 	
-	public TrangThai getTrangThaiId(int id) {
+	public TrangThai getTrangThaiById(int id) {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM TrangThai WHERE idTrangThai=:id");//HQL
 		

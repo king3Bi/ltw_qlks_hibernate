@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.nhom2.qlks.hibernate.HibernateUtils;
+import com.nhom2.qlks.hibernate.pojo.Quyen;
 import com.nhom2.qlks.hibernate.pojo.User;
 
 public class UserDao {
@@ -227,16 +228,15 @@ public class UserDao {
 		return null;
 	}
 
-	public boolean loginUser(String username, String password, int idQuyen) {
+	public boolean loginUser(String username, String password, Quyen quyen) {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.
 				createQuery("FROM User WHERE tenDangNhap=:username "
 						+ "AND matKhau=:password "
-						+ "AND idQuyen=:idQuyen");//HQL
-		
+						+ "AND quyen=:quyen");//HQL
 		q.setParameter("username", username);
 		q.setParameter("password", password);
-		q.setParameter("idQuyen", idQuyen);
+		q.setParameter("quyen", quyen);
 		q.setFirstResult(0);
 		q.setMaxResults(1);
 		

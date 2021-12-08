@@ -35,6 +35,4 @@
 
     </div>
 
-    <div class="credit"> Created by <span>Dang Khoa</span> | All rights reserved </div>
-
 </section>

@@ -1,10 +1,6 @@
 package com.nhom2.qlks.servlet.admin.room;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,48 +15,40 @@ import com.nhom2.qlks.hibernate.pojo.Phong;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
 
 /**
- * Servlet implementation class InsertRoomServlet
+ * Servlet implementation class DeleteRoomServlet
  */
-@WebServlet(name = "AddRoom", urlPatterns = {"/admin/room/add"})
-public class InsertRoomServlet extends HttpServlet {
+@WebServlet(name = "DeleteRoom", urlPatterns = {"/admin/room/delete"})
+public class DeleteRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public InsertRoomServlet() {
+    public DeleteRoomServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        String roomName = request.getParameter("room-name");
-        Integer roomTypeId = Integer.parseInt(request.getParameter("room-type"));
-        Integer roomStatusId = Integer.parseInt(request.getParameter("room-status"));     
+       
+        Integer roomId = Integer.parseInt(request.getParameter("room-id"));
+        
                        
-        LoaiPhongDao roomTypeList = new LoaiPhongDao();
-        LoaiPhong roomType = roomTypeList.getLoaiPhongById(roomTypeId); 
-        
-        TrangThaiDao roomStatusList = new TrangThaiDao();
-        TrangThai roomStatus = roomStatusList.getTrangThaiById(roomStatusId); 
-        
         PhongDao roomList = new PhongDao();
-        Phong room = new Phong(roomName, roomType, roomStatus);
-        
-        roomList.insertPhong(room);
-        
+        roomList.deletePhong(roomId);
+           
         response.sendRedirect(request.getContextPath() + "/admin/room");
     }
+    
     
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 		processRequest(request, response);
 	}
 
@@ -68,7 +56,7 @@ public class InsertRoomServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 		processRequest(request, response);
 	}
 
