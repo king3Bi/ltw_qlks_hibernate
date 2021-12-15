@@ -43,12 +43,20 @@ public class User implements Serializable {
 	
 	@Column(name = "ten_dang_nhap", nullable = false)
 	private String tenDangNhap;
-	
+
+	public int getKichHoat() {
+		return kichHoat;
+	}
+
+	public void setKichHoat(int kichHoat) {
+		this.kichHoat = kichHoat;
+	}
+
 	@Column(name = "mat_khau", nullable = false)
 	private String matKhau;
 	
 	@Column(name = "kich_hoat", nullable = false)
-	private boolean kichHoat;
+	private int kichHoat;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_quyen")
@@ -60,6 +68,21 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user")
 	private List<HoaDon> hoaDons;
 
+	public User() {}
+	public User(String hoten, Date ngaysinh,String gioitinh,String cmnd,String email,String sdt,String tendn,String mk,int kichhoat,Quyen quyen) {
+	
+		this.hoTen = hoten;
+		this.ngaySinh = ngaysinh;
+		this.gioiTinh=gioitinh;
+		this.cmnd = cmnd;
+		this.email = email;
+		this.sdt = sdt;
+		this.tenDangNhap = tendn;
+		this.matKhau = mk;
+		this.kichHoat = kichhoat;
+		this.quyen = quyen;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -132,13 +155,13 @@ public class User implements Serializable {
 		this.matKhau = matKhau;
 	}
 
-	public boolean isKichHoat() {
-		return kichHoat;
-	}
-
-	public void setKichHoat(boolean kichHoat) {
-		this.kichHoat = kichHoat;
-	}
+//	public boolean isKichHoat() {
+//		return kichHoat;
+//	}
+//
+//	public void setKichHoat(boolean kichHoat) {
+//		this.kichHoat = kichHoat;
+//	}
 
 	public Quyen getQuyen() {
 		return quyen;
