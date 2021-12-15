@@ -25,8 +25,8 @@
 		src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 	<link rel="stylesheet"
 		href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
-	<script src='https://kit.fontawesome.com/a076d05399.js'
-		crossorigin='anonymous'></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+  	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/v4-shims.css">
 	<script src="<%=request.getContextPath()%>/static/js/script.js"></script>
 </head>
 <body>

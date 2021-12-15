@@ -126,7 +126,7 @@ public class PhongDao {
         return err_msg;
 	}
 	
-	public List<Phong> getALLPhong() {
+	public List<Phong> getAllPhong() {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM Phong");//HQL
 		

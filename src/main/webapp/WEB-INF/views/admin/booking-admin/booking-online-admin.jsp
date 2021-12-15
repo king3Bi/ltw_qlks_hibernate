@@ -9,7 +9,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Quản lý loại phòng</title>
+	<title>Quản lý booking offline</title>
 	<link rel="stylesheet"
 		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<script
@@ -33,10 +33,13 @@
 		<jsp:include
 			page="/WEB-INF/views/layouts/layout-admin/_header-admin.jsp"></jsp:include>
 		<script>
-			document.querySelector(".nav-sidebar").children[5].classList
+			/* document.querySelector(".nav-sidebar").children[5].classList
 					.add('menu-open');
 			document.querySelector(".menu-open .nav-link").classList
-					.add('active');
+					.add('active'); */
+			$( "li:nth-child(3)").addClass('menu-is-opening menu-open');
+			$( "li:nth-child(3) > ul > li:nth-child(2)" ).children().addClass('active');
+			
 		</script>
 
 		<div class="content-wrapper">

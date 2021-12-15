@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class OnlineBooking
  */
-@WebServlet("/admin/online-booking")
+@WebServlet(name = "BookingOnlineServlet", urlPatterns = {"/admin/booking-online"})
 public class OnlineBookingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -30,8 +30,7 @@ public class OnlineBookingServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/room-admin.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/booking-admin/booking-online-admin.jsp");
 		dispatcher.forward(request, response);
 	}
 

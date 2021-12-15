@@ -227,6 +227,15 @@ public class UserDao {
 		
 		return null;
 	}
+	
+	public List<User> getAllUser() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM User");
+		
+		List<User> users = q.getResultList();
+		
+		return users;
+	}
 
 	public boolean loginUser(String username, String password, Quyen quyen) {
 		Session session = HibernateUtils.getFactory().openSession();

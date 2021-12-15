@@ -27,19 +27,17 @@ DROP TABLE IF EXISTS `booking`;
 CREATE TABLE `booking` (
   `id_booking` int NOT NULL AUTO_INCREMENT,
   `so_nguoi` int DEFAULT NULL,
-  `co_nguoi_nuoc_ngoai` tinyint(1) DEFAULT NULL,
   `check_in` date NOT NULL,
   `check_out` date NOT NULL,
-  `don_gia` float DEFAULT NULL,
   `dat_online` tinyint(1) DEFAULT NULL,
-  `id_KH` int DEFAULT NULL,
+  `id_nguoi_dat` int DEFAULT NULL,
   `id_HD` int DEFAULT NULL,
   `id_phong` int NOT NULL,
   PRIMARY KEY (`id_booking`),
-  KEY `id_KH` (`id_KH`),
+  KEY `id_nguoi_dat` (`id_nguoi_dat`),
   KEY `id_HD` (`id_HD`),
   KEY `id_phong` (`id_phong`),
-  CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`id_KH`) REFERENCES `user` (`id`),
+  CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`id_nguoi_dat`) REFERENCES `user` (`id`),
   CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`id_HD`) REFERENCES `hoa_don` (`id_HD`),
   CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`id_phong`) REFERENCES `phong` (`id_phong`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;

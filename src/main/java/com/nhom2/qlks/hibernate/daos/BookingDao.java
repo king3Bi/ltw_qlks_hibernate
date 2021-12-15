@@ -24,23 +24,12 @@ public class BookingDao {
         
         if (checkCheckOut(booking.getCheckOut())) {
         	return err_msg = "Check out da ton tai";
-        }
-        
-        if (checkDonGia(booking.getDonGia())) {
-        	return err_msg = "Don gia da ton tai";
-        }
+        }       
         
         if (checkSoNguoi(booking.getSoNguoi())) {
         	return err_msg = "So nguoi da ton tai";
         }
         
-//        if (checkCoNguoiNuocNgoai(booking.isCoNguoiNuocNgoai())) {
-//        	return err_msg = "CÃ³ ngÆ°á»�i nÆ°á»›c ngoÃ i";
-//        }
-//        
-//        if (checkDatOnline(booking.setDatOnline())) {
-//        	return err_msg = "CÃ³ Ä‘áº·t online";
-//        }
 		
 		Transaction transaction = null;
         Session session = HibernateUtils.getFactory().openSession();
@@ -71,7 +60,7 @@ public class BookingDao {
         return err_msg;
 	}
 	
-	public String updateBooking(int id,int songuoi,boolean conguoinuocngoai,Date checkin,Date checkout) {
+	public String updateBooking(int id, int songuoi, boolean conguoinuocngoai, Date checkin, Date checkout) {
 		String err_msg = "";
 		
 		Transaction transaction = null;
@@ -146,6 +135,24 @@ public class BookingDao {
 	public List<Booking> getAllBooking() {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM Booking");//HQL
+		
+		List<Booking> bookings = q.getResultList();
+		
+		return bookings;
+	}
+	
+	public List<Booking> getAllBookingOffline() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE datOnline=0");//HQL
+		
+		List<Booking> bookings = q.getResultList();
+		
+		return bookings;
+	}
+	
+	public List<Booking> getAllBookingOnline() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE datOnline=1");//HQL
 		
 		List<Booking> bookings = q.getResultList();
 		
@@ -266,30 +273,7 @@ public class BookingDao {
 		return null;
 	}
 	
-//	private boolean checkCoNguoiNuocNgoai(Boolean conguoinuocngoai) {
-//		if (getCheckCoNguoiNuocNgoai(conguoinuocngoai) != null) {
-//			return true;
-//		}
-//		return false;
-//	}
-//	
-//	public Booking getCheckCoNguoiNuocNgoai(Boolean conguoinuocngoai) {
-//		Session session = HibernateUtils.getFactory().openSession();
-//		Query q = session.createQuery("FROM Booking WHERE coNguoiNuocNgoai=:conguoinuocngoai");//HQL
-//		
-//		q.setParameter("conguoinuocngoai", conguoinuocngoai);
-//		q.setFirstResult(0);
-//		q.setMaxResults(1);
-//		
-//		List<Booking> bookings = q.getResultList();
-//		
-//		if (bookings.size() > 0) {
-//			return bookings.get(0);
-//		}
-//		
-//		return null;
-//	}
-	
+
 //	private boolean checkDatOnline(Boolean datonline) {
 //	if (getcheckDatOnline(datonline) != null) {
 //		return true;
