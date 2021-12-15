@@ -54,7 +54,6 @@ public class EditRoomServlet extends HttpServlet {
 			phong = new PhongDao().getPhongById(Integer.parseInt(idPhongStr));
 		}
 		request.setAttribute("phong", phong);
-		
 		List<LoaiPhong> roomTypeList = new LoaiPhongDao().getAllLoaiPhong();
 		request.setAttribute("loaiPhongs", roomTypeList);
 		
