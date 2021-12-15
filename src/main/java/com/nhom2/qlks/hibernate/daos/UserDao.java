@@ -277,6 +277,14 @@ public class UserDao {
 		
 		return users;
 	}
+	public List<User> getALLUsercustom() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM User WHERE quyen=3");//HQL
+		
+		List<User> users = q.getResultList();
+		
+		return users;
+	}
 	
 	public String updateUserQuyen(int id,int kichhoat) {
 		String err_msg = "";
