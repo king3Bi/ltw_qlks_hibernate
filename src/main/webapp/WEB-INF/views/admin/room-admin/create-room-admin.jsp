@@ -50,7 +50,7 @@
 				<form action="" method="post">
 				  <div class="form-group">
 				    <label for="room-name">Tên phòng:</label>
-				    <input type="text" id="room-name" class="form-control" placeholder="Nhập tên phòng" name="room-name">
+				    <input type="text" id="room-name" class="lps" placeholder="Nhập tên phòng" name="room-name">
 				  </div>
 				  <div class="form-group">
 				    <label for="room-type">Loại phòng:</label>
