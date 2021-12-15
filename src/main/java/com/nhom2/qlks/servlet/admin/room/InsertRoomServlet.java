@@ -48,10 +48,10 @@ public class InsertRoomServlet extends HttpServlet {
         TrangThaiDao roomStatusList = new TrangThaiDao();
         TrangThai roomStatus = roomStatusList.getTrangThaiById(roomStatusId); 
         
-        PhongDao roomList = new PhongDao();
+        PhongDao roomDao= new PhongDao();
         Phong room = new Phong(roomName, roomType, roomStatus);
         
-        roomList.insertPhong(room);
+        roomDao.insertPhong(room);
         
         response.sendRedirect(request.getContextPath() + "/admin/room");
     }

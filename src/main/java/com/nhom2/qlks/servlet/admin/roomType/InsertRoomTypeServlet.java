@@ -14,9 +14,9 @@ import com.nhom2.qlks.hibernate.daos.LoaiPhongDao;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 
 /**
- * Servlet implementation class RoomType
+ * Servlet implementation class InsertRoomTypeServlet
  */
-@WebServlet("/admin/room-type/insert")
+@WebServlet(name = "AddRoomType", urlPatterns = {"/admin/room-type/add"})
 public class InsertRoomTypeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -28,19 +28,33 @@ public class InsertRoomTypeServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        String roomTypeName = request.getParameter("room-type-name");
+        String roomTypeImage = request.getParameter("room-type-image");
+        Float roomTypeUnitPrice = Float.parseFloat(request.getParameter("room-type-unit-price"));
+        Integer roomTypeNumPeople = Integer.parseInt(request.getParameter("room-type-num-people"));
+        String roomTypeNote = request.getParameter("room-type-note");   
+                       
+        
+        LoaiPhongDao roomTypeDao = new LoaiPhongDao();
+        LoaiPhong roomType = new LoaiPhong(roomTypeName, roomTypeImage, roomTypeUnitPrice, roomTypeNumPeople, roomTypeNote);
+        
+        roomTypeDao.insertLoaiPhong(roomType);
+        
+        response.sendRedirect(request.getContextPath() + "/admin/room-type");
+    }    
+    
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html; charset=UTF-8");
-		
-		List<LoaiPhong> lps = new LoaiPhongDao().getAllLoaiPhong();
-		
-		request.setAttribute("loaiPhongs", lps);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-type-admin/create-room-type-admin.jsp");
-		dispatcher.forward(request, response);
+		processRequest(request, response);
 	}
 
 	/**
@@ -48,7 +62,7 @@ public class InsertRoomTypeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		processRequest(request, response);
 	}
 
 }

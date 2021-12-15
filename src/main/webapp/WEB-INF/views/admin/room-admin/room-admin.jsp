@@ -56,7 +56,7 @@
 				
 					<ul class="nav nav-tabs">
 						<li class="nav-item">							
-							<a class="nav-link active" href="<c:url value='/admin/room'/>">Tất cả</a>
+							<a class="nav-link active" href="<c:url value="${pageContext.servletContext.contextPath}/room"/>">Tất cả</a>
 						</li>								
 						
 						<li class="nav-item">
@@ -127,7 +127,8 @@
 								name="room-name" required>
 						</div>
 						<div class="form-group">
-							<label for="room-type">Loại phòng:</label> <select id="room-type"
+							<label for="room-type">Loại phòng:</label> 
+							<select id="room-type"
 								name="room-type" class="custom-select">
 								<option disabled>Chọn loại phòng</option>							
 								
@@ -138,7 +139,8 @@
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="room-status">Trạng thái:</label> <select
+							<label for="room-status">Trạng thái:</label> 
+							<select
 								id="room-status" name="room-status" class="custom-select">
 								<option disabled>Chọn trạng thái</option>
 								

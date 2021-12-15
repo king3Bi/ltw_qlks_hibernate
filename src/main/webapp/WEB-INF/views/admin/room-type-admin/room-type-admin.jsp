@@ -2,33 +2,30 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loại phòng</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- link cdn admin template -->
-<script
-	src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
-<script src='https://kit.fontawesome.com/a076d05399.js'
-	crossorigin='anonymous'></script>
-<!-- link script -->
-<script src="<%=request.getContextPath()%>/static/js/script.js"></script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Quản lý loại phòng</title>
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<script
+		src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
+	<script src='https://kit.fontawesome.com/a076d05399.js'
+		crossorigin='anonymous'></script>
+	<script src="<%=request.getContextPath()%>/static/js/script.js"></script>
 </head>
 <body>
 	<div class="wrapper">
@@ -56,9 +53,9 @@
 				<div class="container-fluid">
 					<ul class="nav nav-tabs">
 						<li class="nav-item"><a class="nav-link active"
-							href="<%=request.getContextPath()%>/room-type">Tất cả</a></li>
+							href="<c:url value="${pageContext.servletContext.contextPath}/room-type"/>">Tất cả</a></li>
 						<li class="nav-item"><a class="nav-link" data-toggle="modal"
-							href="#myModal">Thêm</a></li>
+							href="#addTypeRoomModal">Thêm</a></li>
 					</ul>
 
 					<table class="table table-striped">
@@ -70,33 +67,29 @@
 								<th>Đơn giá</th>
 								<th>Số người</th>
 								<th>Ghi chú</th>
+								<th>Chức năng</th>				
 								<th></th>
 							</tr>
 						</thead>
-						<tbody>
-							<%
-							List<LoaiPhong> loaiPhongs = (List<LoaiPhong>) request.getAttribute("loaiPhongs");
-							%>
-							<%
-							for (LoaiPhong lp : loaiPhongs) {
-							%>
-							<tr>
-								<td><%=lp.getIdLoaiPhong()%></td>
-								<td><%=lp.getTenLoaiPhong()%></td>
-								<td><%=lp.getHinhAnh()%></td>
-								<td><%=lp.getDonGia()%></td>
-								<td><%=lp.getSoNguoi()%></td>
-								<td><%=lp.getGhiChu()%></td>
-								<td>
-									<a class="btn btn-primary"
-									href="<%=request.getContextPath()%>/room-type/edit?room-type-id=<%=lp.getIdLoaiPhong()%>">Sửa</a>
-									<a class="btn btn-primary"
-									href="<%=request.getContextPath()%>/room-type/delete?room-type-id=<%=lp.getIdLoaiPhong()%>">Xóa</a>
-								</td>
-							</tr>
-							<%
-							}
-							%>
+						<tbody>							
+							
+							<c:forEach items="${loaiPhongs}" var="loaiPhong">						
+								<tr>
+									<td><c:out value="${loaiPhong.idLoaiPhong}"></c:out></td>
+									<td><c:out value="${loaiPhong.tenLoaiPhong}"></c:out></td>								
+									<td><img src="<c:url value="${pageContext.request.contextPath}/${loaiPhong.hinhAnh}"/>"></td>
+									<td><c:out value="${loaiPhong.donGia}"></c:out></td>
+									<td><c:out value="${loaiPhong.soNguoi}"></c:out></td>
+									<td><c:out value="${loaiPhong.ghiChu}"></c:out></td>															
+																
+									<td><a class="btn btn-primary"
+										href="<c:url value='room-type/edit'/>?room-type-id=${loaiPhong.idLoaiPhong}">Sửa</a>
+										<a class="btn btn-danger"
+										href="<c:url value='room-type/delete'/>?room-type-id=${loaiPhong.idLoaiPhong}">Xóa</a>
+									</td>
+								</tr>															
+							</c:forEach>							
+							
 						</tbody>
 					</table>
 				</div>
@@ -105,8 +98,8 @@
 		</div>
 	</div>
 
-	<!-- The Modal -->
-	<div class="modal fade" id="myModal">
+	<!-- Add Room Type Modal -->
+	<div class="modal fade" id="addTypeRoomModal">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 
@@ -118,52 +111,54 @@
 
 				<!-- Modal body -->
 				<div class="modal-body">
-					<form action="" id="room-form">
+					<form action="room-type/add"" id="room-type-form" enctype="multipart/form-data">
 						<div class="form-group">
-							<label for="room-name">Tên loại phòng:</label> <input type="text"
-								id="room-name" class="form-control" placeholder="Nhập tên phòng"
-								name="room-name">
+							<label for="room-type-name">Tên loại phòng:</label> 
+							<input type="text"
+								id="room-type-name" class="form-control" placeholder="Nhập tên loại phòng"
+								name="room-type-name" required>
 						</div>
-						<%-- <div class="form-group">
-							<label for="room-type">Loại phòng:</label> <select id="room-type"
-								name="room-type" class="custom-select">
-								<option disabled>Chọn loại phòng</option>
-								<%
-								for (LoaiPhong lp : lps) {
-								%>
-
-								<option value="<%=lp.getIdLoaiPhong()%>"><%=lp.getTenLoaiPhong()%></option>
-								<%
-								}
-								%>
-							</select>
-						</div>
+						
 						<div class="form-group">
-							<label for="room-status">Trạng thái:</label> <select
-								id="room-status" name="room-status" class="custom-select">
-								<option disabled>Chọn trạng thái</option>
-								<%
-								for (TrangThai tt : tts) {
-								%>
-
-								<option value="<%=tt.getIdTrangThai()%>"><%=tt.getTenTrangThai()%></option>
-								<%
-								}
-								%>
-							</select>
-						</div> --%>
+							<label for="room-type-image">Hình ảnh:</label> 
+							<input type="file" path="img"
+								id="room-type-image" class="form-control" placeholder="Chọn hình ảnh loại phòng"
+								name="room-type-image" accept="image/*">
+						</div>
+						
+						<div class="form-group">
+							<label for="room-type-unit-price">Đơn giá:</label> 
+							<input type="number"
+								id="room-type-unit-price" class="form-control" placeholder="Nhập đơn giá"
+								name="room-type-unit-price" required>
+						</div>
+						
+						<div class="form-group">
+							<label for="room-type-num-people">Số người:</label> 
+							<input type="number"
+								id="room-type-num-people" class="form-control" placeholder="Nhập số người"
+								name="room-type-num-people" required>
+						</div>
+						
+						<div class="form-group">
+							<label for="room-type-note">Ghi chú:</label> 
+							<input type="text"
+								id="room-type-note" class="form-control" placeholder="Nhập ghi chú"
+								name="room-type-note">
+						</div>
+						
+						<!-- Modal footer -->
+						<div class="modal-footer">
+							<input type="submit" class="btn btn-success" value="Thêm">
+							<input type="button" class="btn btn-danger" data-dismiss="modal" value="Thoát">							
+						</div>
+						
 					</form>
-				</div>
-
-				<!-- Modal footer -->
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
-						onclick="saveCreateRoomType()">Lưu</button>
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Thoát</button>
-				</div>
+				</div>			
 
 			</div>
 		</div>
-	</div>
+	</div>			
+	
 </body>
 </html>

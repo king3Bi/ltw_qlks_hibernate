@@ -31,13 +31,6 @@ public class EditRoomServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
-	/*
-	 * protected void processRequest(HttpServletRequest request, HttpServletResponse
-	 * response) throws ServletException, IOException {
-	 * 
-	 * }
-	 */
     
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
