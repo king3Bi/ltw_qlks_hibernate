@@ -1,5 +1,6 @@
 package com.nhom2.qlks.hibernate.daos;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -8,7 +9,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.nhom2.qlks.hibernate.HibernateUtils;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.pojo.Phong;
 import com.nhom2.qlks.hibernate.pojo.Quyen;
+import com.nhom2.qlks.hibernate.pojo.TrangThai;
 import com.nhom2.qlks.hibernate.pojo.User;
 
 public class UserDao {
@@ -159,6 +163,22 @@ public class UserDao {
 		}
 		return false;
 	}
+	public User getUserByid(int id) {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM User WHERE id=:id");//HQL có bảng user đợi chút seảch gg
+		
+		q.setParameter("id", id);
+		q.setFirstResult(0);
+		q.setMaxResults(1);
+		
+		List<User> users = q.getResultList();
+		
+		if (users.size() > 0) {
+			return users.get(0);
+		}
+		
+		return null;
+	}
 	
 	public User getUserByUsername(String username) {
         Session session = HibernateUtils.getFactory().openSession();
@@ -248,5 +268,95 @@ public class UserDao {
 		
 		return false;
 	}
+
+	public List<User> getALLUser() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM User WHERE quyen=2");//HQL
+		
+		List<User> users = q.getResultList();
+		
+		return users;
+	}
+	
+	public String updateUserQuyen(int id,int kichhoat) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+          
+			
+			User user = (User)session.get(User.class,id);
+	
+			user.setKichHoat(kichhoat);
+		
+            session.update(user);
+            System.out.println("update user");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	public String updateUser(int id,String hoten,Date ngaysinh,String gioitinh,String cmnd,String email,String sdt,int kichhoat,Quyen quyen) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+          
+			
+			User user = (User)session.get(User.class,id);
+			user.setHoTen(hoten);
+	
+			user.setCmnd(cmnd);
+			user.setEmail(email);
+			user.setSdt(sdt);
+			user.setGioiTinh(gioitinh);
+			user.setNgaySinh(ngaysinh);
+			user.setQuyen(quyen);
+			user.setKichHoat(kichhoat);
+		
+            session.update(user);
+            System.out.println("update user");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
 }
 
