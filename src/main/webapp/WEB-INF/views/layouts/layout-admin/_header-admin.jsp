@@ -130,7 +130,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/admin/bill/insert" class="nav-link">
+            <a href="<%=request.getContextPath()%>/admin/bill/insert" class="nav-link">
               <i class="nav-icon fas fa-receipt"></i>
               <p>
                 Lập hóa đơn                

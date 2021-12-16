@@ -1,13 +1,16 @@
 package com.nhom2.qlks.hibernate.daos;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.nhom2.qlks.hibernate.HibernateUtils;
+import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
@@ -132,6 +135,43 @@ public class PhongDao {
 		
 		List<Phong> phongs = q.getResultList();
 		
+		return phongs;
+	}
+	
+	public List<Phong> timPhong(int soNguoi, Date checkIn, Date checkOut) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+//		Query q1 = session.createQuery("FROM Booking "
+//				+ "WHERE NOT ((checkIn < :checkIn AND checkOut < :checkIn) "
+//				+ "OR (checkIn > :checkOut AND checkOut > :checkOut))");
+		
+		Query q1 = session.createQuery("SELECT p.idPhong, bk.checkIn "
+				+ "FROM Phong p "
+				+ "LEFT JOIN p.bookings bk ");
+		
+//		q1.setParameter("checkIn", checkIn, TemporalType.DATE);
+//		q1.setParameter("checkOut", checkOut, TemporalType.DATE);
+		
+//		List<Booking> bookeds = q1.getResultList();
+//		for (Booking p : bookeds) {
+//			System.out.println(p.getIdBooking());
+//		}
+		
+		List<Object[]> bookeds = q1.getResultList();
+		bookeds.forEach(x -> {
+			System.out.printf("idPhong: %d, checkIn: %s\n", x[0], x[1]);
+		});
+		
+		Query q;
+		if (soNguoi == 0) {
+			q = session.createQuery("FROM Phong");//HQL
+		} else {
+			q = session.createQuery("FROM Phong "
+					+ "WHERE loaiPhong.soNguoi=:soNguoi");//HQL
+			q.setParameter("soNguoi", soNguoi);
+		}
+		
+		List<Phong> phongs = q.getResultList();
 		return phongs;
 	}
 	

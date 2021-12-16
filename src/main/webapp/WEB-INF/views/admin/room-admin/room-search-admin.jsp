@@ -98,6 +98,7 @@
 									<th>Id</th>
 									<th>Tên phòng</th>
 									<th>Loại phòng</th>
+									<th>Số người</th>
 									<th>Trạng thái</th>
 									<th>Đơn giá</th>
 									<th>Chức năng</th>
@@ -111,11 +112,17 @@
 										<td><c:out value="${phong.idPhong}"></c:out></td>
 										<td><c:out value="${phong.tenPhong}"></c:out></td>
 										<td><c:out value="${phong.loaiPhong.tenLoaiPhong}"></c:out></td>
+										<td><c:out value="${phong.loaiPhong.soNguoi}"></c:out></td>
 										<td><c:out value="${phong.trangThai.tenTrangThai}"></c:out></td>
 										<td><c:out value="${phong.loaiPhong.donGia}"></c:out> VNĐ</td>
 																	
-										<td><a class="btn btn-primary" data-toggle="modal" 
-											href="#myModal">Đặt phòng</a>
+										<td><a class="btn btn-primary" 
+											onclick="openCreateBooking(
+														<c:out value="${phong.idPhong}"></c:out>,
+														<c:out value="${phong.tenPhong}"></c:out>,
+														<c:out value="${phong.loaiPhong.soNguoi}"></c:out>
+													)" 
+											href="javascript:void(0)">Đặt phòng</a>
 										</td>
 									</tr>															
 								</c:forEach>
@@ -134,7 +141,7 @@
 
 	<!-- The Modal -->
 	<div class="modal fade" id="myModal">
-		<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
 
 				<!-- Modal Header -->
@@ -145,45 +152,55 @@
 
 				<!-- Modal body -->
 				<div class="modal-body">
-					<form action="room/booking" id="room-form">
-						<div class="form-group">
-							<label for="room-name">Tên phòng:</label> <input type="text"
-								id="room-name" class="form-control" placeholder="Nhập tên phòng"
-								name="room-name" required>
-						</div>
-						<div class="form-group">
-							<label for="room-type">Loại phòng:</label> <select id="room-type"
-								name="room-type" class="custom-select">
-								<option disabled>Chọn loại phòng</option>							
-								
-								<c:forEach items="${loaiPhongs}" var="loaiPhong">
-									<option value="${loaiPhong.idLoaiPhong}">${loaiPhong.tenLoaiPhong}</option>								
-								</c:forEach>
-								
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="room-status">Trạng thái:</label> <select
-								id="room-status" name="room-status" class="custom-select">
-								<option disabled>Chọn trạng thái</option>
-								
-								<c:forEach items="${trangThais}" var="trangThai">
-									<option value="${trangThai.idTrangThai}">${trangThai.tenTrangThai}</option>								
-								</c:forEach>
-																
-							</select>
-						</div>
-						
-						<!-- Modal footer -->
-						<div class="modal-footer">
-							<input type="submit" class="btn btn-success" value="Đặt">
-							<input type="button" class="btn btn-danger" data-dismiss="modal" value="Thoát">							
-						</div>
-					</form>
-				</div>
-
+					<div>
+	                    <div style="display: inline;" class="mr-4">
+	                        <label for="ten-phong-pt">Phòng</label>
+	                        <input id="ten-phong-pt" type="text" disabled="">
+	                    </div>
+	                    <div style="display: inline;" class="mr-4">
+	                        <label for="check-in-pt">Check in</label>
+	                        <input id="check-in-pt" type="date" disabled="">
+	                    </div>
+	                    <div style="display: inline;" class="mr-4">
+	                        <label for="check-out-pt">Check out</label>
+	                        <input id="check-out-pt" type="date" disabled="">
+	                    </div>
+	                    <div style="display: inline;">
+	                        <label for="so-nguoi-pt">Số người</label>
+	                        <input id="so-nguoi-pt" type="number" onchange="createTableBooking(this.value)" min="1" max="3">
+	                    </div>
+	                </div>
+	                
+	                <table class="table table-striped">
+	                    <thead>
+	                        <tr>
+	                            <th>STT</th>
+	                            <th>Khách hàng</th>
+	                            <th>CMND</th>
+	                            <th>Địa chỉ</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody id="tb-booking"><tr><td>1</td><td><input></td><td><input></td><td><input></td></tr></tbody>
+	                </table>
 				
-
+					<!-- Modal footer -->
+					<div class="modal-footer">
+						<input type="button" class="btn btn-success" value="Đặt" onclick="createBooking()">
+						<input type="button" class="btn btn-danger" data-dismiss="modal" value="Thoát">							
+					</div>
+				</div>
+				<script type="text/javascript">
+					function openCreateBooking(roomId, roomName, numPeople) {
+						document.getElementById("ten-phong-pt").value = roomName;
+						document.getElementById("so-nguoi-pt").value = numPeople;
+						createTableBooking(numPeople);
+						$('#myModal').modal();
+					}
+	
+					function createBooking() {
+						
+					}
+				</script>
 			</div>
 		</div>
 	</div>

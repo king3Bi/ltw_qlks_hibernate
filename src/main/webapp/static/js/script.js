@@ -131,3 +131,13 @@ function saveEditPhong() {
 }*/
 
 // ----------------- End Phòng -----------------
+
+// ----------------- Tra cứu phòng -------------
+function openCreateBooking() {
+	$('#myModal').modal();
+}
+
+function createBooking() {
+	
+}
+// ----------------- End tra cứu phòng ---------

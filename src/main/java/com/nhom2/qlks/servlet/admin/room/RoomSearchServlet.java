@@ -44,21 +44,30 @@ public class RoomSearchServlet extends HttpServlet {
 		String checkInStr = request.getParameter("check-in");
 		String checkOutStr = request.getParameter("check-out");
 		
-		int soNguoi = (soNguoiStr != null) ? Integer.parseInt(soNguoiStr) : null;
+		int soNguoi;
+		try {
+			soNguoi = (soNguoiStr != null) ? Integer.parseInt(soNguoiStr) : 0;
+		} catch (Exception e) {
+			// TODO: handle exception
+			soNguoi = 0;
+		}
+		
 		Date checkIn, checkOut;
 		try {
-			checkIn = (checkInStr != null) ? dateFormat.parse(checkInStr) : null; 
-			checkOut = (checkOutStr != null) ? dateFormat.parse(checkOutStr) : null;
+			checkIn = (checkInStr != null) ? dateFormat.parse(checkInStr) : null;
 		} catch (Exception e) {
 			// TODO: handle exception
 			checkIn = null;
+		}
+		
+		try {
+			checkOut = (checkOutStr != null) ? dateFormat.parse(checkOutStr) : null;
+		} catch (Exception e) {
+			// TODO: handle exception
 			checkOut = null;
 		}
 		
-		
-		System.out.println(soNguoiStr + " " + checkInStr + " " + checkOutStr);
-		
-		List<Phong> phongs = new PhongDao().getALLPhong();
+		List<Phong> phongs = new PhongDao().timPhong(soNguoi, checkIn, checkOut);
 		request.setAttribute("phongs", phongs);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/room-search-admin.jsp");
