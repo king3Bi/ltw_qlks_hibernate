@@ -28,7 +28,6 @@ public class UserFilter implements Filter {
 	private String[] urlRoleEmployee = {
 				"/admin/login",
 				"/admin/room-search",
-				"/admin/bill",
 				"/admin/logout",
 				"/admin/online-booking",
 				"/admin/offline-booking"

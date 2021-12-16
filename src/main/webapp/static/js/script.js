@@ -138,6 +138,7 @@ function openCreateBooking() {
 }
 
 function createBooking() {
-	
+	console.log("aaa");
 }
+
 // ----------------- End tra cứu phòng ---------
