@@ -26,23 +26,17 @@ public class Booking implements Serializable {
 	@Column(name = "so_nguoi")
 	private int soNguoi;
 	
-	@Column(name = "co_nguoi_nuoc_ngoai")
-	private boolean coNguoiNuocNgoai;
-	
 	@Column(name = "check_in", nullable = false)
 	private Date checkIn;
 	
 	@Column(name = "check_out", nullable = false)
 	private Date checkOut;
 	
-	@Column(name = "don_gia")
-	private Float donGia;
-	
 	@Column(name = "dat_online")
 	private boolean datOnline;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_KH")
+	@JoinColumn(name = "id_nguoi_dat")
 	private User user;
 	
 	@ManyToOne
@@ -72,14 +66,6 @@ public class Booking implements Serializable {
 		this.soNguoi = soNguoi;
 	}
 
-	public boolean isCoNguoiNuocNgoai() {
-		return coNguoiNuocNgoai;
-	}
-
-	public void setCoNguoiNuocNgoai(boolean coNguoiNuocNgoai) {
-		this.coNguoiNuocNgoai = coNguoiNuocNgoai;
-	}
-
 	public Date getCheckIn() {
 		return checkIn;
 	}
@@ -94,14 +80,6 @@ public class Booking implements Serializable {
 
 	public void setCheckOut(Date checkOut) {
 		this.checkOut = checkOut;
-	}
-
-	public Float getDonGia() {
-		return donGia;
-	}
-
-	public void setDonGia(Float donGia) {
-		this.donGia = donGia;
 	}
 
 	public boolean isDatOnline() {

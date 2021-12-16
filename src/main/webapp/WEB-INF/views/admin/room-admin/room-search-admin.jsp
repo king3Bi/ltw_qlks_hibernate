@@ -171,18 +171,24 @@
 	                    </div>
 	                </div>
 	                
-	                <table class="table table-striped">
-	                    <thead>
-	                        <tr>
-	                            <th>STT</th>
-	                            <th>Khách hàng</th>
-	                            <th>CMND</th>
-	                            <th>Địa chỉ</th>
-	                        </tr>
-	                    </thead>
-	                    <tbody id="tb-booking"><tr><td>1</td><td><input></td><td><input></td><td><input></td></tr></tbody>
-	                </table>
-				
+	                <div>
+	                	<div class="table-responsive">
+	                		<table class="table table-striped table-hover">
+			                    <thead>
+			                        <tr>
+			                            <th>STT</th>
+			                            <th>Khách hàng</th>
+			                            <th>CMND</th>
+			                            <th>Địa chỉ</th>
+			                        </tr>
+			                    </thead>
+			                    <tbody id="tb-booking">
+			                    </tbody>
+			                </table>
+	                	</div>
+		                <input type="hidden" id="id-phong-pt">
+	                </div>
+	                
 					<!-- Modal footer -->
 					<div class="modal-footer">
 						<input type="button" class="btn btn-success" value="Đặt" onclick="createBooking()">
@@ -191,14 +197,59 @@
 				</div>
 				<script type="text/javascript">
 					function openCreateBooking(roomId, roomName, numPeople) {
-						document.getElementById("ten-phong-pt").value = roomName;
-						document.getElementById("so-nguoi-pt").value = numPeople;
-						createTableBooking(numPeople);
-						$('#myModal').modal();
+						if (document.getElementById('check-in').value == '' ||
+						        document.getElementById('check-out').value == '') {
+						            alert('Vui lòng chọn check in, check out');
+						} else {
+							document.getElementById('id-phong-pt').value = roomId;
+							document.getElementById("ten-phong-pt").value = roomName;
+							document.getElementById("check-in-pt").value = document.getElementById('check-in').value;
+							document.getElementById("check-out-pt").value = document.getElementById('check-out').value;
+							document.getElementById("so-nguoi-pt").value = numPeople;
+							document.getElementById("so-nguoi-pt").max = numPeople + 1;
+							createTableBooking(numPeople);
+							$('#myModal').modal();
+						}
 					}
 	
 					function createBooking() {
+						let table = document.getElementById("tb-booking");
+
+					    if(table.rows.length < 1) {
+					        alert('Số người phải lớn hơn 0');
+					        return;
+					    }
+
+					    const data = [];
+
+					    for (let r of table.children) {
+					    	if (r.children[1].children[0].value == '' ||
+					    			r.children[2].children[0].value == '' ||
+					    			r.children[3].children[0].value == '') {
+					    		alert('Nhập thiếu dữ liệu khách hàng');
+					    		return;
+					    	} 
+					        data.push({
+					            hoTen: r.children[1].children[0].value,
+					            cmnd: r.children[2].children[0].value,
+					            diaChi: r.children[3].children[0].value
+					        });
+					    }
+					    console.log(data);
 						
+						$.post(
+								"<%=request.getContextPath()%>/admin/offline-booking", 
+								{ 
+									idPhong: document.getElementById('id-phong-pt').value,
+									checkIn: document.getElementById("check-in-pt").value,
+									checkOut: document.getElementById("check-out-pt").value,
+									soNguoi: document.getElementById("so-nguoi-pt").value,
+									dataKH: JSON.stringify(data),
+								},
+								function(data, status){
+									alert('Đặt phòng thành công');
+						            location.reload();
+								});
 					}
 				</script>
 			</div>

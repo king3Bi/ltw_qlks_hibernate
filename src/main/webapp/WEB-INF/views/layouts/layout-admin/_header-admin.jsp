@@ -101,7 +101,7 @@
           <img src="<%=request.getContextPath()%>/static/image/avatar.svg" class="img-circle elevation-2" alt="User Image"/>   
         </div>
         <div class="info">
-          <a href="#" class="d-block">Tên user</a>
+          <a href="#" class="d-block"><c:out value = "${ sessionScope.user.hoTen }"/></a>
         </div>
       </div>
 
@@ -165,7 +165,7 @@
           
           
           <c:choose>
-          	<c:when test="">
+          	<c:when test="${ sessionScope.user.quyen.idQuyen == 1 }">
           		<li class="nav-header">QUẢN LÝ</li>
 		          <li class="nav-item">
 		            <a href="<%=request.getContextPath()%>/admin/bill" class="nav-link">

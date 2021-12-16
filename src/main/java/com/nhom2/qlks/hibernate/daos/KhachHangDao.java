@@ -9,53 +9,43 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.nhom2.qlks.hibernate.HibernateUtils;
+import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.KhachHang;
 
 public class KhachHangDao {
-	public String insertKhachHang(KhachHang khachhang) {
+	public String insertKhachHangs(KhachHang[] khachHangs, Booking booking, Session session) {
 		String err_msg = "";
-		
-		
-        
-        if (checkHoTen(khachhang.getHo_ten())) {
-        	return err_msg = "Ho ten da ton tai";
-        }
-        
-        if (checkCmnd(khachhang.getCmnd())) {
-        	return err_msg = "Cmnd da ton tai";
-        }
-        
-        if (checkDiaChi(khachhang.getDiaChi())) {
-        	return err_msg = "Dia chi da ton tai";
-        }
-        
 
-		Transaction transaction = null;
-        Session session = HibernateUtils.getFactory().openSession();
+//		Transaction transaction = null;
+//        Session session = HibernateUtils.getFactory().openSession();
         
         try {
             // start a transaction
-            transaction = session.beginTransaction();            
-            System.out.println("created transaction");
+//            transaction = session.beginTransaction();            
+//            System.out.println("created transaction");
             
             // save the student object
-            session.save(khachhang);       
+            for (KhachHang kh : khachHangs) {
+            	kh.setBooking(booking);
+            	session.save(kh);
+            }
+                   
             System.out.println("saved khachhang");
             // commit transaction
-            transaction.commit();
-            System.out.println("commited transaction");
+//            transaction.commit();
+//            System.out.println("commited transaction");
             
             err_msg = "successed";
         } catch (Exception e) {
-            if (transaction != null) {
-            	System.out.println("roll back transaction");
-                transaction.rollback();
-                err_msg = "failed";
-            }
+//            if (transaction != null) {
+//            	System.out.println("roll back transaction");
+//                transaction.rollback();
+//                err_msg = "failed";
+//            }
             e.printStackTrace();
         } finally {
-        	   session.close();
+//        	   session.close();
         }
         return err_msg;
 	}
@@ -195,7 +185,7 @@ public class KhachHangDao {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM KhachHang WHERE cmnd=:cmnd");//HQL
 		
-		q.setParameter("idkhach", cmnd);
+		q.setParameter("cmnd", cmnd);
 		q.setFirstResult(0);
 		q.setMaxResults(1);
 		
@@ -206,29 +196,6 @@ public class KhachHangDao {
 		}
 		
 		return null;
-	}
-	//diachi
-	private boolean checkDiaChi(String checkdiachi) {
-		if (getDiaChi(checkdiachi) != null) {
-			return true;
-		}
-		return false;
 	}
 	
-	public KhachHang getDiaChi(String diachi) {
-		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM KhachHang WHERE diachi=:diachi");//HQL
-		
-		q.setParameter("diachi", diachi);
-		q.setFirstResult(0);
-		q.setMaxResults(1);
-		
-		List<KhachHang> khachhangs = q.getResultList();
-		
-		if (khachhangs.size() > 0) {
-			return khachhangs.get(0);
-		}
-		
-		return null;
-	}
 }
