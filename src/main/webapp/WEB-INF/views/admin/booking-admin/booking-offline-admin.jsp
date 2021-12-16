@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,8 +99,8 @@
 								<tr>
 									<td><c:out value="${booking.idBooking}"></c:out></td>
 									<td><c:out value="${booking.soNguoi}"></c:out></td>								
-									<td><c:out value="${booking.checkIn}"></c:out></td>
-									<td><c:out value="${booking.checkOut}"></c:out></td>
+									<td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkIn}"/></td>
+									<td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkOut}"/></td>			
 									<td><c:out value="${booking.phong.loaiPhong.donGia}"></c:out></td>
 									<td><c:out value="${booking.phong.tenPhong}"></c:out></td>
 									<td><c:out value="${booking.user.tenDangNhap}"></c:out></td>															

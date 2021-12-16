@@ -3,13 +3,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Quản lý booking offline</title>
+	<title>Quản lý booking online</title>
 	<link rel="stylesheet"
 		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<script
@@ -33,21 +34,39 @@
 		<jsp:include
 			page="/WEB-INF/views/layouts/layout-admin/_header-admin.jsp"></jsp:include>
 		<script>
-			/* document.querySelector(".nav-sidebar").children[5].classList
-					.add('menu-open');
-			document.querySelector(".menu-open .nav-link").classList
-					.add('active'); */
 			$( "li:nth-child(3)").addClass('menu-is-opening menu-open');
 			$( "li:nth-child(3) > ul > li:nth-child(2)" ).children().addClass('active');
-			
+									
+			/* function openCustomerList(bookingId) {
+				var url = "<c:url value='booking-offline/customer'/>?booking-id=" + bookingId;
+				$.ajax({
+					type: "GET",
+			    	url: url,
+			     	success: function(data)
+			    	{
+			        	if (data.code == 200) {
+			        		console.log(data);
+			        		document.querySelector("#ten-phong-pt").value = data.data.tenPhong;
+			        		document.querySelector("#check-in-pt").value = data.data.checkIn;
+			        		document.querySelector("#check-out-pt").value = data.data.checkOut;
+			        		document.querySelector("#so-nguoi-pt").value = data.data.soNguoi;
+			        		   
+			        		$("#room-form").attr("action", url);
+			   				$("#customerListModal").modal();
+			        	} else {
+			        		$("#room-form").attr("action", url);
+			   				$("#customerListModal").modal();
+			       		}
+			     	}
+				});
+			} */
 		</script>
 
 		<div class="content-wrapper">
 			<section class="content-header">
 				<div class="container-fluid">
 					<div class="col-11 ">
-						<h1 class="h3 text-center text-gray-800 mb-0">Quản lý loại
-							phòng</h1>
+						<h1 class="h3 text-center text-gray-800 mb-0">Quản lý booking online</h1>
 					</div>
 				</div>
 			</section>
@@ -57,40 +76,60 @@
 				<div class="container-fluid">
 					<ul class="nav nav-tabs">
 						<li class="nav-item"><a class="nav-link active"
-							href="<c:url value="${pageContext.servletContext.contextPath}/room-type"/>">Tất cả</a></li>
-						<li class="nav-item"><a class="nav-link" data-toggle="modal"
-							href="#addTypeRoomModal">Thêm</a></li>
+							href="<c:url value="booking-online"/>">Tất cả</a></li>						
 					</ul>
 
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>Id</th>
-								<th>Tên loại phòng</th>
-								<th>Hình ảnh</th>
-								<th>Đơn giá</th>
+								<th>Mã booking</th>
 								<th>Số người</th>
-								<th>Ghi chú</th>
-								<th>Chức năng</th>				
-								<th></th>
+								<th>Check in</th>
+								<th>Check out</th>
+								<th>Đơn giá</th>
+								<th>Phòng</th>
+								<th>Khách hàng online</th>
+								<th>Mã hóa đơn</th>
+								<th>Khách</th>															
 							</tr>
 						</thead>
 						<tbody>							
 							
-							<c:forEach items="${loaiPhongs}" var="loaiPhong">						
+							<c:forEach items="${bookings}" var="booking">						
 								<tr>
-									<td><c:out value="${loaiPhong.idLoaiPhong}"></c:out></td>
-									<td><c:out value="${loaiPhong.tenLoaiPhong}"></c:out></td>								
-									<td><img src="<c:url value="${pageContext.request.contextPath}/${loaiPhong.hinhAnh}"/>"></td>
-									<td><c:out value="${loaiPhong.donGia}"></c:out></td>
-									<td><c:out value="${loaiPhong.soNguoi}"></c:out></td>
-									<td><c:out value="${loaiPhong.ghiChu}"></c:out></td>															
-																
-									<td><a class="btn btn-primary"
-										href="<c:url value='room-type/edit'/>?room-type-id=${loaiPhong.idLoaiPhong}">Sửa</a>
-										<a class="btn btn-danger"
-										href="<c:url value='room-type/delete'/>?room-type-id=${loaiPhong.idLoaiPhong}">Xóa</a>
-									</td>
+									<td><c:out value="${booking.idBooking}"></c:out></td>
+									<td><c:out value="${booking.soNguoi}"></c:out></td>								
+									<td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkIn}"/></td>
+									<td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkOut}"/></td>			
+									<td><c:out value="${booking.phong.loaiPhong.donGia}"></c:out></td>
+									<td><c:out value="${booking.phong.tenPhong}"></c:out></td>
+									<td><c:out value="${booking.user.tenDangNhap}"></c:out></td>															
+									<td><c:out value="${booking.hoaDon.idHD}"></c:out></td>															
+									<td>
+										<c:forEach items="${customers}" var="customer">
+											<c:set var = "countCustomer" scope = "session" value = "${0}"/>
+																					      
+										    <c:if test="${customer.booking.idBooking == booking.idBooking}">
+										    	<c:set var = "countCustomer" scope = "session" value = "${countCustomer + 1}"/>
+											</c:if>
+										      
+										</c:forEach>
+										 									
+										<c:choose>
+	         										
+									         <c:when test = "${countCustomer > 0}">
+									         	<%-- <a class="btn btn-primary"	
+									            href="<c:url value='booking-offline/customer'/>?booking-id=${booking.idBooking}">Xem</a> --%>
+									           <!--  <a class="btn btn-primary" data-toggle="modal" href="#myModal">Xem</a> -->
+									            <a class="btn btn-primary" data-toggle="modal" onclick="openCustomerList(${booking.idBooking})">Xem</a>
+									         </c:when>										         										      
+									         
+									         <c:otherwise>
+									            <a class="btn btn-success" href="<c:url value='booking-offline/add-customer'/>?booking-id=${booking.idBooking}">Thêm</a>
+									         </c:otherwise>
+										         
+										</c:choose>
+									</td>															
 								</tr>															
 							</c:forEach>							
 							
@@ -101,68 +140,71 @@
 			</section>
 		</div>
 	</div>
-
-	<!-- Add Room Type Modal -->
-	<div class="modal fade" id="addTypeRoomModal">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-
-				<!-- Modal Header -->
-				<div class="modal-header">
-					<h4 class="modal-title">Thêm loại phòng</h4>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-
-				<!-- Modal body -->
-				<div class="modal-body">
-					<form action="room-type/add"" id="room-type-form" enctype="multipart/form-data">
-						<div class="form-group">
-							<label for="room-type-name">Tên loại phòng:</label> 
-							<input type="text"
-								id="room-type-name" class="form-control" placeholder="Nhập tên loại phòng"
-								name="room-type-name" required>
-						</div>
-						
-						<div class="form-group">
-							<label for="room-type-image">Hình ảnh:</label> 
-							<input type="file" path="img"
-								id="room-type-image" class="form-control" placeholder="Chọn hình ảnh loại phòng"
-								name="room-type-image" accept="image/*">
-						</div>
-						
-						<div class="form-group">
-							<label for="room-type-unit-price">Đơn giá:</label> 
-							<input type="number"
-								id="room-type-unit-price" class="form-control" placeholder="Nhập đơn giá"
-								name="room-type-unit-price" required>
-						</div>
-						
-						<div class="form-group">
-							<label for="room-type-num-people">Số người:</label> 
-							<input type="number"
-								id="room-type-num-people" class="form-control" placeholder="Nhập số người"
-								name="room-type-num-people" required>
-						</div>
-						
-						<div class="form-group">
-							<label for="room-type-note">Ghi chú:</label> 
-							<input type="text"
-								id="room-type-note" class="form-control" placeholder="Nhập ghi chú"
-								name="room-type-note">
-						</div>
-						
-						<!-- Modal footer -->
-						<div class="modal-footer">
-							<input type="submit" class="btn btn-success" value="Thêm">
-							<input type="button" class="btn btn-danger" data-dismiss="modal" value="Thoát">							
-						</div>
-						
-					</form>
-				</div>			
-
-			</div>
-		</div>
-	</div>			
+	
+	
+	<div class="modal fade" id="customerListModal">
+	    <div class="modal-dialog modal-lg modal-dialog-centered">
+	        <div class="modal-content">
+	
+	            <!-- Modal Header -->
+	            <div class="modal-header">
+	                <h4 class="modal-title">Thông tin khách hàng</h4>
+	                <button type="button" class="close" data-dismiss="modal">×</button>
+	            </div>
+	
+	            <!-- Modal body -->
+	            <div class="modal-body">
+	                <div class="row">
+	                    <div class="col">
+	                        <label for="ten-phong-pt">Phòng</label></br>
+	                        <input id="ten-phong-pt" type="text" disabled/>
+	                    </div>
+	                    <div class="col">
+	                        <label for="check-in-pt">Check in</label></br>
+	                        <input id="check-in-pt" type="date" disabled/>
+	                    </div>
+	                    <div class="col">
+	                        <label for="check-out-pt">Check out</label></br>
+	                        <input id="check-out-pt" type="date" disabled/>
+	                    </div>
+	                    <div class="col">
+	                        <label for="so-nguoi-pt">Số người</label></br>
+	                        <input id="so-nguoi-pt" type="number" disabled>
+	                    </div>
+	                </div>
+	                <br>
+	                <table class="table table-striped">
+	                    <thead>
+	                    <tr>
+	                        <th>STT</th>
+	                        <th>Khách hàng</th>
+	                        <th>CMND</th>
+	                        <th>Địa chỉ</th>
+	                    </tr>
+	                    </thead>
+	                    <tbody id="tb-booking">
+	                    
+		                    <tr>
+		                        <td>i</td>
+		                        <td>
+		                            <input type="text"/>
+		                        </td>
+		                        <td>
+		                            <input type="text"/>
+		                        </td>
+		                        <td>
+		                            <input type="text"/>
+		                        </td>
+		                    </tr>
+	                
+	                    </tbody>
+	                </table>
+	              
+	            </div>
+	
+	        </div>
+	    </div>
+	</div>
 	
 </body>
 </html>

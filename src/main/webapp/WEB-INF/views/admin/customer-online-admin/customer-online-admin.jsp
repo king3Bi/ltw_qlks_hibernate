@@ -29,18 +29,6 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
   	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/v4-shims.css">
 	<script src="<%=request.getContextPath()%>/static/js/script.js"></script>
-	
-	<script>
-	$( document ).ready(function() {
-	    $("#user-sn").datepicker({ 
-	        format: 'yyyy-mm-dd'
-	    });
-	    $("#user-sn").on("change", function () {
-	        var fromdate = $(this).val();
-	        alert(fromdate);
-	    });
-	}); 
-	</script>
 		
 </head>
 <body>
