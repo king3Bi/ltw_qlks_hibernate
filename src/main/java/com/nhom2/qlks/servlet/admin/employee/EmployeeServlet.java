@@ -1,6 +1,7 @@
 package com.nhom2.qlks.servlet.admin.employee;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.nhom2.qlks.hibernate.daos.LoaiPhongDao;
+import com.nhom2.qlks.hibernate.daos.PhongDao;
+import com.nhom2.qlks.hibernate.daos.QuyenDao;
+import com.nhom2.qlks.hibernate.daos.TrangThaiDao;
+import com.nhom2.qlks.hibernate.daos.UserDao;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.pojo.Phong;
+import com.nhom2.qlks.hibernate.pojo.Quyen;
+import com.nhom2.qlks.hibernate.pojo.User;
 
 /**
  * Servlet implementation class EmployeeServlet
@@ -30,6 +41,14 @@ public class EmployeeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		List<Quyen> quyens = new QuyenDao().getAllQuyen();
+		
+		List<User> users = new UserDao().getAllUserEmployee();
+		
+		request.setAttribute("quyens", quyens);
+		request.setAttribute("users", users);
+		
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/employee-admin/employee-admin.jsp");
 		dispatcher.forward(request, response);

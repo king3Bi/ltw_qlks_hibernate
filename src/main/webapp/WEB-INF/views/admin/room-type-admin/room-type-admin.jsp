@@ -43,8 +43,7 @@
 			<section class="content-header">
 				<div class="container-fluid">
 					<div class="col-11 ">
-						<h1 class="h3 text-center text-gray-800 mb-0">Quản lý loại
-							phòng</h1>
+						<h1 class="h3 text-center text-gray-800 mb-0">Quản lý loại phòng</h1>
 					</div>
 				</div>
 			</section>
@@ -54,7 +53,7 @@
 				<div class="container-fluid">
 					<ul class="nav nav-tabs">
 						<li class="nav-item"><a class="nav-link active"
-							href="<c:url value="${pageContext.servletContext.contextPath}/room-type"/>">Tất cả</a></li>
+							href="<c:url value="/admin/room-type"/>">Tất cả</a></li>
 						<li class="nav-item"><a class="nav-link" data-toggle="modal"
 							href="#addTypeRoomModal">Thêm</a></li>
 					</ul>
@@ -78,7 +77,7 @@
 								<tr>
 									<td><c:out value="${loaiPhong.idLoaiPhong}"></c:out></td>
 									<td><c:out value="${loaiPhong.tenLoaiPhong}"></c:out></td>								
-									<td><img src="<c:url value="${pageContext.request.contextPath}/${loaiPhong.hinhAnh}"/>"></td>
+									<td style="width:300px"><img src="<c:url value="${loaiPhong.hinhAnh}"/>" alt="${loaiPhong.tenLoaiPhong}" width="250" height="150"></td>
 									<td><c:out value="${loaiPhong.donGia}"></c:out></td>
 									<td><c:out value="${loaiPhong.soNguoi}"></c:out></td>
 									<td><c:out value="${loaiPhong.ghiChu}"></c:out></td>															
@@ -122,9 +121,9 @@
 						
 						<div class="form-group">
 							<label for="room-type-image">Hình ảnh:</label> 
-							<input type="file" path="img"
-								id="room-type-image" class="form-control" placeholder="Chọn hình ảnh loại phòng"
-								name="room-type-image" accept="image/*">
+							<input type="text"
+								id="room-type-image" class="form-control" placeholder="Link hình ảnh loại phòng"
+								name="room-type-image" required>
 						</div>
 						
 						<div class="form-group">

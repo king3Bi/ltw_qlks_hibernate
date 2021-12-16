@@ -1,31 +1,26 @@
 package com.nhom2.qlks.servlet.admin.customer;
 
 import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.nhom2.qlks.hibernate.daos.QuyenDao;
 import com.nhom2.qlks.hibernate.daos.UserDao;
-import com.nhom2.qlks.hibernate.pojo.Quyen;
 import com.nhom2.qlks.hibernate.pojo.User;
 
 /**
- * Servlet implementation class OnlineCustomerServlet
+ * Servlet implementation class ActivateCustomerServlet
  */
-@WebServlet("/admin/online-customer")
-public class OnlineCustomerServlet extends HttpServlet {
+@WebServlet(name="ActivateCustomer", urlPatterns = {"/admin/online-customer/activate"})
+public class ActivateCustomerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OnlineCustomerServlet() {
+    public ActivateCustomerServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,25 +28,34 @@ public class OnlineCustomerServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+    protected void ActivateCustomerRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        Integer userId = Integer.parseInt(request.getParameter("user-id"));
+        boolean check= true;    
+   
+        UserDao userDao = new UserDao();
+        User user = userDao.getUserByid(userId);
+        if(user.getKichHoat() == true) {
+        	check = false;
+        }
+        userDao.updateUserQuyen(userId, check);
+        response.sendRedirect(request.getContextPath() + "/admin/online-customer");
+      
+    
+    }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html; charset=UTF-8");
-		request.setCharacterEncoding("UTF-8");
-		
-		List<User> users = new UserDao().getAllUserCustomer();
-		request.setAttribute("users", users);
-
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/customer-online-admin/customer-online-admin.jsp");
-		dispatcher.forward(request, response);
+		ActivateCustomerRequest(request,response);
 	}
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		ActivateCustomerRequest(request,response);
 	}
 
 }

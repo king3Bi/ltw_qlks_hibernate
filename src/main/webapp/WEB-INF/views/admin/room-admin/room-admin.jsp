@@ -56,7 +56,7 @@
 				
 					<ul class="nav nav-tabs">
 						<li class="nav-item">							
-							<a class="nav-link active" href="<c:url value="${pageContext.servletContext.contextPath}/room"/>">Tất cả</a>
+							<a class="nav-link active" href="<c:url value="/admin/room"/>">Tất cả</a>
 						</li>								
 						
 						<li class="nav-item">
@@ -122,7 +122,8 @@
 				<div class="modal-body">
 					<form action="room/add" id="room-form">
 						<div class="form-group">
-							<label for="room-name">Tên phòng:</label> <input type="text"
+							<label for="room-name">Tên phòng:</label> 
+							<input type="text"
 								id="room-name" class="form-control" placeholder="Nhập tên phòng"
 								name="room-name" required>
 						</div>

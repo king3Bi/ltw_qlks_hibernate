@@ -7,9 +7,9 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Chỉnh sửa thông tin phòng</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Chỉnh sửa thông tin loại phòng</title>
 		<link rel="stylesheet"
 			href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 		<script
@@ -23,8 +23,8 @@
 			src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 		<link rel="stylesheet"
 			href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
-		<script src='https://kit.fontawesome.com/a076d05399.js'
-			crossorigin='anonymous'></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+	  	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/v4-shims.css">
 		<script src="<%=request.getContextPath()%>/static/js/script.js"></script>
 	</head>
 	<body>
@@ -71,9 +71,8 @@
 								
 								<div class="form-group">																
 									<label for="room-type-image">Hình ảnh:</label> 
-									<input type="file" id="room-type-image" 
-										class="form-control" placeholder="Chọn hình ảnh loại phòng"
-										name="room-type-image" accept="image/*">							
+									<input type="text" id="room-type-image" class="form-control" placeholder="Link hình ảnh loại phòng"
+									name="room-type-image" required>							
 								</div>
 								
 								<div class="form-group">
@@ -98,6 +97,7 @@
 								</div>
 								
 								<input type="submit" class="btn btn-success" value="Sửa">
+								<a class="btn btn-danger" href="<c:url value='/admin/room-type'/>">Thoát</a>
 
 							</form>
 							<!-- end form -->			
