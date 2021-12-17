@@ -14,18 +14,26 @@
         <a href="#contact">Liên hệ</a>
     </nav>
 
-    <nav class="navbar">
-   		<%User user = (User) session.getAttribute("user");%>
-   		<% if (user != null) { %>
-   			<a class="fas fa-shopping-cart" href=""></a>
-   			<a href="<%=request.getContextPath()%>/<%=user.getTenDangNhap()%>/">
-              <%= user.getHoTen() %>  
-            </a>
-   			<a href="<%=request.getContextPath()%>/logout">Đăng xuất</a>
-   		<% } else { %>       		
+	<nav class="navbar">
+        <%User user = (User) session.getAttribute("user");%>
+        <% if (user != null) { %>
+	        <div class="dropdown">
+	            <a class="nav-link dropdown-toggle" id="dropdownAccount" data-toggle="dropdown"
+	               aria-haspopup="true" aria-expanded="false" href="/">
+	                <i class="fa fa-user" aria-hidden="true"></i>
+	                <%= user.getHoTen() %>	                
+	            </a>
+	            <div class="dropdown-menu" aria-labelledby="dropdownAccount">
+	                <a class="dropdown-item" href="<%=request.getContextPath()%>/change-password">Đổi mật khẩu </a>
+	                <a class="dropdown-item" href="<%=request.getContextPath()%>/booking-history">Lịch sử đặt phòng </a>
+	                <a class="dropdown-item" href="<%=request.getContextPath()%>/logout">Đăng xuất</a>
+	            </div>
+	        </div>
+		<% } else { %>       		
             <a href="<%=request.getContextPath()%>/login">Đăng nhập</a>
             <a href="<%=request.getContextPath()%>/register">Đăng ký</a>
         <% } %>
+        
     </nav>
 
 </header>
