@@ -172,6 +172,9 @@ public class PhongDao {
 		}
 		
 		List<Phong> phongs = q.getResultList();
+		
+		session.close();
+		
 		return phongs;
 	}
 	
@@ -182,6 +185,8 @@ public class PhongDao {
 		q.setParameter("loaiPhong", loaiPhong);
 		
 		List<Phong> phongs = q.getResultList();
+		
+		session.close();
 		
 		return phongs;
 	}
@@ -199,6 +204,8 @@ public class PhongDao {
 		if (phongs.size() > 0) {
 			return phongs.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}
@@ -223,6 +230,8 @@ public class PhongDao {
 		if (phongs.size() > 0) {
 			return phongs.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}

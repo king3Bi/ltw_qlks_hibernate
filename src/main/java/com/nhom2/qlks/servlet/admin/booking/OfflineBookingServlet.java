@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -20,6 +21,7 @@ import com.nhom2.qlks.hibernate.daos.PhongDao;
 import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.KhachHang;
 import com.nhom2.qlks.hibernate.pojo.Phong;
+import com.nhom2.qlks.hibernate.pojo.User;
 
 /**
  * Servlet implementation class OfflineBooking
@@ -55,7 +57,13 @@ public class OfflineBookingServlet extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		
+		Hashtable<String, Object> result = new Hashtable<String, Object>();
+		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		HttpSession session = request.getSession();
+		
+		User user = (User) session.getAttribute("user"); 
 		
 		String idPhongStr = request.getParameter("idPhong");
 		String checkInStr = request.getParameter("checkIn");
@@ -82,21 +90,21 @@ public class OfflineBookingServlet extends HttpServlet {
 			booking.setCheckOut(checkOut);
 			booking.setSoNguoi(soNguoi);
 			booking.setPhong(phong);
+			booking.setUser(user);
 			
 			BookingDao bookingDao = new BookingDao();
 			
-			bookingDao.insertBooking(booking, dataKH);
+			String err_msg = bookingDao.insertBooking(booking, dataKH);
+			if (err_msg.equals("successed")) {
+				result.put("status", 200);
+			} else {
+				result.put("status", 404);
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
+			result.put("status", 404);
+			
 		}
-		
-		
-		
-		
-		Hashtable<String, Object> result = new Hashtable<String, Object>();
-		
-		result.put("checkIn", checkInStr);
-		result.put("checkOut", checkOutStr);
 		
 		PrintWriter out = response.getWriter();
 		

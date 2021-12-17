@@ -14,40 +14,14 @@ import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.KhachHang;
 
 public class KhachHangDao {
-	public String insertKhachHangs(KhachHang[] khachHangs, Booking booking, Session session) {
-		String err_msg = "";
-
-//		Transaction transaction = null;
-//        Session session = HibernateUtils.getFactory().openSession();
-        
-        try {
-            // start a transaction
-//            transaction = session.beginTransaction();            
-//            System.out.println("created transaction");
-            
-            // save the student object
-            for (KhachHang kh : khachHangs) {
-            	kh.setBooking(booking);
-            	session.save(kh);
-            }
-                   
-            System.out.println("saved khachhang");
-            // commit transaction
-//            transaction.commit();
-//            System.out.println("commited transaction");
-            
-            err_msg = "successed";
-        } catch (Exception e) {
-//            if (transaction != null) {
-//            	System.out.println("roll back transaction");
-//                transaction.rollback();
-//                err_msg = "failed";
-//            }
-            e.printStackTrace();
-        } finally {
-//        	   session.close();
+	public void insertKhachHangs(KhachHang[] khachHangs, Booking booking, Session session) {
+		// save the KhachHangs object
+        for (KhachHang kh : khachHangs) {
+        	kh.setBooking(booking);
+            session.save(kh);
         }
-        return err_msg;
+                   
+//        System.out.println("saved khachhang");
 	}
 	
 	public String updateKhachHang(int id,String hoten,String cmnd,String diachi) {

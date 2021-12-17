@@ -57,7 +57,22 @@ public class BookingDao {
         return err_msg;
 	}
 	
-	public String updateBooking(int id,int songuoi,boolean conguoinuocngoai,Date checkin,Date checkout) {
+	public void payBookings(List<Booking> bookings, HoaDon hoaDon, Session session) {
+		for (Booking bk : bookings) {
+			
+			Query q = session.createQuery(
+					"UPDATE Booking "
+					+ "SET hoaDon=:hoaDon "
+					+ "WHERE idBooking=:idBooking");
+			
+			q.setParameter("hoaDon", hoaDon);
+			q.setParameter("idBooking", bk.getIdBooking());
+			
+			q.executeUpdate();
+		}
+	}
+	
+	public String updateBooking(int id, int soNguoi, Date checkIn, Date checkOut) {
 		String err_msg = "";
 		
 		Transaction transaction = null;
@@ -68,9 +83,13 @@ public class BookingDao {
             transaction = session.beginTransaction();            
             System.out.println("created transaction");
             
-            Query query = session.createQuery("UPDATE Booking SET soNguoi=:songuoi,coNguoiNuocNgoai=:conguoinuocngoai,checkIn=:checkin,CheckOut=:checkout"
+            Query query = session.createQuery(
+            		"UPDATE Booking "
+            		+ "SET soNguoi=:soNguoi, checkIn=:checkIn, checkOut=:checkOut"
             		+ " WHERE idBooking=:id");
-			query.setParameter("songuoi", songuoi);
+			query.setParameter("soNguoi", soNguoi);
+			query.setParameter("checkIn", checkIn);
+			query.setParameter("checkOut", checkOut);
 			query.setParameter("id", id);
 			int result = query.executeUpdate();
 			
@@ -135,6 +154,8 @@ public class BookingDao {
 		
 		List<Booking> bookings = q.getResultList();
 		
+		session.close();
+		
 		return bookings;
 	}
 	
@@ -152,29 +173,32 @@ public class BookingDao {
 			return bookings.get(0);
 		}
 		
+		session.close();
+		
 		return null;
 	}
 	
 	public List<Booking> getBookingsByRoomName(String roomName) {
 		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM Booking WHERE phong.tenPhong LIKE :roomName");//HQL
+		
+		Query q = session.createQuery("FROM Booking "
+				+ "WHERE phong.tenPhong LIKE :roomName "
+				+ "AND hoaDon is null");//HQL
 		
 		q.setParameter("roomName", "%" + roomName + "%");
 		
 		List<Booking> bookings = q.getResultList();
 		
-		if (bookings.size() > 0) {
-			return bookings;
-		}
+		session.close();
 		
-		return null;
+		return bookings;
 	}
 	
 	private boolean checkRoomBooked(int idPhong, Date checkIn, Date checkOut) {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM Booking WHERE checkIn=:checkin");//HQL
 		
-		
+		session.close();
 		return false;
 	}
 	
@@ -198,6 +222,8 @@ public class BookingDao {
 		if (bookings.size() > 0) {
 			return bookings.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}
@@ -223,6 +249,8 @@ public class BookingDao {
 			return bookings.get(0);
 		}
 		
+		session.close();
+		
 		return null;
 	}
 	
@@ -247,6 +275,8 @@ public class BookingDao {
 		if (bookings.size() > 0) {
 			return bookings.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}

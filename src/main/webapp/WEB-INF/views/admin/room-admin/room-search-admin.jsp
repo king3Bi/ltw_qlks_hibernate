@@ -247,7 +247,12 @@
 									dataKH: JSON.stringify(data),
 								},
 								function(data, status){
-									alert('Đặt phòng thành công');
+									if (data.status == 200) {
+										alert('Đặt phòng thành công');
+									} else {
+										alert('Đã có lỗi xảy ra, vui lòng thử lại');
+									}
+									
 						            location.reload();
 								});
 					}

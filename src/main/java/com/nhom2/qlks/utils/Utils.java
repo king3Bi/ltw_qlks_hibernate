@@ -2,7 +2,9 @@ package com.nhom2.qlks.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.Date;
 
+import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.User;
 
 public class Utils {
@@ -55,5 +57,21 @@ public class Utils {
 		}
 		
 		return err_msg;
+	}
+
+	public static int getRentalDays(Date checkIn, Date checkOut) {
+		int sub = 0;
+		long difference_In_Time = checkOut.getTime() - checkIn.getTime(); 
+		sub = (int) (difference_In_Time / (1000 * 60 * 60 * 24));
+		return sub;
+	}
+	
+	public static float calcTotalPriceBooking(Booking booking) {
+		float donGia = booking.getPhong().getLoaiPhong().getDonGia();
+		int soNgayThue = getRentalDays(booking.getCheckIn(), booking.getCheckOut());
+		
+		float totalPrice = donGia * soNgayThue;
+		
+		return totalPrice;
 	}
 }

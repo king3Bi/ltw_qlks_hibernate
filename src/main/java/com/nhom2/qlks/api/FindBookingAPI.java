@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.nhom2.qlks.hibernate.daos.BookingDao;
 import com.nhom2.qlks.hibernate.pojo.Booking;
+import com.nhom2.qlks.utils.Utils;
 
 /**
  * Servlet implementation class BookingAPI
@@ -56,6 +57,8 @@ public class FindBookingAPI extends HttpServlet {
 			bookings.forEach(x -> {
 				Date checkIn = x.getCheckIn();
 				Date checkOut = x.getCheckOut();
+				float donGia = x.getPhong().getLoaiPhong().getDonGia();
+				int soNgayThue = Utils.getRentalDays(checkIn, checkOut);
 				
 				Hashtable<String, Object> bk = new Hashtable<String, Object>();
 				bk.put("idBooking", x.getIdBooking());
@@ -64,7 +67,9 @@ public class FindBookingAPI extends HttpServlet {
 				bk.put("checkIn", dateFormat.format(checkIn));
 				bk.put("checkOut", dateFormat.format(checkOut));
 				bk.put("soNguoi", x.getSoNguoi());
-				bk.put("donGia", x.getPhong().getLoaiPhong().getDonGia());
+				bk.put("donGia", donGia);
+				bk.put("soNgayThue", soNgayThue);
+				bk.put("thanhTien", donGia * soNgayThue);
 				
 				rs.add(bk);
 			});
