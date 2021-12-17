@@ -1,6 +1,7 @@
 package com.nhom2.qlks.servlet.admin.employee;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -43,7 +44,10 @@ public class EmployeeServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		List<Quyen> quyen = new QuyenDao().getAllQuyen();
-		
+		for(int i=0;i<quyen.size();i++){
+		    System.out.println(quyen.get(i).getTenQuyen());
+		} 
+
 		List<User> user = new UserDao().getALLUser();
 		
 		request.setAttribute("quyen", quyen);
