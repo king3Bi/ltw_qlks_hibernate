@@ -265,6 +265,22 @@ public class BookingDao {
 		
 		return null;
 	}
+	public Booking getPhongById(int id) {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE hoaDon.idHD=:id");//HQL
+		
+		q.setParameter("id", id);
+		q.setFirstResult(0);
+		q.setMaxResults(1);
+		
+		List<Booking> bookings = q.getResultList();
+		
+		if (bookings.size() > 0) {
+			return bookings.get(0);
+		}
+		
+		return null;
+	}
 	
 //	private boolean checkCoNguoiNuocNgoai(Boolean conguoinuocngoai) {
 //		if (getCheckCoNguoiNuocNgoai(conguoinuocngoai) != null) {
