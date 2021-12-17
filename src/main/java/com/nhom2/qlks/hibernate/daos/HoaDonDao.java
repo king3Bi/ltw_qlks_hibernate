@@ -1,5 +1,6 @@
 package com.nhom2.qlks.hibernate.daos;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +11,14 @@ import org.hibernate.Transaction;
 
 import com.nhom2.qlks.hibernate.HibernateUtils;
 import com.nhom2.qlks.hibernate.pojo.Booking;
+import com.nhom2.qlks.hibernate.pojo.Dongia2;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
+import com.nhom2.qlks.hibernate.pojo.Phong;
+import com.nhom2.qlks.hibernate.pojo.Quyen;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.hoadon.*;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
+import com.nhom2.qlks.hibernate.pojo.dongia;
 
 public class HoaDonDao {
 	public String inserHoaDon(HoaDon hoadon) {
@@ -132,21 +139,23 @@ public class HoaDonDao {
 		return hoadons;
 	}
 	
-	public HoaDon getHoaDonById(int id) {
+	public List<Dongia2> getGiaTienHoaDOn() {
 		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM HoaDon WHERE idHD=:id");//HQL
 		
-		q.setParameter("id", id);
-		q.setFirstResult(0);
-		q.setMaxResults(1);
+		Query q = session.createQuery("SELECT new "+ Dongia2.class.getName()+"(hd.idHD,u.id,hd.ngayTao,q.tenQuyen,SUM(lp.donGia*DATEDIFF(bk.checkOut,bk.checkIn)),bk.idBooking)"
+				+ "		FROM Quyen q inner join User u ON q.idQuyen=u.quyen.idQuyen inner join HoaDon hd ON u.id=hd.user.id inner join Booking bk ON hd.idHD=bk.hoaDon.idHD inner join Phong p ON bk.phong.idPhong=p.idPhong"
+				+ "		inner join LoaiPhong lp ON p.loaiPhong.idLoaiPhong=lp.idLoaiPhong"
+				+ "        Group by hd.idHD");//HQL
+
+
+		List<Dongia2> dongia = q.getResultList();
+	
+		ArrayList<String> array=new ArrayList<String>();
+	
+
+		return dongia;
+	
 		
-		List<HoaDon> hoadons = q.getResultList();
-		
-		if (hoadons.size() > 0) {
-			return hoadons.get(0);
-		}
-		
-		return null;
 	}
 	
 	private boolean checkNgayTao(Date checkngaytao) {
