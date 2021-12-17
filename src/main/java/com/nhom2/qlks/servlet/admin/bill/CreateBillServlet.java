@@ -67,6 +67,8 @@ public class CreateBillServlet extends HttpServlet {
 		
 		Hashtable<String, Object> rs = new Hashtable<String, Object>();
 		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
 		HttpSession session = request.getSession();
 		
 		List<Booking> billDetail = (List<Booking>) session.getAttribute("billDetail"); 
@@ -83,6 +85,8 @@ public class CreateBillServlet extends HttpServlet {
 		String err_msg = hoaDonDao.inserHoaDon(hoaDon, billDetail);
 		if (err_msg.equals("successed")) {
 			rs.put("status", 200);
+			rs.put("idHD", hoaDon.getIdHD());
+			rs.put("ngayTao", dateFormat.format(hoaDon.getNgayTao()));
 		} else {
 			rs.put("status", 404);
 		}

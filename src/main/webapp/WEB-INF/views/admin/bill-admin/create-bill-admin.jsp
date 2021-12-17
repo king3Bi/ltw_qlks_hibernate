@@ -135,7 +135,7 @@
 								    				console.info(data)
 											        if (data.status == 200) {
 											            alert('Thanh toán thành công');
-											            printBill(data.id_HD, data.ngay_tao)
+											            printBill(data.idHD, data.ngayTao)
 											            location.reload();
 											        } else if (data.status == 404) {
 											            alert('Thanh toán thất bại');
@@ -144,9 +144,9 @@
 								    }
 								}
 								
-								function printBill(id_HD, ngay_tao) {
-									document.getElementById('id-HD').innerHTML = 'Mã hóa đơn: ' + id_HD;
-								    document.getElementById('ngay-tao').innerHTML = 'Ngày tạo: ' + ngay_tao;
+								function printBill(idHD, ngayTao) {
+									document.getElementById('id-HD').innerHTML = 'Mã hóa đơn: ' + idHD;
+								    document.getElementById('ngay-tao').innerHTML = 'Ngày tạo: ' + ngayTao;
 								    var printContents = document.getElementById('printJS-form').innerHTML;
 								    var originalContents = document.body.innerHTML;
 
