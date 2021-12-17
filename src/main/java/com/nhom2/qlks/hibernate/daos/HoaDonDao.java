@@ -18,7 +18,7 @@ import com.nhom2.qlks.hibernate.pojo.Quyen;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 import com.nhom2.qlks.hibernate.hoadon.*;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
-import com.nhom2.qlks.hibernate.pojo.dongia;
+
 
 public class HoaDonDao {
 	public String inserHoaDon(HoaDon hoadon) {
