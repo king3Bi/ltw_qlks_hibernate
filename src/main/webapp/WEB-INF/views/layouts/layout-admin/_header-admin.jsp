@@ -230,7 +230,7 @@
 		                </a>
 		              </li>
 		              <li class="nav-item">
-		                <a href="<%=request.getContextPath()%>/admin/stats_usage" class="nav-link">
+		                <a href="<%=request.getContextPath()%>/admin/stats-usage" class="nav-link">
 		                  <i class="far fa-circle nav-icon"></i>
 		                  <p>Mật độ sử dụng phòng</p>
 		                </a>

@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.util.Date;
 
 import com.nhom2.qlks.hibernate.pojo.Booking;
+import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.User;
 
 public class Utils {
@@ -71,6 +72,16 @@ public class Utils {
 		int soNgayThue = getRentalDays(booking.getCheckIn(), booking.getCheckOut());
 		
 		float totalPrice = donGia * soNgayThue;
+		
+		return totalPrice;
+	}
+	
+	public static float calcTotalPriceBill(HoaDon hoaDon) {
+		float totalPrice = 0;
+		
+		for (Booking bk : hoaDon.getBookings()) {
+			totalPrice += calcTotalPriceBooking(bk);
+		}
 		
 		return totalPrice;
 	}
