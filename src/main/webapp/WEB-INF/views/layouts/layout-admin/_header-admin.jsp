@@ -149,7 +149,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/admin/online-booking" class="nav-link">
+                <a href="<%=request.getContextPath()%>/admin/offline-booking" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Đơn đặt phòng offline</p>
                 </a>

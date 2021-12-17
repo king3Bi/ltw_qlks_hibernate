@@ -1,6 +1,7 @@
 package com.nhom2.qlks.servlet.admin.booking;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.nhom2.qlks.hibernate.daos.BookingDao;
+import com.nhom2.qlks.hibernate.pojo.Booking;
 
 /**
  * Servlet implementation class OnlineBooking
@@ -31,7 +35,10 @@ public class OnlineBookingServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/room-admin.jsp");
+		List<Booking> bookings = new BookingDao().getAllBookingOnline();
+		request.setAttribute("bookings", bookings);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/booking-admin/booking-online-admin.jsp");
 		dispatcher.forward(request, response);
 	}
 

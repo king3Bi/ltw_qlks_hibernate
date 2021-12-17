@@ -4,9 +4,12 @@ import java.beans.JavaBean;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.nhom2.qlks.hibernate.daos.BookingDao;
+import com.nhom2.qlks.hibernate.daos.KhachHangDao;
 import com.nhom2.qlks.hibernate.daos.PhongDao;
 import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.KhachHang;
@@ -46,7 +50,13 @@ public class OfflineBookingServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.setContentType("text/html; charset=UTF-8");	
+		
+		List<Booking> bookings = new BookingDao().getAllBookingOffline();
+		request.setAttribute("bookings", bookings);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/booking-admin/booking-offline-admin.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**

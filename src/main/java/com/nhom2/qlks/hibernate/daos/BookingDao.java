@@ -159,6 +159,28 @@ public class BookingDao {
 		return bookings;
 	}
 	
+	public List<Booking> getAllBookingOffline() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE datOnline=0");//HQL
+		
+		List<Booking> bookings = q.getResultList();
+		
+		session.close();
+		
+		return bookings;
+	}
+	
+	public List<Booking> getAllBookingOnline() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE datOnline=1");//HQL
+		
+		List<Booking> bookings = q.getResultList();
+		
+		session.close();
+		
+		return bookings;
+	}
+	
 	public Booking getBookingById(int id) {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM Booking WHERE idBooking=:id");//HQL

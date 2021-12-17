@@ -8,7 +8,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Thống kê mật độ sử dụng phòng</title>
+	<title>Thống kê doanh thu</title>
 	<link rel="stylesheet"
 		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<script
@@ -43,7 +43,7 @@
 			<section class="content-header">
 				<div class="container-fluid">
 					<div class="col-11 ">
-						<h1 class="h3 text-center text-gray-800 mb-0">Thống kê mật độ sử dụng phòng</h1>
+						<h1 class="h3 text-center text-gray-800 mb-0">Thống kê doanh thu theo loại phòng</h1>
 					</div>
 				</div>
 			</section>
@@ -51,8 +51,7 @@
 			<section class="content">
 
 				<div class="container-fluid">
-				
-					<div class="row">
+					<div class="row" id="stats">
 					    <div class="col">
 					        <form id="option">
 					            <input type="month" name="month" id="month" onchange="document.getElementById('option').submit();">
@@ -67,20 +66,20 @@
 					            <thead>
 					                <tr>
 					                    <th>STT</th>
-					                    <th>Phòng</th>
-					                    <th>Số ngày thuê</th>
+					                    <th>Loại Phòng</th>
+					                    <th>Doanh thu</th>
 					                    <th>Tỷ lệ</th>
 					                </tr>
 					            </thead>
 					            <tbody>
-					            {% with usage_density = usage_density_stats_by_month['thong_ke'] %}
-					            {% for room in usage_density %}
+					            {% with revenue = revenue_stats_by_month['thong_ke'] %}
+					            {% for room_type in revenue %}
 					                <tr>
 					                    <td>{{ loop.index }}</td>
-					                    <td>{{ room }}</td>
-					                    <td>{{ usage_density[room] }}</td>
-					                    {% if usage_density_stats_by_month['tong_mat_do'] > 0 %}
-					                    <td>{{ '{:.2f} %'.format(100*usage_density[room]/usage_density_stats_by_month['tong_mat_do']) }}</td>
+					                    <td>{{ room_type }}</td>
+					                    <td>{{ '{:,.0f}'.format(revenue[room_type]|float) }} VNĐ</td>
+					                    {% if revenue_stats_by_month['tong_doanh_thu'] > 0 %}
+					                    <td>{{ '{:.2f} %'.format(100*revenue[room_type]/revenue_stats_by_month['tong_doanh_thu']) }}</td>
 					                    {% else %}
 					                    <td>00.00 %</td>
 					                    {% endif %}
@@ -91,14 +90,14 @@
 					        </table>
 					    </div>
 					    <div class="col">
-					        <canvas id="usageChart"></canvas>
+					        <canvas id="revenueChart"></canvas>
 					        <script>
 					            let labels = [], info = [];
 					
-					            {% with usage_density = usage_density_stats_by_month['thong_ke'] %}
-					            {% for room in usage_density %}
-					                labels.push('{{ room }}');
-					                info.push({{ usage_density[room] }});
+					            {% with revenue = revenue_stats_by_month['thong_ke'] %}
+					            {% for room_type in revenue %}
+					                labels.push('{{ room_type }}');
+					                info.push({{ revenue[room_type] }});
 					            {% endfor %}
 					            {% endwith %}
 					
@@ -117,7 +116,7 @@
 					            const data = {
 					              labels: labels,
 					              datasets: [{
-					                label: 'Thống kê doanh thu theo mật độ sử dụng phòng',
+					                label: 'Thống kê doanh thu theo loại phòng',
 					                data: info,
 					                backgroundColor: colors,
 					                hoverOffset: 4
@@ -130,13 +129,12 @@
 					            };
 					
 					            window.onload = function() {
-					                let ctx = document.getElementById('usageChart').getContext('2d');
+					                let ctx = document.getElementById('revenueChart').getContext('2d');
 					                new Chart(ctx, config);
 					            }
 					        </script>
 					    </div>
 					</div>
-				
 				</div>
 				
 			</section>
