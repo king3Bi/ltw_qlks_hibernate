@@ -1,3 +1,4 @@
+<%@page import="com.nhom2.qlks.hibernate.pojo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
@@ -5,7 +6,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Quên mật khẩu</title>
+	<title>Đổi mật khẩu</title>
 
 	<!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
@@ -28,27 +29,48 @@
 			<img src="static/image/background-login.svg">
 		</div>
 		<div class="login-content">
-			<form action="${pageContext.request.contextPath}/reset-password" method="post">
-				<img src="static/image/avatar.svg">
+			<form action="change-password" method="post">
+				<img src="static/image/avatar.svg" alt="logo">
 				<h2 class="title">Maris</h2>
-           		<div class="input-div one">
+           		<div class="input-div one focus">
            		   <div class="i">
            		   		<i class="fas fa-user"></i>
            		   </div>
            		   <div class="div">
-           		   		<h5>Mật khẩu mới</h5>
-           		   		<input type="password" name="password" class="input">
-           		   </div>
+           		   		<%User user = (User) session.getAttribute("user");%>
+	                    <h5>Tên đăng nhập</h5>
+	                    <input type="text" name="username" value="<%= user.getTenDangNhap() %>" class="input" readonly="readonly">
+                	</div>
            		</div>
-           		<div class="input-div pass">
-           		   <div class="i">
-           		    	<i class="fas fa-lock"></i>
-           		   </div>
-           		   <div class="div">
-           		    	<h5>Nhập lại mật khẩu</h5>
-           		    	<input type="password" name="confirm-password" class="input">
-            	   </div>
-            	</div>
+           		<div class="input-div two">
+	                <div class="i">
+	                    <i class="fas fa-lock"></i>
+	                </div>
+	                <div class="div">
+	                    <h5>Mật khẩu cũ</h5>
+	                    <input type="password" name="oldPassword" class="input" required>
+	                </div>
+	            </div>
+
+	            <div class="input-div pass">
+	                <div class="i">
+	                    <i class="fas fa-lock"></i>
+	                </div>
+	                <div class="div">
+	                    <h5>Nhập mật khẩu mới</h5>
+	                    <input type="password" name="newPassword" class="input" required>
+	                </div>
+	            </div>
+
+	            <div class="input-div pass">
+	                <div class="i">
+	                    <i class="fas fa-lock"></i>
+	                </div>
+	                <div class="div">
+	                    <h5>Nhập lại mật khẩu mới</h5>
+	                    <input type="password" name="confirmNewPassword" class="input" required>
+	                </div>
+	            </div>
             	
          
             	<div>${errMessage}</div>

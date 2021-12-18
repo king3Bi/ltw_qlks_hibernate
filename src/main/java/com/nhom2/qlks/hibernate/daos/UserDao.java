@@ -101,6 +101,51 @@ public class UserDao {
         return err_msg;
 	}
 	
+	public String changePassword(String username, String oldPassword, String newPassword) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            Query query = session.createQuery("UPDATE User SET matKhau=:newPassword"
+            		+ " WHERE tenDangNhap=:username"
+            		+ " AND matKhau=:oldPassword");
+            
+			query.setParameter("newPassword", newPassword);
+			query.setParameter("username", username);
+			query.setParameter("oldPassword", oldPassword);
+			
+			int result = query.executeUpdate();
+			System.out.println(result);
+            System.out.println("update user");
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            if(result==1) {            	
+            	err_msg = "thành công";
+            }
+            else {
+            	err_msg = "that bai";
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "sai mật khẩu	";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
 	public String deleteUser(int id) {
 		String err_msg = "";
 		

@@ -24,7 +24,7 @@
 	                    <h3 class="card-title">${loaiPhong.getTenLoaiPhong()}</h3>
 	                    <h3 class="card-title">Số người: ${loaiPhong.getSoNguoi()}</h3>                        
 	                    <h4 class="card-title">${loaiPhong.getDonGia()} VND / 1 đêm</h4>
-	                    <a href="<c:url value='room-type-${loaiPhong.getIdLoaiPhong()}'/>" class="btn">Đặt phòng</a>
+	                    <a href="<c:url value='room-type'/>?id=${loaiPhong.getIdLoaiPhong()}" class="btn">Đặt phòng</a>
 	                </div>
 	            </div>
 	        </div>	         
