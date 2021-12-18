@@ -122,6 +122,18 @@
 										class="form-control" placeholder="Nhập sdt" 
 										name="user-sdt" value="${user.sdt}" required>
 								</div>
+								<div class="form-group">
+									<label for="usertdn">Tên Dang Nhap:</label>
+									<input type="text" id="user-tdn" 
+										class="form-control" placeholder="Nhập Ten Tai Khoan" 
+										name="user-tdn" required>
+								</div>
+								<div class="form-group">
+									<label for="usermk">MK:</label>
+									<input type="text" id="user-mk" 
+										class="form-control" placeholder="Nhập MK" 
+										name="user-mk" value="${user.sdt}" required>
+								</div>
 							
 								<div class="form-group">
 									<label for="userkh">Kích hoạt:</label>
