@@ -77,33 +77,16 @@
 					                <tr>
 					                    <td><c:out value="${lp[0]}"></c:out></td>
 					                    <td><c:out value="${lp[1]}"></c:out></td>
-					                    <c:choose>
-					                    	<c:when test = "${lp[2] == null}">
-					                    		<td>0 VNĐ</td>
-					                    	</c:when>
+					                    <td>
+					                    	<fmt:formatNumber type = "number" 
+					                    		maxFractionDigits = "0" 
+					                    		value = "${lp[2]}" /> VNĐ</td>
+					                    <td>
+					                    	<fmt:formatNumber type = "number" 
+					                    		groupingUsed = "false" 
+					                    		maxFractionDigits = "2"
+					                    		value = "${100 * lp[2] / tongDoanhThu}" /> %</td>
 					                    	
-					                    	<c:otherwise>
-					                    		<td>
-					                    			<fmt:formatNumber type = "number" 
-					                    				maxFractionDigits = "0" 
-					                    				value = "${lp[2]}" /> VNĐ</td>
-					                    	</c:otherwise>
-					                    </c:choose>
-					                    
-					                    <c:choose>
-					                    	<c:when test = "${lp[2] == null}">
-					                    		<td>0.00 %</td>
-					                    	</c:when>
-					                    	
-					                    	<c:otherwise>
-					                    		<td>
-					                    			<fmt:formatNumber type = "number" 
-					                    				groupingUsed = "false" 
-					                    				maxFractionDigits = "2"
-					                    				value = "${100 * lp[2] / tongDoanhThu}" /> %</td>
-					                    	</c:otherwise>
-					                    </c:choose>
-					                    
 					                </tr>
 					            </c:forEach>
 					            </tbody>

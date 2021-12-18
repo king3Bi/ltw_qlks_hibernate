@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -77,7 +78,11 @@
 										<td><c:out value="${hoaDon.idHD}"></c:out></td>
 										<td><c:out value="${hoaDon.user.hoTen}"></c:out></td>
 										<td><c:out value="${hoaDon.ngayTao}"></c:out></td>
-										<td><c:out value="${Utils.calcTotalPriceBill(hoaDon)}"></c:out> VNĐ</td>
+										<td>
+											<fmt:formatNumber type = "number" 
+					                    		maxFractionDigits = "0" 
+					                    		value = "${Utils.calcTotalPriceBill(hoaDon)}" /> VNĐ</td> 
+											</td>
 																	
 										<td><a class="btn btn-primary" 
 											onclick="showBillDetail(${hoaDon.idHD})" 
