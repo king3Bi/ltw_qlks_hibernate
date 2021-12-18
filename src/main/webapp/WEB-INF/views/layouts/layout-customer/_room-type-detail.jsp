@@ -26,7 +26,7 @@
                     <div class="row mt-5">
                         <div class="col-lg-2"></div>
                         <div class="col-lg-10">
-                            <form class="form-horizontal" action="/room-type-<id_loai_phong>">
+                            <form class="form-horizontal" action="">
                                 <h1 class="col-sm font-weight-bold mb-5">Tổng tiền: <span id="total-price">0</span> VNĐ </h1>
 
                                 <h3 class="col-sm font-weight-bold mb-3">Đơn giá: ${roomTypeDetail.getDonGia()} VNĐ / 1 đêm</h3>
@@ -83,7 +83,11 @@
                                     <label class="font-weight-bold col-sm control-label"
                                            for="room-list">Phòng <strong style="color: red">*</strong></label>
                                     <div class="col-sm-10">
-                                        <select class="form-control form-control-lg" name="room" id="room-list"></select>
+                                        <select class="form-control form-control-lg" name="room" id="room-list">
+                                        	<%-- <c:forEach items="rooms" value="room">
+                                        		<option>${room.getTenPhong}</option>
+                                        	</c:forEach> --%>
+                                        </select>
                                     </div>
                                 </div>
                                 <!-- {% if err_msg %}
@@ -110,3 +114,48 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+	function roomSearchCustomer(idRoomType) {
+	    let checkIn = document.querySelector("#check-in").value;
+	    let checkOut = document.querySelector("#check-out").value;
+	
+	    const uri = "<%=request.getContextPath()%>/api/find-rooms-by-room-type?" +
+	        "room-type=" + idRoomType +
+	        "&check-in=" + checkIn +
+	        "&check-out=" + checkOut;
+	
+	    //chi khi nao nguoi dung dien thoi gian checkin, checkout thi se tao moi 1 request
+	    if (checkIn == "" || checkOut == "") {
+	        return;
+	    }
+	    fetch(uri, {
+	        method: 'get',
+	        headers: {
+	            "Content-Type": "application/json"
+	        }
+	    }).then(function(res) {
+	        console.info(res)
+	        return res.json()
+	    }).then(function(data) {
+	        console.info(data)
+	            document.getElementById("room-list").options.length = 0;
+	
+	            let roomList = document.getElementById("room-list")
+	
+	            if (data.length == 0) {
+	                var opt = document.createElement('option');
+	                opt.value = "room";
+	                opt.innerHTML = "Không có phòng thỏa điều kiện";
+	                roomList.appendChild(opt);
+	            } else{
+	                for (let room of data){
+	                    var opt = document.createElement('option');
+	                    opt.value = room.tenPhong;
+	                    opt.innerHTML = room.tenPhong;
+	                    roomList.appendChild(opt);
+	                }
+	            }
+	    });
+	}
+</script>

@@ -11,25 +11,13 @@ import org.hibernate.Transaction;
 import com.nhom2.qlks.hibernate.HibernateUtils;
 import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
+import com.nhom2.qlks.hibernate.pojo.KhachHang;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
 
 public class BookingDao {
-	public String insertBooking(Booking booking) {
+	public String insertBooking(Booking booking, KhachHang[] dataKH) {
 		String err_msg = "";
-		
-		if (checkCheckIn(booking.getCheckIn())) {
-    		return err_msg = "Check in da ton tai";
-        }
-        
-        if (checkCheckOut(booking.getCheckOut())) {
-        	return err_msg = "Check out da ton tai";
-        }       
-        
-        if (checkSoNguoi(booking.getSoNguoi())) {
-        	return err_msg = "So nguoi da ton tai";
-        }
-        
 		
 		Transaction transaction = null;
         Session session = HibernateUtils.getFactory().openSession();
@@ -41,10 +29,19 @@ public class BookingDao {
             
             // save the student object
             session.save(booking);       
-            System.out.println("saved user");
+            System.out.println("saved booking");
+            System.out.printf("id booking: %d\n", booking.getIdBooking());
+            
+            
+            KhachHangDao khachHangDao = new KhachHangDao();
+            khachHangDao.insertKhachHangs(dataKH, booking, session);
+            
+            
             // commit transaction
             transaction.commit();
             System.out.println("commited transaction");
+            
+            System.out.printf("id booking: %d\n", booking.getIdBooking());
             
             err_msg = "successed";
         } catch (Exception e) {
@@ -60,7 +57,23 @@ public class BookingDao {
         return err_msg;
 	}
 	
-	public String updateBooking(int id, int songuoi, boolean conguoinuocngoai, Date checkin, Date checkout) {
+
+	public void payBookings(List<Booking> bookings, HoaDon hoaDon, Session session) {
+		for (Booking bk : bookings) {
+			
+			Query q = session.createQuery(
+					"UPDATE Booking "
+					+ "SET hoaDon=:hoaDon "
+					+ "WHERE idBooking=:idBooking");
+			
+			q.setParameter("hoaDon", hoaDon);
+			q.setParameter("idBooking", bk.getIdBooking());
+			
+			q.executeUpdate();
+		}
+	}
+	
+	public String updateBooking(int id, int soNguoi, Date checkIn, Date checkOut) {
 		String err_msg = "";
 		
 		Transaction transaction = null;
@@ -71,9 +84,13 @@ public class BookingDao {
             transaction = session.beginTransaction();            
             System.out.println("created transaction");
             
-            Query query = session.createQuery("UPDATE Booking SET soNguoi=:songuoi,coNguoiNuocNgoai=:conguoinuocngoai,checkIn=:checkin,CheckOut=:checkout"
+            Query query = session.createQuery(
+            		"UPDATE Booking "
+            		+ "SET soNguoi=:soNguoi, checkIn=:checkIn, checkOut=:checkOut"
             		+ " WHERE idBooking=:id");
-			query.setParameter("songuoi", songuoi);
+			query.setParameter("soNguoi", soNguoi);
+			query.setParameter("checkIn", checkIn);
+			query.setParameter("checkOut", checkOut);
 			query.setParameter("id", id);
 			int result = query.executeUpdate();
 			
@@ -138,6 +155,8 @@ public class BookingDao {
 		
 		List<Booking> bookings = q.getResultList();
 		
+		session.close();
+		
 		return bookings;
 	}
 	
@@ -147,6 +166,8 @@ public class BookingDao {
 		
 		List<Booking> bookings = q.getResultList();
 		
+		session.close();
+		
 		return bookings;
 	}
 	
@@ -155,6 +176,8 @@ public class BookingDao {
 		Query q = session.createQuery("FROM Booking WHERE datOnline=1");//HQL
 		
 		List<Booking> bookings = q.getResultList();
+		
+		session.close();
 		
 		return bookings;
 	}
@@ -173,7 +196,33 @@ public class BookingDao {
 			return bookings.get(0);
 		}
 		
+		session.close();
+		
 		return null;
+	}
+	
+	public List<Booking> getBookingsByRoomName(String roomName) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q = session.createQuery("FROM Booking "
+				+ "WHERE phong.tenPhong LIKE :roomName "
+				+ "AND hoaDon is null");//HQL
+		
+		q.setParameter("roomName", "%" + roomName + "%");
+		
+		List<Booking> bookings = q.getResultList();
+		
+		session.close();
+		
+		return bookings;
+	}
+	
+	private boolean checkRoomBooked(int idPhong, Date checkIn, Date checkOut) {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE checkIn=:checkin");//HQL
+		
+		session.close();
+		return false;
 	}
 	
 	private boolean checkCheckIn(Date checkin) {
@@ -196,6 +245,8 @@ public class BookingDao {
 		if (bookings.size() > 0) {
 			return bookings.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}
@@ -220,6 +271,8 @@ public class BookingDao {
 		if (bookings.size() > 0) {
 			return bookings.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}
@@ -246,55 +299,10 @@ public class BookingDao {
 			return bookings.get(0);
 		}
 		
-		return null;
-	}
-	
-	private boolean checkSoNguoi(int checksonguoi) {
-		if (getCheckSoNguoi(checksonguoi) != null) {
-			return true;
-		}
-		return false;
-	}
-	
-	public Booking getCheckSoNguoi(int songuoi) {
-		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM Booking WHERE soNguoi=:songuoi");//HQL
-		
-		q.setParameter("songuoi", songuoi);
-		q.setFirstResult(0);
-		q.setMaxResults(1);
-		
-		List<Booking> bookings = q.getResultList();
-		
-		if (bookings.size() > 0) {
-			return bookings.get(0);
-		}
+		session.close();
 		
 		return null;
 	}
 	
 
-//	private boolean checkDatOnline(Boolean datonline) {
-//	if (getcheckDatOnline(datonline) != null) {
-//		return true;
-//		}
-//	return false;
-//	}
-//
-//	public Booking getcheckDatOnline(Boolean datonline) {
-//	Session session = HibernateUtils.getFactory().openSession();
-//	Query q = session.createQuery("FROM Booking WHERE datOnline=:datonline");//HQL
-//	
-//	q.setParameter("datonline", datonline);
-//	q.setFirstResult(0);
-//	q.setMaxResults(1);
-//	
-//	List<Booking> bookings = q.getResultList();
-//	
-//	if (bookings.size() > 0) {
-//		return bookings.get(0);
-//		}
-//	
-//	return null;
-//	}
 }

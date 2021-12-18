@@ -1,33 +1,28 @@
-package com.nhom2.qlks.servlet.admin.bill;
+package com.nhom2.qlks.api;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
-import com.nhom2.qlks.hibernate.daos.HoaDonDao;
+import com.nhom2.qlks.hibernate.daos.BookingDao;
+import com.nhom2.qlks.hibernate.daos.KhachHangDao;
 import com.nhom2.qlks.hibernate.pojo.Booking;
-import com.nhom2.qlks.hibernate.pojo.HoaDon;
-import com.nhom2.qlks.hibernate.pojo.User;
+import com.nhom2.qlks.hibernate.pojo.KhachHang;
 
 /**
- * Servlet implementation class CreateBill
+ * Servlet implementation class GetCustomerBookingAPI
  */
-@WebServlet("/admin/bill/insert")
-public class CreateBillServlet extends HttpServlet {
+@WebServlet("/api/customer-booking")
+public class CustomerBookingAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private Gson gson;
@@ -35,7 +30,7 @@ public class CreateBillServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreateBillServlet() {
+    public CustomerBookingAPI() {
         super();
         // TODO Auto-generated constructor stub
         this.gson = new Gson();
@@ -46,15 +41,33 @@ public class CreateBillServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html; charset=UTF-8");
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
 		
-		HttpSession session = request.getSession();
-		List<Booking> billDetail = new ArrayList<Booking>();
+		List<Hashtable<String, Object>> rs = new ArrayList<Hashtable<String,Object>>();
 		
-		session.setAttribute("billDetail", billDetail);
+		String idBookingStr = request.getParameter("idBooking");
+		int idBooking = Integer.parseInt(idBookingStr);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/bill-admin/create-bill-admin.jsp");
-		dispatcher.forward(request, response);
+		Booking booking = new BookingDao().getBookingById(idBooking);
+		List<KhachHang> khachHangs = booking.getKhachHangs();
+		
+		for (KhachHang kh : khachHangs) {
+			Hashtable<String, Object> temp = new Hashtable<String, Object>();
+			
+			temp.put("hoTen", kh.getHoTen());
+			temp.put("cmnd", kh.getCmnd());
+			temp.put("diaChi", kh.getDiaChi());
+			
+			rs.add(temp);
+		}
+		
+		PrintWriter out = response.getWriter();
+		
+		String rsStr = this.gson.toJson(rs);
+		
+		out.write(rsStr);
+		out.flush();
 	}
 
 	/**
@@ -67,26 +80,17 @@ public class CreateBillServlet extends HttpServlet {
 		
 		Hashtable<String, Object> rs = new Hashtable<String, Object>();
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String idBookingStr = request.getParameter("idBooking");
+		String dataKHStr = request.getParameter("dataKH");
 		
-		HttpSession session = request.getSession();
+		int idBooking = Integer.parseInt(idBookingStr);
+		KhachHang[] dataKH = gson.fromJson(dataKHStr, KhachHang[].class);
 		
-		List<Booking> billDetail = (List<Booking>) session.getAttribute("billDetail"); 
+		Booking booking = new BookingDao().getBookingById(idBooking);
 		
-		User user = (User) session.getAttribute("user");
-		
-		HoaDonDao hoaDonDao = new HoaDonDao();
-		HoaDon hoaDon = new HoaDon();
-		hoaDon.setUser(user);
-		
-		Date currentDate = new Date();
-		hoaDon.setNgayTao(currentDate);
-
-		String err_msg = hoaDonDao.inserHoaDon(hoaDon, billDetail);
+		String err_msg = new KhachHangDao().insertKhachHangs(dataKH, booking);
 		if (err_msg.equals("successed")) {
 			rs.put("status", 200);
-			rs.put("idHD", hoaDon.getIdHD());
-			rs.put("ngayTao", dateFormat.format(hoaDon.getNgayTao()));
 		} else {
 			rs.put("status", 404);
 		}

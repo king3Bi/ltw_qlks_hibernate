@@ -1,6 +1,7 @@
 package com.nhom2.qlks.servlet.admin.bill;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.nhom2.qlks.hibernate.daos.HoaDonDao;
+import com.nhom2.qlks.hibernate.pojo.HoaDon;
 
 /**
  * Servlet implementation class BillServlet
@@ -30,6 +34,10 @@ public class BillServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
+		
+		List<HoaDon> hoaDons = new HoaDonDao().getAllHoaDon();
+		
+		request.setAttribute("hoaDons", hoaDons);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/bill-admin/bill-admin.jsp");
 		dispatcher.forward(request, response);

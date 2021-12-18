@@ -16,6 +16,7 @@ import com.nhom2.qlks.hibernate.daos.UserDao;
 import com.nhom2.qlks.hibernate.pojo.Phong;
 import com.nhom2.qlks.hibernate.pojo.Quyen;
 import com.nhom2.qlks.hibernate.pojo.User;
+import com.nhom2.qlks.utils.Utils;
 
 /**
  * Servlet implementation class InsertEmployeeServlet
@@ -66,7 +67,7 @@ public class InsertEmployeeServlet extends HttpServlet {
         String email = request.getParameter("user-email");
         String phone = request.getParameter("user-phone");
         String username = request.getParameter("user-username");
-        String password = request.getParameter("user-password");
+        String password = new Utils().strToMD5(request.getParameter("user-password"));
         boolean activate = true;    
         if(request.getParameter("user-activate") == null || request.getParameter("user-activate") == "") {        	
         	activate = false;        	

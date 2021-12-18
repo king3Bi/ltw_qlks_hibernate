@@ -12,15 +12,11 @@ import com.nhom2.qlks.hibernate.HibernateUtils;
 import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
+import com.nhom2.qlks.hibernate.pojo.User;
 
 public class HoaDonDao {
-	public String inserHoaDon(HoaDon hoadon) {
+	public String inserHoaDon(HoaDon hoaDon, List<Booking> billDetail) {
 		String err_msg = "";
-		
-        
-        if (checkNgayTao(hoadon.getNgayTao())) {
-        	return err_msg = "Ngay tao da ton tai";
-        }
         
         Transaction transaction = null;
         Session session = HibernateUtils.getFactory().openSession();
@@ -31,8 +27,12 @@ public class HoaDonDao {
             System.out.println("created transaction");
             
             // save the student object
-            session.save(hoadon);       
+            session.save(hoaDon);       
             System.out.println("saved user");
+            
+            BookingDao bookingDao = new BookingDao();
+            bookingDao.payBookings(billDetail, hoaDon, session);
+            
             // commit transaction
             transaction.commit();
             System.out.println("commited transaction");

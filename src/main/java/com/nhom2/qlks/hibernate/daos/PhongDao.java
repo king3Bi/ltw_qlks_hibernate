@@ -1,13 +1,17 @@
 package com.nhom2.qlks.hibernate.daos;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.nhom2.qlks.hibernate.HibernateUtils;
+import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
@@ -135,6 +139,145 @@ public class PhongDao {
 		return phongs;
 	}
 	
+	public List<Phong> searchRoomsByRoomType(int idRoomType, Date checkIn, Date checkOut) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q;
+		
+		q = session.createQuery("FROM Phong "
+				+ "WHERE loaiPhong.idLoaiPhong=:idRoomType");//HQL
+		q.setParameter("idRoomType", idRoomType);
+		
+		
+		List<Phong> phongs = q.getResultList();
+		List<Phong> phongsCp = new ArrayList<>(phongs);
+		
+		if (checkIn != null) {
+			if (checkOut != null) {
+				for (Phong p : phongs) {
+					if (checkRoomBooked(p, checkIn, checkOut)) {
+						phongsCp.remove(p);
+					}
+				}
+			} else {
+				for (Phong p : phongs) {
+					if (checkRoomBookedAtDate(p, checkIn)) {
+						phongsCp.remove(p);
+					}
+				}
+			}
+		}
+		
+		session.close();
+		
+		return phongsCp;
+	}
+	
+	public List<Phong> timPhong(int soNguoi, Date checkIn, Date checkOut) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+//		Query q1 = session.createQuery("FROM Booking "
+//				+ "WHERE NOT ((checkIn < :checkIn AND checkOut < :checkIn) "
+//				+ "OR (checkIn > :checkOut AND checkOut > :checkOut))");
+//		
+//		System.out.printf("CheckIn: %s, checkOut: %s\n", checkIn, checkOut);
+//		Query q1 = session.createQuery("SELECT p.idPhong, bk.checkIn, bk.checkOut "
+//				+ "FROM Phong p "
+//				+ "LEFT JOIN p.bookings bk "
+//				+ "WHERE "
+//				+ "(bk.checkIn is not null) "
+//				+ "OR (bk.checkOut is not null) "
+//				+ "OR "
+//				+ "bk.idBooking = ALL ("
+//				+ "SELECT idBooking "
+//				+ "FROM Booking "
+//				+ "WHERE ((checkIn > :checkIn) AND (checkIn > :checkOut)) "
+//				+ "OR ((checkOut < :checkIn AND (checkOut < :checkOut))))");
+//		
+//		q1.setParameter("checkIn", checkIn, TemporalType.DATE);
+//		q1.setParameter("checkOut", checkOut, TemporalType.DATE);
+//		
+//		List<Booking> bookeds = q1.getResultList();
+//		for (Booking p : bookeds) {
+//			System.out.println(p.getIdBooking());
+//		}
+//		
+//		List<Object[]> bookeds = q1.getResultList();
+//		bookeds.forEach(x -> {
+//			System.out.printf("idPhong: %d, checkIn: %s, checkOut: %s\n", x[0], x[1], x[2]);
+//		});
+		
+		Query q;
+		if (soNguoi == 0) {
+			q = session.createQuery("FROM Phong");//HQL
+		} else {
+			q = session.createQuery("FROM Phong "
+					+ "WHERE loaiPhong.soNguoi=:soNguoi");//HQL
+			q.setParameter("soNguoi", soNguoi);
+		}
+		
+		List<Phong> phongs = q.getResultList();
+		List<Phong> phongsCp = new ArrayList<>(phongs);
+		
+		if (checkIn != null) {
+			if (checkOut != null) {
+				for (Phong p : phongs) {
+					if (checkRoomBooked(p, checkIn, checkOut)) {
+						phongsCp.remove(p);
+					}
+				}
+			} else {
+				for (Phong p : phongs) {
+					if (checkRoomBookedAtDate(p, checkIn)) {
+						phongsCp.remove(p);
+					}
+				}
+			}
+		}
+		
+		session.close();
+		
+		return phongsCp;
+	}
+	
+	private boolean checkRoomBooked(Phong phong, Date checkIn, Date checkOut) {
+		for (Booking bk : phong.getBookings()) {
+			if (!checkInOut(bk, checkIn, checkOut)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean checkInOut(Booking booking, Date checkIn, Date checkOut) {
+		if ((checkIn.compareTo(booking.getCheckIn()) == -1 
+				&& checkOut.compareTo(booking.getCheckIn()) == -1) 
+				|| 
+				(checkIn.compareTo(booking.getCheckOut()) == 1)
+				&& checkOut.compareTo(booking.getCheckOut()) == 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean checkRoomBookedAtDate(Phong phong, Date date) {
+		for (Booking bk : phong.getBookings()) {
+			if (!checkBookingAtDate(bk, date)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean checkBookingAtDate(Booking booking, Date date) {
+		if (date.compareTo(booking.getCheckIn()) == -1 
+				|| date.compareTo(booking.getCheckOut()) == 1) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public List<Phong> getPhongByLoaiPhong(LoaiPhong loaiPhong) {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM Phong WHERE loaiPhong=:loaiPhong");//HQL
@@ -142,6 +285,8 @@ public class PhongDao {
 		q.setParameter("loaiPhong", loaiPhong);
 		
 		List<Phong> phongs = q.getResultList();
+		
+		session.close();
 		
 		return phongs;
 	}
@@ -159,6 +304,8 @@ public class PhongDao {
 		if (phongs.size() > 0) {
 			return phongs.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}
@@ -183,6 +330,8 @@ public class PhongDao {
 		if (phongs.size() > 0) {
 			return phongs.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}

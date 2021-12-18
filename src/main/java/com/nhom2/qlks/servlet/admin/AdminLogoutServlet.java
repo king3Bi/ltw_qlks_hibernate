@@ -1,4 +1,4 @@
-package com.nhom2.qlks.servlet.admin.stats;
+package com.nhom2.qlks.servlet.admin;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -6,18 +6,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class StatsServlet
+ * Servlet implementation class AdminLogoutServlet
  */
-@WebServlet("/admin/stats")
-public class StatsServlet extends HttpServlet {
+@WebServlet("/admin/logout")
+public class AdminLogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public StatsServlet() {
+    public AdminLogoutServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,7 +28,14 @@ public class StatsServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.setContentType("text/html; charset=UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		
+		HttpSession session = request.getSession(false);
+		session.removeAttribute("user");
+		
+		String site = request.getContextPath() + "/admin";
+		response.sendRedirect(site);
 	}
 
 	/**

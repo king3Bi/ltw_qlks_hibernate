@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>    
+
     <%-- <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
 	  <ul class="navbar-nav">
 	    <li class="nav-item">
@@ -100,7 +101,7 @@
           <img src="<%=request.getContextPath()%>/static/image/avatar.svg" class="img-circle elevation-2" alt="User Image"/>   
         </div>
         <div class="info">
-          <a href="#" class="d-block">Tên user</a>
+          <a href="#" class="d-block"><c:out value = "${ sessionScope.user.hoTen }"/></a>
         </div>
       </div>
 
@@ -122,7 +123,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="<%=request.getContextPath()%>/admin" class="nav-link">
+            <a href="<%=request.getContextPath()%>/admin/room-search" class="nav-link">
               <i class="nav-icon fas fa-search"></i>
               <p>
                 Tra cứu phòng             
@@ -130,7 +131,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/admin/bill/insert" class="nav-link">
+            <a href="<%=request.getContextPath()%>/admin/bill/insert" class="nav-link">
               <i class="nav-icon fas fa-receipt"></i>
               <p>
                 Lập hóa đơn                
@@ -148,7 +149,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/admin/booking-offline" class="nav-link">
+              	<a href="<%=request.getContextPath()%>/admin/booking-offline" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Đơn đặt phòng offline</p>
                 </a>
@@ -162,77 +163,86 @@
             </ul>
           </li>                    
           
-          <li class="nav-header">QUẢN LÝ</li>
-          <li class="nav-item">
-            <a href="<%=request.getContextPath()%>/admin/bill" class="nav-link">
-              <i class="nav-icon fas fa-edit"></i>
-              <p>
-                Hóa đơn                
-              </p>
-            </a>            
-          </li>
           
-          <li class="nav-item">
-            <a href="<%=request.getContextPath()%>/admin/room-type" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Loại phòng
-              </p>
-            </a>           
-          </li>
-              
-          <li class="nav-item">
-            <a href="<%=request.getContextPath()%>/admin/room" class="nav-link">
-              <i class="nav-icon fa fa-bed"></i>
-              <p>
-                Phòng             
-              </p>
-            </a>           
-          </li>          
+          <c:choose>
+          	<c:when test="${ sessionScope.user.quyen.idQuyen == 1 }">
+          		<li class="nav-header">QUẢN LÝ</li>
+		          <li class="nav-item">
+		            <a href="<%=request.getContextPath()%>/admin/bill" class="nav-link">
+		              <i class="nav-icon fas fa-edit"></i>
+		              <p>
+		                Hóa đơn                
+		              </p>
+		            </a>            
+		          </li>
+		          
+		          <li class="nav-item">
+		            <a href="<%=request.getContextPath()%>/admin/room-type" class="nav-link">
+		              <i class="nav-icon fas fa-table"></i>
+		              <p>
+		                Loại phòng
+		              </p>
+		            </a>           
+		          </li>
+		              
+		          <li class="nav-item">
+		            <a href="<%=request.getContextPath()%>/admin/room" class="nav-link">
+		              <i class="nav-icon fa fa-bed"></i>
+		              <p>
+		                Phòng             
+		              </p>
+		            </a>           
+		          </li>          
+		          
+		          <li class="nav-item">
+		            <a href="<%=request.getContextPath()%>/admin/online-customer" class="nav-link">
+		              <i class="nav-icon fas fa-users"></i>
+		              <p>
+		                Khách hàng online                
+		              </p>
+		            </a>            
+		          </li>
+		          
+		          <li class="nav-item">
+		            <a href="<%=request.getContextPath()%>/admin/employee" class="nav-link">
+		              <i class="nav-icon fa fa-user-tie"></i>
+		              <p>
+		                Nhân viên  
+		              </p>
+		            </a>            
+		          </li>
+		          
+		          <li class="nav-header">THỐNG KÊ</li>         
+		          <li class="nav-item">
+		            <a href="" class="nav-link">
+		              <i class="nav-icon fas fa-chart-pie"></i>
+		              <p>
+		                Báo cáo tháng
+		                <i class="right fas fa-angle-left"></i>
+		                <span class="badge badge-info right">2</span>                            
+		              </p>                                         
+		            </a>
+		            <ul class="nav nav-treeview">
+		              <li class="nav-item">
+		                <a href="<%=request.getContextPath()%>/admin/stats-revenue" class="nav-link">
+		                  <i class="far fa-circle nav-icon"></i>
+		                  <p>Doanh thu theo loại phòng</p>
+		                </a>
+		              </li>
+		              <li class="nav-item">
+		                <a href="<%=request.getContextPath()%>/admin/stats-usage" class="nav-link">
+		                  <i class="far fa-circle nav-icon"></i>
+		                  <p>Mật độ sử dụng phòng</p>
+		                </a>
+		              </li>              
+		            </ul>
+		          </li>
+          	</c:when>
+          	
+          	<c:otherwise>
+          	</c:otherwise>
+          </c:choose>
           
-          <li class="nav-item">
-            <a href="<%=request.getContextPath()%>/admin/online-customer" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                Khách hàng online                
-              </p>
-            </a>            
-          </li>
-          
-          <li class="nav-item">
-            <a href="<%=request.getContextPath()%>/admin/employee" class="nav-link">
-              <i class="nav-icon fa fa-user-tie"></i>
-              <p>
-                Nhân viên  
-              </p>
-            </a>            
-          </li>
-          
-          <li class="nav-header">THỐNG KÊ</li>         
-          <li class="nav-item">
-            <a href="" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Báo cáo tháng
-                <i class="right fas fa-angle-left"></i>
-                <span class="badge badge-info right">2</span>                            
-              </p>                                         
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/admin/stats-revenue" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Doanh thu theo loại phòng</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/admin/stats_usage" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Mật độ sử dụng phòng</p>
-                </a>
-              </li>              
-            </ul>
-          </li>
           
           <li class="nav-item">
             <a href="<%=request.getContextPath()%>/admin/logout" class="nav-link">
