@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -55,37 +56,56 @@
 					    <div class="col">
 					        <form id="option">
 					            <input type="month" name="month" id="month" onchange="document.getElementById('option').submit();">
-					            <a href="./" class="btn btn-primary">Tất cả</a>
+					            <a href="<%=request.getContextPath()%>/admin/stats-revenue" class="btn btn-primary">Tất cả</a>
 					        </form>
-					        {% if month %}
-					        <script>
+					        
+					        <!-- <script>
 					            document.getElementById('month').value = '{{ month }}';
-					        </script>
-					        {% endif %}
+					        </script> -->
+					        
 					        <table class="table table-striped">
 					            <thead>
 					                <tr>
-					                    <th>STT</th>
+					                    <th>Id Loại Phòng</th>
 					                    <th>Loại Phòng</th>
-					                    <th>Doanh thu</th>
-					                    <th>Tỷ lệ</th>
+					                    <th>Doanh Thu</th>
+					                    <th>Tỷ Lệ</th>
 					                </tr>
 					            </thead>
 					            <tbody>
-					            {% with revenue = revenue_stats_by_month['thong_ke'] %}
-					            {% for room_type in revenue %}
+					            <c:forEach items="${thongKe}" var="lp">
 					                <tr>
-					                    <td>{{ loop.index }}</td>
-					                    <td>{{ room_type }}</td>
-					                    <td>{{ '{:,.0f}'.format(revenue[room_type]|float) }} VNĐ</td>
-					                    {% if revenue_stats_by_month['tong_doanh_thu'] > 0 %}
-					                    <td>{{ '{:.2f} %'.format(100*revenue[room_type]/revenue_stats_by_month['tong_doanh_thu']) }}</td>
-					                    {% else %}
-					                    <td>00.00 %</td>
-					                    {% endif %}
+					                    <td><c:out value="${lp[0]}"></c:out></td>
+					                    <td><c:out value="${lp[1]}"></c:out></td>
+					                    <c:choose>
+					                    	<c:when test = "${lp[2] == null}">
+					                    		<td>0 VNĐ</td>
+					                    	</c:when>
+					                    	
+					                    	<c:otherwise>
+					                    		<td>
+					                    			<fmt:formatNumber type = "number" 
+					                    				maxFractionDigits = "0" 
+					                    				value = "${lp[2]}" /> VNĐ</td>
+					                    	</c:otherwise>
+					                    </c:choose>
+					                    
+					                    <c:choose>
+					                    	<c:when test = "${lp[2] == null}">
+					                    		<td>0.00 %</td>
+					                    	</c:when>
+					                    	
+					                    	<c:otherwise>
+					                    		<td>
+					                    			<fmt:formatNumber type = "number" 
+					                    				groupingUsed = "false" 
+					                    				maxFractionDigits = "2"
+					                    				value = "${100 * lp[2] / tongDoanhThu}" /> %</td>
+					                    	</c:otherwise>
+					                    </c:choose>
+					                    
 					                </tr>
-					            {% endfor %}
-					            {% endwith %}
+					            </c:forEach>
 					            </tbody>
 					        </table>
 					    </div>
@@ -94,18 +114,25 @@
 					        <script>
 					            let labels = [], info = [];
 					
-					            {% with revenue = revenue_stats_by_month['thong_ke'] %}
-					            {% for room_type in revenue %}
-					                labels.push('{{ room_type }}');
-					                info.push({{ revenue[room_type] }});
-					            {% endfor %}
-					            {% endwith %}
+					            <c:forEach items="${thongKe}" var="lp">
+					                labels.push('${lp[1]}');
+					                
+					                <c:choose>
+				                    	<c:when test = "${lp[2] == null}">
+				                    		info.push(0);
+				                    	</c:when>
+				                    	
+				                    	<c:otherwise>
+				                    		info.push(${lp[2]});
+				                    	</c:otherwise>
+				                    </c:choose>
+					            </c:forEach>
 					
 					            var dynamicColors = function() {
 					                var r = Math.floor(Math.random() * 255);
 					                var g = Math.floor(Math.random() * 255);
 					                var b = Math.floor(Math.random() * 255);
-					                return `rgb(${r}, ${g}, ${b})`;
+					                return 'rgb(' + r + ',' + g + ',' + b + ')';
 					             };
 					
 					            var colors = [];

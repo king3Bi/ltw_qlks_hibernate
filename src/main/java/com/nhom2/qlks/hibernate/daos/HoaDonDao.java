@@ -149,6 +149,59 @@ public class HoaDonDao {
 		return null;
 	}
 	
+	public float tongDoanhThu() {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q = session.createNativeQuery("SELECT "
+				+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+				+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+				+ "WHERE  "
+				+ "hd.id_HD = bk.id_HD "
+				+ "AND bk.id_phong = p.id_phong "
+				+ "AND p.id_loai_phong = lp.id_loai_phong");
+		
+		float sum = ((Double) q.getSingleResult()).floatValue();
+		
+		System.out.println(sum);
+		
+		session.close();
+		
+		return sum;
+	}
+	
+	public List<Object[]> thongKeDoanhThuTheoLoaiPhong() {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q = session.createNativeQuery("SELECT "
+				+ "lp.id_loai_phong, "
+				+ "lp.ten_loai_phong, "
+				+ "(CASE "
+				+ "WHEN temp.tong_tien is NULL THEN 0 "
+				+ "ELSE temp.tong_tien "
+				+ "END) "
+				+ "FROM loai_phong lp left join ("
+				+ "SELECT "
+				+ "lp.id_loai_phong, "
+				+ "lp.ten_loai_phong, "
+				+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+				+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+				+ "WHERE  "
+				+ "hd.id_HD = bk.id_HD "
+				+ "AND bk.id_phong = p.id_phong "
+				+ "AND p.id_loai_phong = lp.id_loai_phong "
+				+ "GROUP BY lp.id_loai_phong, lp.ten_loai_phong) temp on lp.id_loai_phong = temp.id_loai_phong ");
+		
+		List<Object[]> thongKe = (List<Object[]>) q.getResultList();
+		
+		thongKe.forEach(x -> {
+			System.out.printf("%d, %s, %f\n", x[0], x[1], x[2]);
+		});
+		
+		session.close();
+		
+		return thongKe;
+	}
+	
 	private boolean checkNgayTao(Date checkngaytao) {
 		if (getNgayTao(checkngaytao) != null) {
 			return true;

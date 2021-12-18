@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -56,37 +57,37 @@
 					    <div class="col">
 					        <form id="option">
 					            <input type="month" name="month" id="month" onchange="document.getElementById('option').submit();">
-					            <a href="./" class="btn btn-primary">Tất cả</a>
+					            <a href="<%=request.getContextPath()%>/admin/stats-usage" class="btn btn-primary">Tất cả</a>
 					        </form>
-					        {% if month %}
+					        <!-- 
 					        <script>
 					            document.getElementById('month').value = '{{ month }}';
 					        </script>
-					        {% endif %}
+					         -->
 					        <table class="table table-striped">
 					            <thead>
 					                <tr>
-					                    <th>STT</th>
+					                    <th>Id Phòng</th>
 					                    <th>Phòng</th>
-					                    <th>Số ngày thuê</th>
-					                    <th>Tỷ lệ</th>
+					                    <th>Số Ngày Thuê</th>
+					                    <th>Tỷ Lệ</th>
 					                </tr>
 					            </thead>
 					            <tbody>
-					            {% with usage_density = usage_density_stats_by_month['thong_ke'] %}
-					            {% for room in usage_density %}
+					            <c:forEach items="${thongKe}" var="phong">
 					                <tr>
-					                    <td>{{ loop.index }}</td>
-					                    <td>{{ room }}</td>
-					                    <td>{{ usage_density[room] }}</td>
-					                    {% if usage_density_stats_by_month['tong_mat_do'] > 0 %}
-					                    <td>{{ '{:.2f} %'.format(100*usage_density[room]/usage_density_stats_by_month['tong_mat_do']) }}</td>
-					                    {% else %}
-					                    <td>00.00 %</td>
-					                    {% endif %}
+					                    <td><c:out value="${phong[0]}"></c:out></td>
+					                    <td><c:out value="${phong[1]}"></c:out></td>
+					                    <td><c:out value="${phong[2]}"></c:out></td>
+					                    <td>
+					                    	<fmt:parseNumber var = "temp" type = "number" 
+					                    		value = "${phong[2]}" />
+					                    	<fmt:formatNumber type = "number" 
+					                    				groupingUsed = "false" 
+					                    				maxFractionDigits = "2"
+					                    				value = "${100 * temp / tongTGSD}" /> %</td>
 					                </tr>
-					            {% endfor %}
-					            {% endwith %}
+					            </c:forEach>
 					            </tbody>
 					        </table>
 					    </div>
@@ -95,18 +96,16 @@
 					        <script>
 					            let labels = [], info = [];
 					
-					            {% with usage_density = usage_density_stats_by_month['thong_ke'] %}
-					            {% for room in usage_density %}
-					                labels.push('{{ room }}');
-					                info.push({{ usage_density[room] }});
-					            {% endfor %}
-					            {% endwith %}
+					            <c:forEach items="${thongKe}" var="phong">
+					                labels.push('${phong[1]}');
+				                    info.push(${phong[2]});
+					            </c:forEach>
 					
 					            var dynamicColors = function() {
 					                var r = Math.floor(Math.random() * 255);
 					                var g = Math.floor(Math.random() * 255);
 					                var b = Math.floor(Math.random() * 255);
-					                return `rgb(${r}, ${g}, ${b})`;
+					                return 'rgb(' + r + ',' + g + ',' + b + ')';
 					             };
 					
 					            var colors = [];

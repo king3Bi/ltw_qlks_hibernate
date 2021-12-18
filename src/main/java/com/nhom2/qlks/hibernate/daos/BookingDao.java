@@ -1,5 +1,6 @@
 package com.nhom2.qlks.hibernate.daos;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -146,6 +147,47 @@ public class BookingDao {
         	   session.close();
         }
         return err_msg;
+	}
+	
+	public int tongSuDungPhong() {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q = session.createNativeQuery("SELECT "
+				+ "SUM(DATEDIFF(bk.check_out, bk.check_in)) "
+				+ "FROM booking bk ");
+		
+		int tongTGSuDung = ((BigDecimal) q.getSingleResult()).intValue();
+		
+		System.out.println(tongTGSuDung);
+		
+		session.close();
+		
+		return tongTGSuDung;
+	}
+	
+	public List<Object[]> thongKeMatDoSuDungPhong() {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q = session.createNativeQuery("SELECT "
+				+ "p.id_phong, "
+				+ "p.ten_phong, "
+				+ "(CASE "
+				+ "WHEN bk.id_booking is NULL THEN 0 "
+				+ "ELSE SUM(DATEDIFF(bk.check_out, bk.check_in)) "
+				+ "END) "
+				+ "FROM phong p left join booking bk "
+				+ "ON p.id_phong = bk.id_phong "
+				+ "GROUP BY p.id_phong, p.ten_phong");
+		
+		List<Object[]> thongKe = (List<Object[]>) q.getResultList();
+		
+		thongKe.forEach(x -> {
+			System.out.printf("%d, %s, %f\n", x[0], x[1], x[2]);
+		});
+		
+		session.close();
+		
+		return thongKe;
 	}
 	
 	public List<Booking> getAllBooking() {
