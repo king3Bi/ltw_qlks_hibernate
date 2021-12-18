@@ -108,7 +108,11 @@
 	         										
 									         <c:when test = "${booking.khachHangs.size() > 0}">
 									            <a class="btn btn-primary" 
-									            	onclick="openCustomerList(${booking.idBooking})" 
+									            	onclick="openCustomerList(${booking.idBooking},
+									            		${booking.phong.tenPhong},
+									            		'<fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkIn}"/>',
+									            		'<fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkOut}"/>',
+									            		${booking.soNguoi})"
 									            	href="javascript:void(0)">
 									            	Xem
 									            </a>
@@ -116,7 +120,11 @@
 									         
 									         <c:otherwise>
 									            <a class="btn btn-success" 
-									            	onclick="openAddCustomerList()"
+									            	onclick="openAddCustomerList(${booking.idBooking},
+									            		${booking.phong.tenPhong},
+									            		'<fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkIn}"/>',
+									            		'<fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkOut}"/>', 
+									            		${booking.soNguoi})"
 									            	href="javascript:void(0)">
 									            	Thêm
 									            </a>
@@ -193,25 +201,106 @@
 	                
 	                    </tbody>
 	                </table>
-	              
+	                
 	            </div>
-	
+				
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<input type="button" class="btn btn-success" id="btn-save" value="Lưu" onclick="saveAddCustomerList()">
+					<input type="button" class="btn btn-danger" data-dismiss="modal" value="Thoát">							
+				</div>
 	        </div>
 	    </div>
 	</div>
 	
 	<script type="text/javascript">
-		function openCustomerList(idBooking) {
+		var currentIdBooking;
+	
+		function openCustomerList(idBooking, tenPhong, checkIn, checkOut, soNguoi) {
+			currentIdBooking = idBooking;
+			
 			$.get(
-					"<%=request.getContextPath()%>/api/get-customer-booking?idBooking=" + idBooking,
+					"<%=request.getContextPath()%>/api/customer-booking?idBooking=" + idBooking,
 					function(data) {
 						console.log(data);
+						
+						document.getElementById('ten-phong-pt').value = tenPhong;
+			            document.getElementById('check-in-pt').value = checkIn;
+			            document.getElementById('check-out-pt').value = checkOut;
+			            document.getElementById('so-nguoi-pt').value = soNguoi;
+						
+						let table = document.getElementById("tb-booking");
+					    table.innerHTML = '';
+
+					    for (let i = 0; i < data.length; i++) {
+					        let r = table.insertRow(i);
+
+					        r.insertCell(0).innerText = i + 1;
+					        r.insertCell(1).innerText = data[i].hoTen;
+					        r.insertCell(2).innerText = data[i].cmnd;
+					        r.insertCell(3).innerText = data[i].diaChi;
+					    }
+						
+					    document.getElementById('btn-save').disabled = true;
+					    
 						$("#customerListModal").modal();
 					})
 		}
 		
-		function openAddCustomerList() {
+		function openAddCustomerList(idBooking, tenPhong, checkIn, checkOut, soNguoi) {
+			currentIdBooking = idBooking;
+			
+			document.getElementById('ten-phong-pt').value = tenPhong;
+            document.getElementById('check-in-pt').value = checkIn;
+            document.getElementById('check-out-pt').value = checkOut;
+            document.getElementById('so-nguoi-pt').value = soNguoi;
+            
+            document.getElementById('btn-save').disabled = false;
+			
+			createTableBooking(soNguoi);
 			$("#customerListModal").modal();
+		}
+		
+		function saveAddCustomerList() {
+			let table = document.getElementById("tb-booking");
+
+		    if(table.rows.length < 1) {
+		        alert('Số người phải lớn hơn 0');
+		        return;
+		    }
+
+		    const data = [];
+
+		    for (let r of table.children) {
+		    	if (r.children[1].children[0].value == '' ||
+		    			r.children[2].children[0].value == '' ||
+		    			r.children[3].children[0].value == '') {
+		    		alert('Nhập thiếu dữ liệu khách hàng');
+		    		return;
+		    	} 
+		        data.push({
+		            hoTen: r.children[1].children[0].value,
+		            cmnd: r.children[2].children[0].value,
+		            diaChi: r.children[3].children[0].value
+		        });
+		    }
+			console.log(data);
+				
+			$.post(
+					"<%=request.getContextPath()%>/api/customer-booking", 
+					{ 
+						idBooking: currentIdBooking,
+						dataKH: JSON.stringify(data),
+					},
+					function(data){
+						if (data.status == 200) {
+							alert('Thêm khách hàng thành công');
+						} else {
+							alert('Đã có lỗi xảy ra, vui lòng thử lại');
+						}
+							
+				        location.reload();
+					});
 		}
 	</script>
 </body>

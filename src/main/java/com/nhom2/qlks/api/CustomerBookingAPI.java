@@ -21,8 +21,8 @@ import com.nhom2.qlks.hibernate.pojo.KhachHang;
 /**
  * Servlet implementation class GetCustomerBookingAPI
  */
-@WebServlet("/api/get-customer-booking")
-public class GetCustomerBookingAPI extends HttpServlet {
+@WebServlet("/api/customer-booking")
+public class CustomerBookingAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private Gson gson;
@@ -30,7 +30,7 @@ public class GetCustomerBookingAPI extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetCustomerBookingAPI() {
+    public CustomerBookingAPI() {
         super();
         // TODO Auto-generated constructor stub
         this.gson = new Gson();
@@ -75,7 +75,32 @@ public class GetCustomerBookingAPI extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		
+		Hashtable<String, Object> rs = new Hashtable<String, Object>();
+		
+		String idBookingStr = request.getParameter("idBooking");
+		String dataKHStr = request.getParameter("dataKH");
+		
+		int idBooking = Integer.parseInt(idBookingStr);
+		KhachHang[] dataKH = gson.fromJson(dataKHStr, KhachHang[].class);
+		
+		Booking booking = new BookingDao().getBookingById(idBooking);
+		
+		String err_msg = new KhachHangDao().insertKhachHangs(dataKH, booking);
+		if (err_msg.equals("successed")) {
+			rs.put("status", 200);
+		} else {
+			rs.put("status", 404);
+		}
+		
+		PrintWriter out = response.getWriter();
+		
+		String rsStr = this.gson.toJson(rs);
+		
+		out.write(rsStr);
+		out.flush();
 	}
 
 }

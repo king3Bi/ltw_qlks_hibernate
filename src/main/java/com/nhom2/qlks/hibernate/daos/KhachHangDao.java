@@ -24,6 +24,41 @@ public class KhachHangDao {
 //        System.out.println("saved khachhang");
 	}
 	
+	public String insertKhachHangs(KhachHang[] khachHangs, Booking booking) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+        	transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            // save the KhachHangs object
+            for (KhachHang kh : khachHangs) {
+            	kh.setBooking(booking);
+                session.save(kh);
+            }
+            
+            transaction.commit();
+            System.out.println("commited transaction");
+        	
+        	err_msg = "successed";
+        } catch (Exception e) {
+			// TODO: handle exception
+        	if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+		} finally {
+     	   session.close();
+		}
+		
+		return err_msg;
+	}
+	
 	public String updateKhachHang(int id,String hoten,String cmnd,String diachi) {
 		String err_msg = "";
 		
