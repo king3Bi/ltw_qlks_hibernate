@@ -117,7 +117,7 @@
 									         
 									         <c:otherwise>
 									            <a class="btn btn-success" 
-									            	onclick="openAddCustomerList()" 
+									            	onclick="openAddCustomerList(${booking.soNguoi})" 
 									            	href="javascript:void(0)">
 									            	Thêm
 									            </a>
@@ -208,11 +208,24 @@
 					function(data) {
 						console.log(data);
 						
+						let table = document.getElementById("tb-booking");
+					    table.innerHTML = '';
+
+					    for (let i = 0; i < data.length; i++) {
+					        let r = table.insertRow(i);
+
+					        r.insertCell(0).innerText = i + 1;
+					        r.insertCell(1).innerText = data[i].hoTen;
+					        r.insertCell(2).innerText = data[i].cmnd;
+					        r.insertCell(3).innerText = data[i].diaChi;
+					    }
+						
 						$("#customerListModal").modal();
 					})
 		}
 		
-		function openAddCustomerList() {
+		function openAddCustomerList(soNguoi) {
+			createTableBooking(soNguoi);
 			$("#customerListModal").modal();
 		}
 	</script>
