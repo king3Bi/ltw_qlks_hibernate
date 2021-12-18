@@ -322,7 +322,7 @@ public class UserDao {
         }
         return err_msg;
 	}
-	public String updateUser(int id,String hoten,Date ngaysinh,String gioitinh,String cmnd,String email,String sdt,int kichhoat,Quyen quyen) {
+	public String updateUser(int id,String hoten,Date ngaysinh,String gioitinh,String cmnd,String email,String sdt,String tendangnhap,String matkhau,int kichhoat,Quyen quyen) {
 		String err_msg = "";
 		
 		Transaction transaction = null;
@@ -340,6 +340,8 @@ public class UserDao {
 			user.setCmnd(cmnd);
 			user.setEmail(email);
 			user.setSdt(sdt);
+			user.setTenDangNhap(tendangnhap);
+			user.setMatKhau(matkhau);
 			user.setGioiTinh(gioitinh);
 			user.setNgaySinh(ngaysinh);
 			user.setQuyen(quyen);
