@@ -63,6 +63,15 @@ public class Booking implements Serializable {
 		this.datOnline = isBookingOnline;
 	}
 
+	public Booking(int numPeople, Date checkIn, Date checkOut, boolean isBookingOnline, User user, Phong room) {
+		super();
+		this.soNguoi = numPeople;
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+		this.user = user;
+		this.phong = room;
+		this.datOnline = isBookingOnline;
+	}
 	
 	public int getIdBooking() {
 		return idBooking;

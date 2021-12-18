@@ -35,8 +35,7 @@
                                     <label class="font-weight-bold col-sm control-label"
                                            for="numPeople">Số người <strong style="color: red">*</strong></label>
                                     <div class="col-sm-10">
-                                        <select class="form-control form-control-lg" id="numPeople" name="numPeople"
-                                                onchange="totalPrice(${roomTypeDetail.getIdLoaiPhong()})">
+                                        <select class="form-control form-control-lg" id="numPeople" name="numPeople">
                                         	<c:forEach var = "i" begin = "1" end = "${roomTypeDetail.getSoNguoi()}">
          										<option><c:out value = "${i}"/></option>
       										</c:forEach>
@@ -84,29 +83,20 @@
                                            for="room-list">Phòng <strong style="color: red">*</strong></label>
                                     <div class="col-sm-10">
                                         <select class="form-control form-control-lg" name="room" id="room-list">
-                                        	<%-- <c:forEach items="rooms" value="room">
-                                        		<option>${room.getTenPhong}</option>
-                                        	</c:forEach> --%>
+                                        	
                                         </select>
                                     </div>
-                                </div>
-                                <!-- {% if err_msg %}
-                                <div class="alert">
-                                    {{ err_msg }}
-                                </div>
-                                {% endif %} -->
+                                </div>	                           
             
                             </form>
                             <div class="col-sm-offset-2 col-sm-10">
-                            	<%User user = (User) session.getAttribute("user");%>
-                                <% if (user != null) { %>
-                                	<button id="btnCreateBooking" class="btn btn-info" type="button" onclick="createBookingOnline({{ current_user.id }},
-                                                                                                    {{room_type_detail.id_loai_phong}})">Đặt phòng</button>
-                                <% } else {%>
-                                	<a href="<c:url value='login?next=/room-type'/>?id=${roomTypeDetail.getIdLoaiPhong()}">Đăng nhập để đặt phòng</a>
-                                	
-                                <% } %>
-                            </div>
+	                            	<%User user = (User) session.getAttribute("user");%>
+	                                <% if (user != null) { %>
+	                                	<button id="btnCreateBooking" class="btn btn-info" type="button" onclick="createBookingOnline(<%= user.getId() %>,${roomTypeDetail.getIdLoaiPhong()})">Đặt phòng</button>
+	                                <% } else {%>
+	                                	<a href="<c:url value='login?next=/room-type'/>?id=${roomTypeDetail.getIdLoaiPhong()}">Đăng nhập để đặt phòng</a>                                	
+	                                <% } %>
+	                       </div>
                         </div>
                     </div>
                 </div>
@@ -124,7 +114,7 @@
 	        "room-type=" + idRoomType +
 	        "&check-in=" + checkIn +
 	        "&check-out=" + checkOut;
-	
+		
 	    //chi khi nao nguoi dung dien thoi gian checkin, checkout thi se tao moi 1 request
 	    if (checkIn == "" || checkOut == "") {
 	        return;
@@ -151,11 +141,96 @@
 	            } else{
 	                for (let room of data){
 	                    var opt = document.createElement('option');
-	                    opt.value = room.tenPhong;
+	                    opt.value = room.idPhong;
 	                    opt.innerHTML = room.tenPhong;
 	                    roomList.appendChild(opt);
 	                }
 	            }
 	    });
 	}
+	
+	function totalPrice(id_loai_phong){
+	    let num_people = document.querySelector("#numPeople").value;
+	    let check_in = document.querySelector("#check-in").value;
+	    let check_out = document.querySelector("#check-out").value;
+
+	    let uri = "<%=request.getContextPath()%>/api/get-total-price?" +
+	        "room-type=" + id_loai_phong +	       
+	        "&check-in=" + check_in +
+	        "&check-out=" + check_out;
+
+	    //chi khi nao nguoi dung dien thoi gian checkin, checkout thi se tao moi 1 request
+	    if (check_in == "" || check_out == "") {
+	        return;
+	    }
+
+	    fetch(uri, {
+	        method: 'get',
+	        headers: {
+	            "Content-Type": "application/json"
+	        }
+	    }).then(function(res) {
+	        console.info(res)
+	        return res.json()
+	    }).then(function(data) {
+	        console.info(data)
+	        document.querySelector('#total-price').innerHTML = Intl.NumberFormat('vi-VN').format(data.totalPrice);
+	    })
+	}
+	
+	function createBookingOnline(customerId, roomTypeId) {	   
+	    let numPeople = document.getElementById("numPeople").value;
+	    let checkin = document.getElementById("check-in").value;
+	    let checkout = document.getElementById("check-out").value;
+	    let idRoom = document.getElementById("room-list").value;
+	    let customerIdStr = customerId.toString();
+		console.log(typeof(numPeople));
+		console.log(typeof(checkin));
+		console.log(typeof(checkout));
+		console.log(typeof(idRoom));
+		console.log(typeof(customerIdStr));
+	    //bien thong bao
+	    let notification = document.createElement('span');
+	    notification.setAttribute('id','msg');
+	    //xoa .msg neu da ton tai
+	    $("#msg").remove();
+	    document.getElementById("btnCreateBooking").before(notification);
+	    if (checkin == '' || checkout == '' || numPeople == '') {
+	        notification.setAttribute('class','error');
+	        notification.innerText = 'Thiếu thông tin';
+	        return;
+	    }
+
+	    fetch("<%=request.getContextPath()%>/api/booking-online", {
+	        method: 'POST',
+	        body: JSON.stringify({
+	        	numPeople: numPeople,
+	            check_in: checkin,
+	            check_out: checkout,
+	            id_phong: idRoom,
+	            id_khach_hang: customerIdStr
+	        }),
+	        headers: {
+	            "Content-Type": "application/json"
+	        }
+	    }).then(function(res) {
+	        console.log(res)
+	        return res.json()
+	    }).then(function(data) {
+	        console.log(data)
+	        if (data.status_code == 200) {
+	        	
+	            notification.setAttribute('class','success');
+	            notification.innerText = 'Đặt phòng thành công';
+	        } else if (data.status_code == 404) {
+	            notification.setAttribute('class','error');
+	            notification.innerText = 'Lỗi hệ thống';
+	        }
+	        roomSearchCustomer(roomTypeId);
+	    }).catch(function(error){
+	    	console.log(error);
+	    	
+	    })
+	}
+	
 </script>

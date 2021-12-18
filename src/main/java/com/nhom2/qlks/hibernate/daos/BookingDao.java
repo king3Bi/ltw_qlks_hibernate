@@ -57,7 +57,41 @@ public class BookingDao {
         return err_msg;
 	}
 	
-
+	public String insertBookingOnline(Booking booking) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            session.save(booking);       
+            System.out.println("saved booking");
+            System.out.printf("id booking: %d\n", booking.getIdBooking());                        
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            System.out.printf("id booking: %d\n", booking.getIdBooking());
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
 	public void payBookings(List<Booking> bookings, HoaDon hoaDon, Session session) {
 		for (Booking bk : bookings) {
 			
