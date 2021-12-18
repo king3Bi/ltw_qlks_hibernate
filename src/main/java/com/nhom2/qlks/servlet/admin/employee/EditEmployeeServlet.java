@@ -86,6 +86,8 @@ public class EditEmployeeServlet extends HttpServlet {
         String userCmnd = request.getParameter("user-cmnd");
         String userEmail = request.getParameter("user-em");
         String userSdt = request.getParameter("user-sdt");
+        String userTdn=request.getParameter("user-tdn");
+        String userMk=request.getParameter("user-mk");
         Integer check=0;
         try {
         	 check= Integer.parseInt(request.getParameter("user-kh"));
@@ -107,7 +109,7 @@ public class EditEmployeeServlet extends HttpServlet {
         QuyenDao quyenList = new QuyenDao();
         Quyen quyenStatus = quyenList.getQuyenById(userQuyen); 
         UserDao userup = new UserDao();
-        userup.updateUser(userId, userName,ngaysinh,userGioiTinh, userCmnd, userEmail, userSdt, check,quyenStatus);
+        userup.updateUser(userId, userName,ngaysinh,userGioiTinh, userCmnd, userEmail, userSdt,userTdn,userMk, check,quyenStatus);
        
         
         response.sendRedirect(request.getContextPath() + "/admin/employee");      
