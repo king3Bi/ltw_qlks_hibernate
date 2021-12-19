@@ -201,36 +201,27 @@
 	        return;
 	    }
 
-	    fetch("<%=request.getContextPath()%>/api/booking-online", {
-	        method: 'POST',
-	        body: JSON.stringify({
-	        	numPeople: numPeople,
-	            check_in: checkin,
-	            check_out: checkout,
-	            id_phong: idRoom,
-	            id_khach_hang: customerIdStr
-	        }),
-	        headers: {
-	            "Content-Type": "application/json"
-	        }
-	    }).then(function(res) {
-	        console.log(res)
-	        return res.json()
-	    }).then(function(data) {
-	        console.log(data)
-	        if (data.status_code == 200) {
-	        	
-	            notification.setAttribute('class','success');
-	            notification.innerText = 'Đặt phòng thành công';
-	        } else if (data.status_code == 404) {
-	            notification.setAttribute('class','error');
-	            notification.innerText = 'Lỗi hệ thống';
-	        }
-	        roomSearchCustomer(roomTypeId);
-	    }).catch(function(error){
-	    	console.log(error);
-	    	
-	    })
+	    $.post(
+	    		"<%=request.getContextPath()%>/api/booking-online", 
+	    		{
+	        		so_nguoi: numPeople,
+	            	check_in: checkin,
+	            	check_out: checkout,
+	            	id_phong: idRoom,
+	            	id_khach_hang: customerIdStr
+	        	},
+	        	function(data) {
+	        		console.log(data);
+	        		if (data.status == 200) {
+	        			notification.setAttribute('class','success');
+	    	            notification.innerText = 'Đặt phòng thành công';
+	        		} else {
+	        			notification.setAttribute('class','error');
+	    	            notification.innerText = 'Lỗi hệ thống';
+	        		}
+	        		roomSearchCustomer(roomTypeId);
+	        	}
+	     );
 	}
 	
 </script>

@@ -53,11 +53,8 @@ public class CreateBookingOnlineAPI extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		
-		Hashtable<String, Object> rs = new Hashtable<String, Object>();
-		System.out.println(request.getParameter("numPeople"));
+		Hashtable<String, Object> rs = new Hashtable<String, Object>();	
 		int numPeople = Integer.parseInt(request.getParameter("so_nguoi"));
-		System.out.println(numPeople + "......");
 		Date checkin = new Date();
         String checkinStr = request.getParameter("check_in");
         try {        	        	

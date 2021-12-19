@@ -65,11 +65,6 @@ public class LoginServlet extends HttpServlet {
 			String site = request.getContextPath() + "/" + next ;
 			request.setAttribute("site", site);		
 			
-			
-//	        response.setStatus(response.SC_MOVED_TEMPORARILY);
-//	        response.setHeader("Location", site);
-			
-//			request.getRequestDispatcher("/index.jsp").forward(request, response);
 			response.sendRedirect(site);
 			return;
 		} else {

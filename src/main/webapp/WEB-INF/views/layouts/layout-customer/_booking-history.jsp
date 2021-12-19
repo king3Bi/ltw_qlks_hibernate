@@ -19,21 +19,30 @@
 
 	<%User user = (User) session.getAttribute("user");%>
 	<% if (user != null) { %>
-        <tr>
-            <td colspan="7" class="text-center">Không có booking nào</td>
-        </tr>
-    
-        
-        <tr id="booking-id">
-           <!--  <td>{{ booking.id_booking }}</td>
-            <td>{{ booking.phong.ten_phong }}</td>
-            <td>{{ booking.so_nguoi }}</td>
-            <td>{{ booking.co_nguoi_nuoc_ngoai }}</td>
-            <td>{{ booking.check_in }}</td>
-            <td>{{ booking.check_out }}</td>
-            <td>{{ '{:,.0f}'.format(booking.phong.loai_phong.don_gia|float)}} VNĐ</td>
-        </tr> -->
-        
+		<c:choose>
+			<c:when test="${numBooking == 0}">
+		        <tr>
+		            <td colspan="7" class="text-center">Không có booking nào</td>
+		        </tr>
+	   		 </c:when>
+	   		 <c:otherwise>
+		   		<c:forEach items="${bookings}" var="booking">				       
+			        <tr id="booking-id">
+			            <td> <c:out value = "${booking.getIdBooking()}"/></td>				         
+			            <td> <c:out value = "${booking.getPhong().getTenPhong()}"/></td>				         
+			            <td> <c:out value = "${booking.getSoNguoi()}"/></td>				         
+			            <td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.getCheckIn()}"/></td>			         
+			            <td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.getCheckOut()}"/></td>			        
+			            
+			        	<td>
+			        		<fmt:setLocale value = "vi_VN"/>
+			        		<fmt:formatNumber value="${booking.getPhong().getLoaiPhong().getDonGia()}" type="currency"  maxFractionDigits = "0"/>
+			        	</td>
+			        </tr>
+				</c:forEach> 
+	   		 </c:otherwise>			
+		</c:choose>
+		
     <% } %>
 </table>
 
