@@ -38,6 +38,19 @@ public class LoaiPhong implements Serializable {
 	@OneToMany(mappedBy = "loaiPhong")
 	private List<Phong> phongs;
 	
+	
+	public LoaiPhong() {}
+	
+	public LoaiPhong(String roomTypeName, String roomTypeImage, Float roomTypeUnitPrice, Integer roomTypeNumPeople, String roomTypeNote) {
+		super();
+		this.tenLoaiPhong = roomTypeName;
+		this.hinhAnh = roomTypeImage;
+		this.donGia = roomTypeUnitPrice;
+		this.soNguoi = roomTypeNumPeople;
+		this.ghiChu = roomTypeNote;
+	}
+
+	
 	public int getIdLoaiPhong() {
 		return idLoaiPhong;
 	}

@@ -45,17 +45,7 @@ public class RoomServlet extends HttpServlet {
 		List<TrangThai> tts = new TrangThaiDao().getAllTrangThai();
 		request.setAttribute("trangThais", tts);
 		
-//		String idLoaiPhongStr = request.getParameter("room-type");
-		
-//		List<Phong> phongs;
-		
-//		if (idLoaiPhongStr == null || idLoaiPhongStr.equals("")) {
-		List<Phong> phongs = new PhongDao().getALLPhong();
-//		} else {
-//			LoaiPhong loaiPhong = new LoaiPhongDao().getLoaiPhongById(Integer.parseInt(idLoaiPhongStr));
-//			phongs = new PhongDao().getPhongByLoaiPhong(loaiPhong);
-//		}
-		
+		List<Phong> phongs = new PhongDao().getAllPhong();
 		request.setAttribute("phongs", phongs);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/room-admin.jsp");

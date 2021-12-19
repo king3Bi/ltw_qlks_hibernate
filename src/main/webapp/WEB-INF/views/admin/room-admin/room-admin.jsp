@@ -25,8 +25,8 @@
 		src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 	<link rel="stylesheet"
 		href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
-	<script src='https://kit.fontawesome.com/a076d05399.js'
-		crossorigin='anonymous'></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+  	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/v4-shims.css">
 	<script src="<%=request.getContextPath()%>/static/js/script.js"></script>
 </head>
 <body>
@@ -56,7 +56,7 @@
 				
 					<ul class="nav nav-tabs">
 						<li class="nav-item">							
-							<a class="nav-link active" href="<c:url value='/admin/room'/>">Tất cả</a>
+							<a class="nav-link active" href="<c:url value="/admin/room"/>">Tất cả</a>
 						</li>								
 						
 						<li class="nav-item">
@@ -122,12 +122,14 @@
 				<div class="modal-body">
 					<form action="room/add" id="room-form">
 						<div class="form-group">
-							<label for="room-name">Tên phòng:</label> <input type="text"
+							<label for="room-name">Tên phòng:</label> 
+							<input type="text"
 								id="room-name" class="form-control" placeholder="Nhập tên phòng"
 								name="room-name" required>
 						</div>
 						<div class="form-group">
-							<label for="room-type">Loại phòng:</label> <select id="room-type"
+							<label for="room-type">Loại phòng:</label> 
+							<select id="room-type"
 								name="room-type" class="custom-select">
 								<option disabled>Chọn loại phòng</option>							
 								
@@ -138,7 +140,8 @@
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="room-status">Trạng thái:</label> <select
+							<label for="room-status">Trạng thái:</label> 
+							<select
 								id="room-status" name="room-status" class="custom-select">
 								<option disabled>Chọn trạng thái</option>
 								

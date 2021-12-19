@@ -67,11 +67,7 @@ public class AdminLoginServlet extends HttpServlet {
 			session.setAttribute("user", user);
 			
 			String site = request.getContextPath() + "/admin/room-search";
-//			 
-//	        response.setStatus(response.SC_MOVED_TEMPORARILY);
-//	        response.setHeader("Location", site);
-			
-//			request.getRequestDispatcher("/index.jsp").forward(request, response);
+
 			response.sendRedirect(site);
 			return;
 		} else {

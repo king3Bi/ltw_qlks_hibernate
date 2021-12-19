@@ -36,7 +36,7 @@ public class AdminServlet extends HttpServlet {
 		 * request.getRequestDispatcher("/WEB-INF/views/admin/home-admin.jsp");
 		 * dispatcher.forward(request, response);
 		 */
-		response.sendRedirect(request.getContextPath() + "/admin/room");
+		response.sendRedirect(request.getContextPath() + "/admin/room-search");
 		
 	}
 

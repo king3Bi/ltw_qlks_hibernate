@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Đăng nhập</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/login-customer.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/register-login-customer.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 </head>
 <body>
@@ -37,13 +37,9 @@
             	   </div>
             	</div>
             	
-            	<!-- <h5>hiện lỗi</h5> -->
+            
             	<div>${errMessage}</div>
-				<!-- {% if err_msg %}
-					<div class="alert">
-						{{ err_msg }}
-					</div>
-				{% endif %} -->
+				
             	<input type="submit" class="btn" value="Đăng nhập">
             </form>
         </div>

@@ -1,3 +1,5 @@
+<%@page import="com.nhom2.qlks.hibernate.pojo.LoaiPhong"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
@@ -93,7 +95,9 @@
 						</thead>
 						<tbody>							
 							
+
 							<c:forEach items="${bookings}" var="booking">
+							
 								<tr>
 									<td><c:out value="${booking.idBooking}"></c:out></td>
 									<td><c:out value="${booking.soNguoi}"></c:out></td>								
@@ -128,6 +132,7 @@
 									            	href="javascript:void(0)">
 									            	Thêm
 									            </a>
+
 									         </c:otherwise>
 										         
 										</c:choose>
@@ -209,6 +214,7 @@
 					<input type="button" class="btn btn-success" id="btn-save" value="Lưu" onclick="saveAddCustomerList()">
 					<input type="button" class="btn btn-danger" data-dismiss="modal" value="Thoát">							
 				</div>
+
 	        </div>
 	    </div>
 	</div>

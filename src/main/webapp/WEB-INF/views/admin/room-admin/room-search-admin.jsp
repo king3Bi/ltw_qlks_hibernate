@@ -238,7 +238,7 @@
 					    console.log(data);
 						
 						$.post(
-								"<%=request.getContextPath()%>/admin/offline-booking", 
+								"<%=request.getContextPath()%>/admin/booking-offline", 
 								{ 
 									idPhong: document.getElementById('id-phong-pt').value,
 									checkIn: document.getElementById("check-in-pt").value,

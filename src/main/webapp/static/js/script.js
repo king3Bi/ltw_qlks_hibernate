@@ -43,6 +43,7 @@ function roomSearch() {
     })
 }
 
+
 function book(roomId, roomName) {
     if (document.querySelector('#check-in').value == '' ||
         document.querySelector('#check-out').value == '') {

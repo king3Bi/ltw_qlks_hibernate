@@ -130,7 +130,7 @@ public class PhongDao {
         return err_msg;
 	}
 	
-	public List<Phong> getALLPhong() {
+	public List<Phong> getAllPhong() {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM Phong");//HQL
 		
@@ -139,39 +139,42 @@ public class PhongDao {
 		return phongs;
 	}
 	
-	public List<Phong> timPhong(int soNguoi, Date checkIn, Date checkOut) {
+	public List<Phong> searchRoomsByRoomType(int idRoomType, Date checkIn, Date checkOut) {
 		Session session = HibernateUtils.getFactory().openSession();
 		
-//		Query q1 = session.createQuery("FROM Booking "
-//				+ "WHERE NOT ((checkIn < :checkIn AND checkOut < :checkIn) "
-//				+ "OR (checkIn > :checkOut AND checkOut > :checkOut))");
-//		
-//		System.out.printf("CheckIn: %s, checkOut: %s\n", checkIn, checkOut);
-//		Query q1 = session.createQuery("SELECT p.idPhong, bk.checkIn, bk.checkOut "
-//				+ "FROM Phong p "
-//				+ "LEFT JOIN p.bookings bk "
-//				+ "WHERE "
-//				+ "(bk.checkIn is not null) "
-//				+ "OR (bk.checkOut is not null) "
-//				+ "OR "
-//				+ "bk.idBooking = ALL ("
-//				+ "SELECT idBooking "
-//				+ "FROM Booking "
-//				+ "WHERE ((checkIn > :checkIn) AND (checkIn > :checkOut)) "
-//				+ "OR ((checkOut < :checkIn AND (checkOut < :checkOut))))");
-//		
-//		q1.setParameter("checkIn", checkIn, TemporalType.DATE);
-//		q1.setParameter("checkOut", checkOut, TemporalType.DATE);
-//		
-//		List<Booking> bookeds = q1.getResultList();
-//		for (Booking p : bookeds) {
-//			System.out.println(p.getIdBooking());
-//		}
-//		
-//		List<Object[]> bookeds = q1.getResultList();
-//		bookeds.forEach(x -> {
-//			System.out.printf("idPhong: %d, checkIn: %s, checkOut: %s\n", x[0], x[1], x[2]);
-//		});
+		Query q;
+		
+		q = session.createQuery("FROM Phong "
+				+ "WHERE loaiPhong.idLoaiPhong=:idRoomType");//HQL
+		q.setParameter("idRoomType", idRoomType);
+		
+		
+		List<Phong> phongs = q.getResultList();
+		List<Phong> phongsCp = new ArrayList<>(phongs);
+		
+		if (checkIn != null) {
+			if (checkOut != null) {
+				for (Phong p : phongs) {
+					if (checkRoomBooked(p, checkIn, checkOut)) {
+						phongsCp.remove(p);
+					}
+				}
+			} else {
+				for (Phong p : phongs) {
+					if (checkRoomBookedAtDate(p, checkIn)) {
+						phongsCp.remove(p);
+					}
+				}
+			}
+		}
+		
+		session.close();
+		
+		return phongsCp;
+	}
+	
+	public List<Phong> timPhong(int soNguoi, Date checkIn, Date checkOut) {
+		Session session = HibernateUtils.getFactory().openSession();
 		
 		Query q;
 		if (soNguoi == 0) {

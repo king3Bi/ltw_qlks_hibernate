@@ -37,8 +37,8 @@ public class DeleteRoomServlet extends HttpServlet {
         Integer roomId = Integer.parseInt(request.getParameter("room-id"));
         
                        
-        PhongDao roomList = new PhongDao();
-        roomList.deletePhong(roomId);
+        PhongDao roomDao = new PhongDao();
+        roomDao.deletePhong(roomId);
            
         response.sendRedirect(request.getContextPath() + "/admin/room");
     }

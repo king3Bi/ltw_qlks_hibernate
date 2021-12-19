@@ -1,3 +1,5 @@
+<%@page import="com.nhom2.qlks.hibernate.pojo.LoaiPhong"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
@@ -129,6 +131,7 @@
 									            	href="javascript:void(0)">
 									            	Thêm
 									            </a>
+									            
 									         </c:otherwise>
 										         
 										</c:choose>
@@ -204,16 +207,18 @@
 	                </table>
 	              
 	            </div>
+
 				
 				<!-- Modal footer -->
 				<div class="modal-footer">
 					<input type="button" class="btn btn-success" id="btn-save" value="Lưu" onclick="saveAddCustomerList()">
 					<input type="button" class="btn btn-danger" data-dismiss="modal" value="Thoát">							
 				</div>
+
 	        </div>
 	    </div>
 	</div>
-	
+
 	<script type="text/javascript">
 		var currentIdBooking;
 	
@@ -304,5 +309,6 @@
 					});
 		}
 	</script>
+
 </body>
 </html>

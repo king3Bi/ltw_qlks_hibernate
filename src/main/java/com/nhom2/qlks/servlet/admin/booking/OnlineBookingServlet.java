@@ -11,12 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.nhom2.qlks.hibernate.daos.BookingDao;
+import com.nhom2.qlks.hibernate.daos.KhachHangDao;
 import com.nhom2.qlks.hibernate.pojo.Booking;
+import com.nhom2.qlks.hibernate.pojo.KhachHang;
 
 /**
  * Servlet implementation class OnlineBooking
  */
-@WebServlet("/admin/online-booking")
+@WebServlet(name = "BookingOnlineServlet", urlPatterns = {"/admin/booking-online"})
 public class OnlineBookingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -33,11 +35,15 @@ public class OnlineBookingServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html; charset=UTF-8");
+		response.setContentType("text/html; charset=UTF-8");			
+		
+		List<KhachHang> customers = new KhachHangDao().getAllKhachHang();
+		request.setAttribute("customers", customers);
 		
 		List<Booking> bookings = new BookingDao().getAllBookingOnline();
 		request.setAttribute("bookings", bookings);
 		
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/booking-admin/booking-online-admin.jsp");
 		dispatcher.forward(request, response);
 	}

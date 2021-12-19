@@ -31,13 +31,6 @@ public class EditRoomServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
-	/*
-	 * protected void processRequest(HttpServletRequest request, HttpServletResponse
-	 * response) throws ServletException, IOException {
-	 * 
-	 * }
-	 */
     
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -54,7 +47,6 @@ public class EditRoomServlet extends HttpServlet {
 			phong = new PhongDao().getPhongById(Integer.parseInt(idPhongStr));
 		}
 		request.setAttribute("phong", phong);
-		
 		List<LoaiPhong> roomTypeList = new LoaiPhongDao().getAllLoaiPhong();
 		request.setAttribute("loaiPhongs", roomTypeList);
 		

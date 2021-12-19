@@ -29,8 +29,9 @@ public class UserFilter implements Filter {
 				"/admin/login",
 				"/admin/room-search",
 				"/admin/logout",
-				"/admin/online-booking",
-				"/admin/offline-booking"
+				"/admin/bill/insert",
+				"/admin/booking-online",
+				"/admin/booking-offline"
 			};
 
     /**

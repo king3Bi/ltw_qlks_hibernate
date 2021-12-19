@@ -48,8 +48,31 @@ public class Booking implements Serializable {
 	private Phong phong;
 	
 	@OneToMany(mappedBy = "booking")
-	private List<KhachHang> khachHangs;
+	private List<KhachHang> khachHangs;	
+	
+	public Booking() {}
+	
+	public Booking(int numPeople, Date checkIn, Date checkOut, boolean isBookingOnline, User user, HoaDon bill, Phong room) {
+		super();
+		this.soNguoi = numPeople;
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+		this.user = user;
+		this.hoaDon = bill;
+		this.phong = room;
+		this.datOnline = isBookingOnline;
+	}
 
+	public Booking(int numPeople, Date checkIn, Date checkOut, boolean isBookingOnline, User user, Phong room) {
+		super();
+		this.soNguoi = numPeople;
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+		this.user = user;
+		this.phong = room;
+		this.datOnline = isBookingOnline;
+	}
+	
 	public int getIdBooking() {
 		return idBooking;
 	}

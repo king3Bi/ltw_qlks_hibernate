@@ -2,6 +2,7 @@ package com.nhom2.qlks.servlet.customer;
 
 import java.io.IOException;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,8 +49,7 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
-		String err_msg = "";
-		
+		String err_msg = "";		
 		String tenDangNhap = request.getParameter("username");
 		String matKhau = new Utils().strToMD5(request.getParameter("password"));
 		Quyen quyen = new QuyenDao().getQuyenById(3);
@@ -61,8 +61,11 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("user", user);
 			
-			String site = request.getContextPath();
-//			 
+			String next = request.getParameter("next");
+			String site = request.getContextPath() + "/" + next ;
+			request.setAttribute("site", site);		
+			
+			
 //	        response.setStatus(response.SC_MOVED_TEMPORARILY);
 //	        response.setHeader("Location", site);
 			

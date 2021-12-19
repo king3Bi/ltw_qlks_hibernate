@@ -27,10 +27,25 @@ import com.nhom2.qlks.hibernate.pojo.KhachHang;
 import com.nhom2.qlks.hibernate.pojo.Phong;
 import com.nhom2.qlks.hibernate.pojo.User;
 
+import com.nhom2.qlks.hibernate.daos.BookingDao;
+import com.nhom2.qlks.hibernate.daos.HoaDonDao;
+import com.nhom2.qlks.hibernate.daos.KhachHangDao;
+import com.nhom2.qlks.hibernate.daos.LoaiPhongDao;
+import com.nhom2.qlks.hibernate.daos.PhongDao;
+import com.nhom2.qlks.hibernate.daos.TrangThaiDao;
+import com.nhom2.qlks.hibernate.daos.UserDao;
+import com.nhom2.qlks.hibernate.pojo.Booking;
+import com.nhom2.qlks.hibernate.pojo.HoaDon;
+import com.nhom2.qlks.hibernate.pojo.KhachHang;
+import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.pojo.Phong;
+import com.nhom2.qlks.hibernate.pojo.TrangThai;
+import com.nhom2.qlks.hibernate.pojo.User;
+
 /**
  * Servlet implementation class OfflineBooking
  */
-@WebServlet("/admin/offline-booking")
+@WebServlet(name = "BookingOfflineServlet", urlPatterns = {"/admin/booking-offline"})
 public class OfflineBookingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -51,7 +66,6 @@ public class OfflineBookingServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");	
-		
 		List<Booking> bookings = new BookingDao().getAllBookingOffline();
 		request.setAttribute("bookings", bookings);
 		

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class OfflineCustomerServlet
  */
-@WebServlet("/admin/offline-customer")
+@WebServlet("/admin/booking-offline/customer")
 public class OfflineCustomerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

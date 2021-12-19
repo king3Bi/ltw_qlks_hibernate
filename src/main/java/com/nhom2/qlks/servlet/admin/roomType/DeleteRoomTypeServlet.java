@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.nhom2.qlks.hibernate.daos.LoaiPhongDao;
+import com.nhom2.qlks.hibernate.daos.PhongDao;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 
 /**
  * Servlet implementation class RoomType
  */
-@WebServlet("/admin/room-type/delete")
+@WebServlet(name = "DeleteRoomType", urlPatterns = {"/admin/room-type/delete"})
 public class DeleteRoomTypeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -28,19 +29,27 @@ public class DeleteRoomTypeServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+       
+        Integer roomTypeId = Integer.parseInt(request.getParameter("room-type-id"));
+        
+                       
+        LoaiPhongDao roomTypeDao = new LoaiPhongDao();
+        roomTypeDao.deleteLoaiPhong(roomTypeId);
+           
+        response.sendRedirect(request.getContextPath() + "/admin/room-type");
+    }
+    
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html; charset=UTF-8");
-		
-		List<LoaiPhong> lps = new LoaiPhongDao().getAllLoaiPhong();
-		
-		request.setAttribute("loaiPhongs", lps);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-type-admin/room-type-admin.jsp");
-		dispatcher.forward(request, response);
+		processRequest(request, response);
 	}
 
 	/**
@@ -48,7 +57,7 @@ public class DeleteRoomTypeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		processRequest(request, response);
 	}
 
 }
