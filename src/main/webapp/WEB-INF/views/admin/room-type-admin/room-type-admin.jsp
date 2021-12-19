@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -78,7 +79,10 @@
 									<td><c:out value="${loaiPhong.idLoaiPhong}"></c:out></td>
 									<td><c:out value="${loaiPhong.tenLoaiPhong}"></c:out></td>								
 									<td style="width:300px"><img src="<c:url value="${loaiPhong.hinhAnh}"/>" alt="${loaiPhong.tenLoaiPhong}" width="250" height="150"></td>
-									<td><c:out value="${loaiPhong.donGia}"></c:out></td>
+									<td>
+										<fmt:formatNumber type = "number" 
+					                    		maxFractionDigits = "0" 
+					                    		value = "${loaiPhong.donGia}" /> VNĐ</td>
 									<td><c:out value="${loaiPhong.soNguoi}"></c:out></td>
 									<td><c:out value="${loaiPhong.ghiChu}"></c:out></td>															
 																

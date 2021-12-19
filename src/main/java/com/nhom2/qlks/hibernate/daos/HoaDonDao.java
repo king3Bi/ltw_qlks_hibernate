@@ -125,7 +125,7 @@ public class HoaDonDao {
 	
 	public List<HoaDon> getAllHoaDon() {
 		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM HoaDon");//HQL
+		Query q = session.createQuery("FROM HoaDon ORDER BY idHD DESC");//HQL
 		
 		List<HoaDon> hoadons = q.getResultList();
 		

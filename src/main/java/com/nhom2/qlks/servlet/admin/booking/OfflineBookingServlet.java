@@ -66,7 +66,17 @@ public class OfflineBookingServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");	
-		List<Booking> bookings = new BookingDao().getAllBookingOffline();
+		
+		String numPageStr = request.getParameter("page");
+		int numPage;
+		if (numPageStr != null) {
+			numPage = Integer.parseInt(numPageStr);
+		} else {
+			numPage = 1;
+		}
+		request.setAttribute("numPage", numPage);
+		
+		List<Booking> bookings = new BookingDao().getAllBookingOffline(numPage);
 		request.setAttribute("bookings", bookings);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/booking-admin/booking-offline-admin.jsp");

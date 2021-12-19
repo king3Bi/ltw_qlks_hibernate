@@ -108,7 +108,7 @@
 					                    		maxFractionDigits = "0" 
 					                    		value = "${booking.phong.loaiPhong.donGia}" /> VNĐ</td>
 									<td><c:out value="${booking.phong.tenPhong}"></c:out></td>
-									<td><c:out value="${booking.user.tenDangNhap}"></c:out></td>															
+									<td><c:out value="${booking.user.hoTen}"></c:out></td>															
 									<td><c:out value="${booking.hoaDon.idHD}"></c:out></td>															
 									<td>	
 										<c:choose>
@@ -146,6 +146,21 @@
 						</tbody>
 					</table>
 				</div>
+				
+				<ul class="pagination justify-content-center">
+					<c:choose>
+						<c:when test="${numPage == 1}">
+						</c:when>
+							
+						<c:otherwise>
+							<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-offline?page=${numPage - 1}">Previous</a></li>
+						    <li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-offline?page=${numPage - 1}">${numPage - 1}</a></li>
+						</c:otherwise>
+					</c:choose>
+					<li class="page-item active"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-offline?page=${numPage}">${numPage}</a></li>
+					<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-offline?page=${numPage + 1}">${numPage + 1}</a></li>
+					<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-offline?page=${numPage + 1}">Next</a></li>
+				</ul>
 
 			</section>
 		</div>

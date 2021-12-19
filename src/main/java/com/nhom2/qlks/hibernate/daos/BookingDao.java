@@ -315,9 +315,16 @@ public class BookingDao {
 		return bookings;
 	}
 	
-	public List<Booking> getAllBookingOffline() {
+	public List<Booking> getAllBookingOffline(int pageNumber) {
+		int pageSize = 10;
+		
 		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM Booking WHERE datOnline=0");//HQL
+		Query q = session.createQuery("FROM Booking "
+				+ "WHERE datOnline=0 "
+				+ "ORDER BY idBooking DESC");//HQL
+		
+		q.setMaxResults(pageSize);
+		q.setFirstResult(pageSize*(pageNumber - 1));
 		
 		List<Booking> bookings = q.getResultList();
 		
@@ -326,15 +333,43 @@ public class BookingDao {
 		return bookings;
 	}
 	
-	public List<Booking> getAllBookingOnline() {
+	public List<Booking> getAllBookingOnline(int pageNumber) {
+		int pageSize = 10;
+		
 		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM Booking WHERE datOnline=1");//HQL
+		Query q = session.createQuery("FROM Booking "
+				+ "WHERE "
+				+ "datOnline=1 "
+				+ "ORDER BY idBooking DESC");//HQL
+		
+		q.setMaxResults(pageSize);
+		q.setFirstResult(pageSize*(pageNumber - 1));
 		
 		List<Booking> bookings = q.getResultList();
 		
 		session.close();
 		
 		return bookings;
+	}
+	
+	public Booking getBookingOnlineById(int id) {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking "
+				+ "WHERE idBooking=:id AND datOnline=1");//HQL
+		
+		q.setParameter("id", id);
+		q.setFirstResult(0);
+		q.setMaxResults(1);
+		
+		List<Booking> bookings = q.getResultList();
+		
+		if (bookings.size() > 0) {
+			return bookings.get(0);
+		}
+		
+		session.close();
+		
+		return null;
 	}
 	
 	public Booking getBookingById(int id) {

@@ -30,7 +30,6 @@ public class UserFilter implements Filter {
 				"/admin/room-search",
 				"/admin/bill/insert",
 				"/admin/logout",
-				"/admin/bill/insert",
 				"/admin/booking-online",
 				"/admin/booking-offline"
 			};

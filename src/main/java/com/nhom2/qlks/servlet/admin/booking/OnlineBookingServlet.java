@@ -1,6 +1,7 @@
 package com.nhom2.qlks.servlet.admin.booking;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -40,9 +41,31 @@ public class OnlineBookingServlet extends HttpServlet {
 		List<KhachHang> customers = new KhachHangDao().getAllKhachHang();
 		request.setAttribute("customers", customers);
 		
-		List<Booking> bookings = new BookingDao().getAllBookingOnline();
-		request.setAttribute("bookings", bookings);
+		List<Booking> bookings;
+		String idBookingStr = request.getParameter("id-booking");
+		if (idBookingStr != null) {
+			int idBooking = Integer.parseInt(idBookingStr);
+			
+			Booking booking = new BookingDao().getBookingOnlineById(idBooking);
+			
+			bookings = new ArrayList<Booking>();
+			if (booking != null) {
+				bookings.add(booking);
+			}
+		} else {
+			String numPageStr = request.getParameter("page");
+			int numPage;
+			if (numPageStr != null) {
+				numPage = Integer.parseInt(numPageStr);
+			} else {
+				numPage = 1;
+			}
+			request.setAttribute("numPage", numPage);
+			
+			bookings = new BookingDao().getAllBookingOnline(numPage);
+		}
 		
+		request.setAttribute("bookings", bookings);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/booking-admin/booking-online-admin.jsp");
 		dispatcher.forward(request, response);

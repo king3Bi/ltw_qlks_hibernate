@@ -53,7 +53,15 @@
 				<div class="container-fluid">
 					<ul class="nav nav-tabs">
 						<li class="nav-item"><a class="nav-link active"
-							href="<c:url value="booking-online"/>">Tất cả</a></li>						
+							href="<c:url value="booking-online"/>">Tất cả</a></li>		
+						<li class="nav-item ml-2">
+							<form method="GET" action="" class="form-inline my-2 my-lg-0" role="search">
+						    	<div class="form-inline">
+						        	<input class="form-control col-auto" size="30" type="text" name="id-booking" value="" placeholder="Mã booking">
+						            <button class="btn btn-secondary my-2 my-sm-0 ml-2" type="submit">Tìm</button>
+						        </div>
+						    </form>
+						</li>				
 					</ul>
 
 					<table class="table table-striped">
@@ -83,7 +91,7 @@
 					                    		maxFractionDigits = "0" 
 					                    		value = "${booking.phong.loaiPhong.donGia}" /> VNĐ</td>
 									<td><c:out value="${booking.phong.tenPhong}"></c:out></td>
-									<td><c:out value="${booking.user.tenDangNhap}"></c:out></td>															
+									<td><c:out value="${booking.user.hoTen}"></c:out></td>															
 									<td><c:out value="${booking.hoaDon.idHD}"></c:out></td>															
 									<td>
 																
@@ -122,7 +130,32 @@
 						</tbody>
 					</table>
 				</div>
-
+				
+				<c:choose>
+					<c:when test="${numPage != null}">
+						<c:choose>
+							<c:when test="${numPage == 1}">
+								<ul class="pagination justify-content-center">
+								    <li class="page-item active"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-online?page=${numPage}">${numPage}</a></li>
+								    <li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-online?page=${numPage + 1}">${numPage + 1}</a></li>
+								    <li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-online?page=${numPage + 1}">Next</a></li>
+								</ul>
+							</c:when>
+							
+							<c:otherwise>
+								<ul class="pagination justify-content-center">
+									<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-online?page=${numPage - 1}">Previous</a></li>
+								    <li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-online?page=${numPage - 1}">${numPage - 1}</a></li>
+								    <li class="page-item active"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-online?page=${numPage}">${numPage}</a></li>
+								    <li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-online?page=${numPage + 1}">${numPage + 1}</a></li>
+								    <li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/booking-online?page=${numPage + 1}">Next</a></li>
+								</ul>
+							</c:otherwise>
+						</c:choose>
+					</c:when>
+					<c:otherwise></c:otherwise>
+				</c:choose>
+				
 			</section>
 		</div>
 	</div>
