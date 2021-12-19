@@ -1,5 +1,7 @@
 package com.nhom2.qlks.hibernate.daos;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -10,7 +12,8 @@ import org.hibernate.Transaction;
 import com.nhom2.qlks.hibernate.HibernateUtils;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
 import com.nhom2.qlks.hibernate.pojo.Phong;
-
+import com.nhom2.qlks.hibernate.daos.PhongDao;
+import com.nhom2.qlks.hibernate.pojo.Booking;
 public class LoaiPhongDao {
 	
 	public String insertLoaiPhong(LoaiPhong loaiPhong) {
@@ -183,4 +186,7 @@ public class LoaiPhongDao {
 		
 		return null;
 	}
+	
+	
+	
 }

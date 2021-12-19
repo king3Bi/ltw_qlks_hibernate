@@ -1,7 +1,9 @@
 package com.nhom2.qlks.hibernate.daos;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -209,7 +211,57 @@ public class PhongDao {
 		return phongsCp;
 	}
 	
-	private boolean checkRoomBooked(Phong phong, Date checkIn, Date checkOut) {
+	public List<LoaiPhong> searchRoomTypes(int numPeople, Date checkIn, Date checkOut) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q1;
+		Query q2;
+		
+		q1 = session.createQuery("FROM LoaiPhong "
+				+ "WHERE soNguoi <= :numPeople");//HQL
+		q1.setParameter("numPeople", numPeople);		
+		
+		List<LoaiPhong> loaiPhongs = q1.getResultList();
+		List<LoaiPhong> loaiPhongsCp = new ArrayList<LoaiPhong>(); 
+		System.out.print("))))))))))"+loaiPhongsCp);
+		q2 = session.createQuery("FROM Phong "
+				+ "WHERE loaiPhong.soNguoi <= :numPeople");//HQL
+		q2.setParameter("numPeople", numPeople);		
+		
+		List<Phong> phongs = q2.getResultList();
+		List<Phong> phongsCp = new ArrayList<>(phongs);
+		
+		if (checkIn != null) {
+			if (checkOut != null) {
+				for (Phong p : phongs) {
+					if (checkRoomBooked(p, checkIn, checkOut)) {
+						phongsCp.remove(p);
+					}
+				}
+			} else {
+				for (Phong p : phongs) {
+					if (checkRoomBookedAtDate(p, checkIn)) {
+						phongsCp.remove(p);
+					}
+				}
+			}
+		}
+		
+		for (LoaiPhong loaiPhong : loaiPhongs) {
+			for (Phong phong : phongsCp) {
+				if (phong.getLoaiPhong() == loaiPhong) {
+					loaiPhongsCp.add(loaiPhong);
+					break;
+				}
+			}
+		}
+		
+		session.close();
+		
+		return loaiPhongsCp;
+	}
+	
+	boolean checkRoomBooked(Phong phong, Date checkIn, Date checkOut) {
 		for (Booking bk : phong.getBookings()) {
 			if (!checkInOut(bk, checkIn, checkOut)) {
 				return true;

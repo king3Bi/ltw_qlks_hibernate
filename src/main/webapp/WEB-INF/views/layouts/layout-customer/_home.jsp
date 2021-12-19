@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <section class="home" id="home">
 
     <div class="content">
@@ -10,7 +10,7 @@
     </div>
 
     <div class="form-container">
-        <form action="/#room-type" method="post">
+        <form action="search-room-type" method="get">
             <h3>Tìm phòng</h3>
 
             <div class="form-group">
@@ -58,12 +58,7 @@
                 document.querySelector("#check-out").min = document.querySelector("#check-out").value
                 document.querySelector("#check-out").value = ''
             </script>
-
-           <!--  {% if err_msg %}
-            <div class="error">
-                {{ err_msg }}
-            </div>
-            {% endif %} -->
+           
 
             <button id="btnSearchRoomTypes" type="submit">Tìm phòng</button>
         </form>

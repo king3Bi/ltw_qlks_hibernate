@@ -62,7 +62,7 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("user", user);
 			
 			String next = request.getParameter("next");
-			String site = request.getContextPath() + "/" + next ;
+			String site = request.getContextPath() + next ;
 			request.setAttribute("site", site);		
 			
 			response.sendRedirect(site);
