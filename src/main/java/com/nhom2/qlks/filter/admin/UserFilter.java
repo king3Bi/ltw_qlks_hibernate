@@ -28,6 +28,7 @@ public class UserFilter implements Filter {
 	private String[] urlRoleEmployee = {
 				"/admin/login",
 				"/admin/room-search",
+				"/admin/bill/insert",
 				"/admin/logout",
 				"/admin/bill/insert",
 				"/admin/booking-online",
@@ -79,6 +80,9 @@ public class UserFilter implements Filter {
 						chain.doFilter(request, response);
 					}
 				}
+			} else {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/loginAdmin.jsp");
+				dispatcher.forward(request, response);
 			}
 		} else {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/loginAdmin.jsp");

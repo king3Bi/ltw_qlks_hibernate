@@ -1,6 +1,7 @@
 package com.nhom2.qlks.servlet.admin.stats;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.nhom2.qlks.hibernate.daos.HoaDonDao;
 
 /**
  * Servlet implementation class StatsServlet
@@ -30,6 +33,16 @@ public class StatsRevenueServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
+		
+		String monthStr = request.getParameter("month");
+		
+		HoaDonDao hoaDonDao = new HoaDonDao();
+		List<Object[]> thongKe = hoaDonDao.thongKeDoanhThuTheoLoaiPhong(monthStr);
+		float tongDoangThu = hoaDonDao.tongDoanhThu(monthStr);
+		
+		request.setAttribute("thongKe", thongKe);
+		request.setAttribute("tongDoanhThu", tongDoangThu);
+		request.setAttribute("month", monthStr);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/stats/stats-revenue-admin.jsp");
 		dispatcher.forward(request, response);

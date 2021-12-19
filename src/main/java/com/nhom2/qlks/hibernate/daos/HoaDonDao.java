@@ -149,6 +149,109 @@ public class HoaDonDao {
 		return null;
 	}
 	
+	public float tongDoanhThu(String monthStr) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q;
+		if (monthStr == null) {
+			q = session.createNativeQuery("SELECT "
+					+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+					+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+					+ "WHERE  "
+					+ "hd.id_HD = bk.id_HD "
+					+ "AND bk.id_phong = p.id_phong "
+					+ "AND p.id_loai_phong = lp.id_loai_phong");
+		} else {
+			monthStr = monthStr.concat("-01");
+			
+			q = session.createNativeQuery("SELECT "
+					+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+					+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+					+ "WHERE "
+					+ "hd.ngay_tao >= :month AND hd.ngay_tao <= last_day(:month) "
+					+ "AND hd.id_HD = bk.id_HD "
+					+ "AND bk.id_phong = p.id_phong "
+					+ "AND p.id_loai_phong = lp.id_loai_phong");
+			
+			q.setParameter("month", monthStr);
+		}
+		
+		Object rs = q.getSingleResult();
+		
+		float sum = 0.f;
+		if (rs != null) {
+			sum = ((Double) rs).floatValue();
+		}
+		
+		System.out.println(sum);
+		
+		session.close();
+		
+		return sum;
+	}
+	
+	public List<Object[]> thongKeDoanhThuTheoLoaiPhong(String monthStr) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q;
+		
+		if (monthStr == null) {
+			q = session.createNativeQuery("SELECT "
+					+ "lp.id_loai_phong, "
+					+ "lp.ten_loai_phong, "
+					+ "(CASE "
+					+ "WHEN temp.tong_tien is NULL THEN 0 "
+					+ "ELSE temp.tong_tien "
+					+ "END) "
+					+ "FROM loai_phong lp left join ("
+					+ "SELECT "
+					+ "lp.id_loai_phong, "
+					+ "lp.ten_loai_phong, "
+					+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+					+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+					+ "WHERE  "
+					+ "hd.id_HD = bk.id_HD "
+					+ "AND bk.id_phong = p.id_phong "
+					+ "AND p.id_loai_phong = lp.id_loai_phong "
+					+ "GROUP BY lp.id_loai_phong, lp.ten_loai_phong) temp on lp.id_loai_phong = temp.id_loai_phong ");
+		} else {
+			monthStr = monthStr.concat("-01");
+			System.out.println(monthStr);
+			
+			q = session.createNativeQuery("SELECT "
+					+ "lp.id_loai_phong, "
+					+ "lp.ten_loai_phong, "
+					+ "(CASE "
+					+ "WHEN temp.tong_tien is NULL THEN 0 "
+					+ "ELSE temp.tong_tien "
+					+ "END) "
+					+ "FROM loai_phong lp left join ("
+					+ "SELECT "
+					+ "lp.id_loai_phong, "
+					+ "lp.ten_loai_phong, "
+					+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+					+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+					+ "WHERE "
+					+ "hd.ngay_tao >= :month AND hd.ngay_tao <= last_day(:month) "
+					+ "AND hd.id_HD = bk.id_HD "
+					+ "AND bk.id_phong = p.id_phong "
+					+ "AND p.id_loai_phong = lp.id_loai_phong "
+					+ "GROUP BY lp.id_loai_phong, lp.ten_loai_phong) temp on lp.id_loai_phong = temp.id_loai_phong ");
+			
+			q.setParameter("month", monthStr);
+		}
+		
+		List<Object[]> thongKe = (List<Object[]>) q.getResultList();
+		
+		thongKe.forEach(x -> {
+			System.out.printf("%d, %s, %f\n", x[0], x[1], x[2]);
+		});
+		
+		session.close();
+		
+		return thongKe;
+	}
+	
 	private boolean checkNgayTao(Date checkngaytao) {
 		if (getNgayTao(checkngaytao) != null) {
 			return true;
