@@ -68,7 +68,7 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect(site);
 			return;
 		} else {
-			request.setAttribute("errMessage", "Tên đăng nhập hoặc mật khẩu không đúng");
+			request.setAttribute("errMessage", "Tên đăng nhập hoặc mật khẩu không đúng hoặc tài khoản bị khóa");
 			request.getRequestDispatcher("/WEB-INF/views/customer/login.jsp").forward(request, response);
 			return;
 		}

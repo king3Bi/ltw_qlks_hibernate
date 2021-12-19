@@ -33,11 +33,9 @@
 
 		<jsp:include
 			page="/WEB-INF/views/layouts/layout-admin/_header-admin.jsp"></jsp:include>
-		<script>
-			document.querySelector(".nav-sidebar").children[10].classList
-					.add('menu-open');
-			document.querySelector(".menu-open .nav-link").classList
-					.add('active');
+		<script>		
+			$( "li:nth-child(11)").addClass('menu-is-opening menu-open');
+			$( "li:nth-child(11) > ul > li:nth-child(2)" ).children().addClass('active');
 		</script>
 
 		<div class="content-wrapper">

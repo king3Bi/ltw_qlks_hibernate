@@ -71,7 +71,7 @@ public class AdminLoginServlet extends HttpServlet {
 			response.sendRedirect(site);
 			return;
 		} else {
-			request.setAttribute("errMessage", "Tên đăng nhập hoặc mật khẩu không đúng");
+			request.setAttribute("errMessage", "Tên đăng nhập hoặc mật khẩu không đúng hoặc tài khoản đã bị khóa");
 			request.getRequestDispatcher("/WEB-INF/views/admin/loginAdmin.jsp").forward(request, response);
 			return;
 		}

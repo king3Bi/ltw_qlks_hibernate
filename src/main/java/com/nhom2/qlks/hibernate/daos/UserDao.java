@@ -307,7 +307,8 @@ public class UserDao {
 		Query q = session.
 				createQuery("FROM User WHERE tenDangNhap=:username "
 						+ "AND matKhau=:password "
-						+ "AND quyen=:quyen");//HQL
+						+ "AND quyen=:quyen "
+						+ "AND kichHoat=true");//HQL
 		q.setParameter("username", username);
 		q.setParameter("password", password);
 		q.setParameter("quyen", quyen);

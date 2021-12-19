@@ -45,7 +45,7 @@
 			<jsp:include
 				page="/WEB-INF/views/layouts/layout-admin/_header-admin.jsp"></jsp:include>
 			<script>
-				document.querySelector(".nav-sidebar").children[6].classList
+				document.querySelector(".nav-sidebar").children[8].classList
 						.add('menu-open');
 				document.querySelector(".menu-open .nav-link").classList
 						.add('active');
@@ -128,8 +128,16 @@
 								
 							
 								<div class="form-group">
-									<label for="user-activate">Kích hoạt:</label>
-									<input checked="" class="form-control-lg" id="user-kh" name="user-activate" type="checkbox">
+									<label for="user-activate" style="display: block">Kích hoạt:</label>
+									<c:choose>
+										<c:when test="${user.kichHoat}">
+											<input checked="" class="form-control-lg" id="user-kh" name="user-activate" type="checkbox">
+										</c:when>
+										<c:otherwise>
+											<input class="form-control-lg" id="user-kh" name="user-activate" type="checkbox">											
+										</c:otherwise>
+									</c:choose>
+									
 								</div>
 								
 								<div class="form-group">
