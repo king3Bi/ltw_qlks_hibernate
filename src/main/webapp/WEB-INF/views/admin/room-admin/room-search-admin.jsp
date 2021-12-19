@@ -52,10 +52,12 @@
 				<div class="container-fluid">												
 				
 					<div class="m-5">
-						<form class="form-inline pb-6" action="">
+						<form class="form-inline pb-6" id="search-form" action="">
 					        <div class="form-inline">
 					            <label class="mr-2" for="num-people">Số người/phòng:</label>
-					            <select class="form-control mr-4" id="num-people" name="num-people">
+					            <select class="form-control mr-4" 
+					            	id="num-people" name="num-people" 
+					            	onchange="document.querySelector('#search-form').submit()">
 					                <option value="0">Tất cả</option>
 					                <option value="1">1</option>
 					                <option value="2">2</option>
@@ -67,16 +69,16 @@
 					
 					        <div class="form-inline">
 					            <label class="mr-2">Check in:</label>
-					            <input id="check-in" class="form-control mr-4" type="date" name="check-in">
+					            <input id="check-in" class="form-control mr-4" 
+					            	type="date" name="check-in" disabled="true" 
+					            	onchange="document.querySelector('#search-form').submit()">
 					        </div>
 					
 					        <div class="form-inline">
 					            <label class="mr-2">Check out:</label>
-					            <input id="check-out" class="form-control mr-4" type="date" name="check-out">
-					        </div>
-					        
-					        <div>
-					        	<input type="submit" value="Tìm" />
+					            <input id="check-out" class="form-control mr-4" 
+					            	type="date" name="check-out" 
+					            	onchange="document.querySelector('#search-form').submit()">
 					        </div>
 					
 					        <script>
@@ -86,6 +88,21 @@
 					            document.querySelector("#check-out").stepUp(1)
 					            document.querySelector("#check-out").min = document.querySelector("#check-out").value
 					            document.querySelector("#check-out").value = ''
+					            
+					            var url = new URL(window.location.href);
+					            var numPeople = url.searchParams.get('num-people');
+					            var checkIn = url.searchParams.get('check-in');
+					            var checkOut = url.searchParams.get('check-out');
+					            
+					            if (numPeople != 0 && numPeople != null) {
+					            	document.querySelector("#num-people").value = numPeople;
+					            }
+					            if (checkIn != '' && checkIn != null) {
+					            	document.querySelector("#check-in").value = checkIn;
+					            }
+					            if (checkOut != '' && checkOut != null) {
+					            	document.querySelector("#check-out").value = checkOut;
+					            }
 					        </script>
 					
 					    </form>
@@ -152,7 +169,7 @@
 
 				<!-- Modal body -->
 				<div class="modal-body">
-					<div>
+					<div class="form-inline mb-2">
 	                    <div style="display: inline;" class="mr-4">
 	                        <label for="ten-phong-pt">Phòng</label>
 	                        <input id="ten-phong-pt" type="text" disabled="">
