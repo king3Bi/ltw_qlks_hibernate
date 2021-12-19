@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -70,7 +71,7 @@
 					        <div class="form-inline">
 					            <label class="mr-2">Check in:</label>
 					            <input id="check-in" class="form-control mr-4" 
-					            	type="date" name="check-in" disabled="true" 
+					            	type="date" name="check-in"  
 					            	onchange="document.querySelector('#search-form').submit()">
 					        </div>
 					
@@ -131,7 +132,10 @@
 										<td><c:out value="${phong.loaiPhong.tenLoaiPhong}"></c:out></td>
 										<td><c:out value="${phong.loaiPhong.soNguoi}"></c:out></td>
 										<td><c:out value="${phong.trangThai.tenTrangThai}"></c:out></td>
-										<td><c:out value="${phong.loaiPhong.donGia}"></c:out> VNĐ</td>
+										<td>
+											<fmt:formatNumber type = "number" 
+					                    		maxFractionDigits = "0" 
+					                    		value = "${phong.loaiPhong.donGia}" /> VNĐ</td>
 																	
 										<td><a class="btn btn-primary" 
 											onclick="openCreateBooking(

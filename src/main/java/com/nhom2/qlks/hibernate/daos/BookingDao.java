@@ -14,6 +14,7 @@ import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
 import com.nhom2.qlks.hibernate.pojo.KhachHang;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.pojo.Phong;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
 
 public class BookingDao {
@@ -36,6 +37,12 @@ public class BookingDao {
             
             KhachHangDao khachHangDao = new KhachHangDao();
             khachHangDao.insertKhachHangs(dataKH, booking, session);
+            System.out.println("saved khachHangs");
+            
+            Phong phong = booking.getPhong();
+            PhongDao phongDao = new PhongDao();
+            phongDao.bookRoom(phong, session);
+            System.out.println("updated room status");
             
             
             // commit transaction

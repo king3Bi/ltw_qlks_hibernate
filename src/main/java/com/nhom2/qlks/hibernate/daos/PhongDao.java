@@ -53,6 +53,18 @@ public class PhongDao {
         return err_msg;
 	}
 	
+	public void bookRoom(Phong phong, Session session) {
+		// trạng thái đang ở
+		TrangThai trangThai = new TrangThaiDao().getTrangThaiById(2);
+		
+		Query query = session.createQuery("UPDATE Phong SET trangThai=:trangThai "
+				+ "WHERE idPhong=:idPhong");
+		
+		query.setParameter("trangThai", trangThai);
+		query.setParameter("idPhong", phong.getIdPhong());
+		int result = query.executeUpdate();
+	}
+	
 	public String updatePhong(int roomId, String roomName, LoaiPhong roomType, TrangThai roomStatus) {
 		String err_msg = "";
 		
