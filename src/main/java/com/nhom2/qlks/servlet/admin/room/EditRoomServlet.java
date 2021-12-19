@@ -20,7 +20,7 @@ import com.nhom2.qlks.hibernate.pojo.TrangThai;
 /**
  * Servlet implementation class EditRoomServlet
  */
-@WebServlet("/admin/room/edit")
+@WebServlet(name = "EditRoom", urlPatterns = {"/admin/room/edit"})
 public class EditRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -31,15 +31,14 @@ public class EditRoomServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		List<LoaiPhong> lps = new LoaiPhongDao().getAllLoaiPhong();
-		request.setAttribute("loaiPhongs", lps);
-		
+		response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
 		String idPhongStr =request.getParameter("room-id");
 		Phong phong;
 		if (idPhongStr == null || idPhongStr.equals("")) {
@@ -48,10 +47,13 @@ public class EditRoomServlet extends HttpServlet {
 			phong = new PhongDao().getPhongById(Integer.parseInt(idPhongStr));
 		}
 		request.setAttribute("phong", phong);
+		List<LoaiPhong> roomTypeList = new LoaiPhongDao().getAllLoaiPhong();
+		request.setAttribute("loaiPhongs", roomTypeList);
 		
-		List<TrangThai> tts = new TrangThaiDao().getAllTrangThai();
-		request.setAttribute("trangThais", tts);
+		List<TrangThai> statusRoomList = new TrangThaiDao().getAllTrangThai();
+		request.setAttribute("trangThais", statusRoomList);
 		
+				
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/edit-room-admin.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -61,7 +63,24 @@ public class EditRoomServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        
+        Integer roomId = Integer.parseInt(request.getParameter("room-id"));
+        String roomName = request.getParameter("room-name");
+        Integer roomTypeId = Integer.parseInt(request.getParameter("room-type"));
+        Integer roomStatusId = Integer.parseInt(request.getParameter("room-status"));          
+        
+        LoaiPhongDao roomTypeList = new LoaiPhongDao();
+        LoaiPhong roomType = roomTypeList.getLoaiPhongById(roomTypeId); 
+        
+        TrangThaiDao roomStatusList = new TrangThaiDao();
+        TrangThai roomStatus = roomStatusList.getTrangThaiById(roomStatusId); 
+        
+        PhongDao roomDao = new PhongDao();
+        roomDao.updatePhong(roomId, roomName, roomType, roomStatus);
+        
+        response.sendRedirect(request.getContextPath() + "/admin/room");      
 	}
 
 }

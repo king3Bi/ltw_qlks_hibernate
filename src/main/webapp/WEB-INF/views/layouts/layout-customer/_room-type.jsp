@@ -2,6 +2,7 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
     
 <section class="room-type" id="room-type">
 
@@ -14,20 +15,20 @@
     </ul>
 
     <div class="row">
-    	<% List<LoaiPhong> loaiPhongs = (List<LoaiPhong>) request.getAttribute("loaiPhongs"); %>
-    	 
-        <% for (LoaiPhong lp : loaiPhongs) { %>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="card">
-                    <img class="card-img-top" src="static/image/banner-hotel.jpg" alt="Card image">
-                    <div class="card-body">
-                        <h3 class="card-title"><%= lp.getTenLoaiPhong() %></h3>
-                        <h4 class="card-title"><%= lp.getDonGia() %> VND / 1 đêm</h4>
-                        <a href="#" class="btn">Đặt phòng</a>
-                    </div>
-                </div>
-            </div>
-         <% } %>
+    	<c:forEach items="${loaiPhongs}" var="loaiPhong">
+	        <div class="col-md-4 col-sm-6 col-xs-12 mb-5">
+	            <div class="card">
+	                <img class="card-img" src="<c:url value="${loaiPhong.getHinhAnh()}"/>"  
+	                alt="${loaiPhong.tenLoaiPhong}">
+	                <div class="card-body">
+	                    <h3 class="card-title">${loaiPhong.getTenLoaiPhong()}</h3>
+	                    <h3 class="card-title">Số người: ${loaiPhong.getSoNguoi()}</h3>                        
+	                    <h4 class="card-title">${loaiPhong.getDonGia()} VND / 1 đêm</h4>
+	                    <a href="<c:url value='room-type'/>?id=${loaiPhong.getIdLoaiPhong()}" class="btn">Đặt phòng</a>
+	                </div>
+	            </div>
+	        </div>	         
+        </c:forEach>
     </div>
 
 </section>

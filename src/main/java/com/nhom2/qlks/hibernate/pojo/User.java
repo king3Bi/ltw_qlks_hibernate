@@ -43,7 +43,7 @@ public class User implements Serializable {
 	
 	@Column(name = "ten_dang_nhap", nullable = false)
 	private String tenDangNhap;
-	
+
 	@Column(name = "mat_khau", nullable = false)
 	private String matKhau;
 	
@@ -60,6 +60,22 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user")
 	private List<HoaDon> hoaDons;
 
+	public User() {}
+	public User(String hoTen, Date ngaySinh, String gioiTinh, String cmnd,
+			String email, String sdt, String tenDangNhap, String matKhau, boolean kichHoat, Quyen quyen) {
+	
+		this.hoTen = hoTen;
+		this.ngaySinh = ngaySinh;
+		this.gioiTinh= gioiTinh;
+		this.cmnd = cmnd;
+		this.email = email;
+		this.sdt = sdt;
+		this.tenDangNhap = tenDangNhap;
+		this.matKhau = matKhau;
+		this.kichHoat = kichHoat;
+		this.quyen = quyen;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -132,7 +148,7 @@ public class User implements Serializable {
 		this.matKhau = matKhau;
 	}
 
-	public boolean isKichHoat() {
+	public boolean getKichHoat() {
 		return kichHoat;
 	}
 

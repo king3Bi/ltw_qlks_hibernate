@@ -21,7 +21,7 @@ public class KhachHang implements Serializable {
 	private int idKhach;
 	
 	@Column(name = "ho_ten", nullable = false)
-	private String ho_ten;
+	private String hoTen;
 	
 	@Column(name = "cmnd", nullable = false, unique = true)
 	private String cmnd;
@@ -41,12 +41,12 @@ public class KhachHang implements Serializable {
 		this.idKhach = idKhach;
 	}
 
-	public String getHo_ten() {
-		return ho_ten;
+	public String getHoTen() {
+		return hoTen;
 	}
 
-	public void setHo_ten(String ho_ten) {
-		this.ho_ten = ho_ten;
+	public void setHoTen(String hoTen) {
+		this.hoTen = hoTen;
 	}
 
 	public String getCmnd() {

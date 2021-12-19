@@ -26,23 +26,17 @@ public class Booking implements Serializable {
 	@Column(name = "so_nguoi")
 	private int soNguoi;
 	
-	@Column(name = "co_nguoi_nuoc_ngoai")
-	private boolean coNguoiNuocNgoai;
-	
 	@Column(name = "check_in", nullable = false)
 	private Date checkIn;
 	
 	@Column(name = "check_out", nullable = false)
 	private Date checkOut;
 	
-	@Column(name = "don_gia")
-	private Float donGia;
-	
 	@Column(name = "dat_online")
 	private boolean datOnline;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_KH")
+	@JoinColumn(name = "id_nguoi_dat")
 	private User user;
 	
 	@ManyToOne
@@ -54,8 +48,31 @@ public class Booking implements Serializable {
 	private Phong phong;
 	
 	@OneToMany(mappedBy = "booking")
-	private List<KhachHang> khachHangs;
+	private List<KhachHang> khachHangs;	
+	
+	public Booking() {}
+	
+	public Booking(int numPeople, Date checkIn, Date checkOut, boolean isBookingOnline, User user, HoaDon bill, Phong room) {
+		super();
+		this.soNguoi = numPeople;
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+		this.user = user;
+		this.hoaDon = bill;
+		this.phong = room;
+		this.datOnline = isBookingOnline;
+	}
 
+	public Booking(int numPeople, Date checkIn, Date checkOut, boolean isBookingOnline, User user, Phong room) {
+		super();
+		this.soNguoi = numPeople;
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+		this.user = user;
+		this.phong = room;
+		this.datOnline = isBookingOnline;
+	}
+	
 	public int getIdBooking() {
 		return idBooking;
 	}
@@ -72,14 +89,6 @@ public class Booking implements Serializable {
 		this.soNguoi = soNguoi;
 	}
 
-	public boolean isCoNguoiNuocNgoai() {
-		return coNguoiNuocNgoai;
-	}
-
-	public void setCoNguoiNuocNgoai(boolean coNguoiNuocNgoai) {
-		this.coNguoiNuocNgoai = coNguoiNuocNgoai;
-	}
-
 	public Date getCheckIn() {
 		return checkIn;
 	}
@@ -94,14 +103,6 @@ public class Booking implements Serializable {
 
 	public void setCheckOut(Date checkOut) {
 		this.checkOut = checkOut;
-	}
-
-	public Float getDonGia() {
-		return donGia;
-	}
-
-	public void setDonGia(Float donGia) {
-		this.donGia = donGia;
 	}
 
 	public boolean isDatOnline() {

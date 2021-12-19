@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <section class="home" id="home">
 
     <div class="content">
@@ -10,21 +10,57 @@
     </div>
 
     <div class="form-container">
-        <form action="">
-
+        <form action="search-room-type" method="get">
             <h3>Tìm phòng</h3>
 
-            <span>Số người</span>
-            <input type="number" placeholder="Nhập số người">
+            <div class="form-group">
+                <label class="font-weight-bold col-sm control-label">Số người<strong
+                        style="color: red">*</strong></label>
+                <div class="col-sm-12">
+                    <input id="numPeople"
+                           class="form-control form-control-lg"
+                           type="number"
+                           name="num-people"
+                           placeholder="Nhập số người"
+                           min="1"
+                           required>
+                </div>
+            </div>
 
-            <span>Ngày check-in</span>
-            <input type="date">
+            <div class="form-group">
+                <label class="font-weight-bold col-sm control-label">Check in <strong
+                        style="color: red">*</strong></label>
+                <div class="col-sm-12">
+                    <input id="check-in"
+                           class="form-control form-control-lg"
+                           type="date"
+                           name="check-in"
+                           required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bold col-sm control-label">Check out <strong
+                        style="color: red">*</strong></label>
+                <div class="col-sm-12">
+                    <input id="check-out"
+                           class="form-control form-control-lg"
+                           type="date"
+                           name="check-out"
+                           required>
+                </div>
+            </div>
 
-            <span>Ngày check-out</span>
-            <input type="date">
+            <script>
+                document.querySelector("#check-in").valueAsDate = new Date()
+                document.querySelector("#check-in").min = document.querySelector("#check-in").value
+                document.querySelector("#check-out").valueAsDate = new Date()
+                document.querySelector("#check-out").stepUp(1)
+                document.querySelector("#check-out").min = document.querySelector("#check-out").value
+                document.querySelector("#check-out").value = ''
+            </script>
+           
 
-            <input type="submit" value="Tìm phòng">
-
+            <button id="btnSearchRoomTypes" type="submit">Tìm phòng</button>
         </form>
     </div>
 

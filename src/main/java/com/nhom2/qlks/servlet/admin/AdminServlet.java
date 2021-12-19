@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class AdminServlet
  */
-@WebServlet("/admin")
+@WebServlet(name = "adminHome", urlPatterns = {"/admin"})
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -31,8 +31,13 @@ public class AdminServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/home-admin.jsp");
-		dispatcher.forward(request, response);
+		/*
+		 * RequestDispatcher dispatcher =
+		 * request.getRequestDispatcher("/WEB-INF/views/admin/home-admin.jsp");
+		 * dispatcher.forward(request, response);
+		 */
+		response.sendRedirect(request.getContextPath() + "/admin/room-search");
+		
 	}
 
 	/**

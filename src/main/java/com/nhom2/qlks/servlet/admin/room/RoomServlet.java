@@ -20,7 +20,7 @@ import com.nhom2.qlks.hibernate.pojo.TrangThai;
 /**
  * Servlet implementation class Room
  */
-@WebServlet("/admin/room")
+@WebServlet(name = "RoomServlet", urlPatterns = {"/admin/room"})
 public class RoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -37,7 +37,7 @@ public class RoomServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html; charset=UTF-8");
+		response.setContentType("text/html; charset=UTF-8");			
 		
 		List<LoaiPhong> lps = new LoaiPhongDao().getAllLoaiPhong();
 		request.setAttribute("loaiPhongs", lps);
@@ -45,17 +45,7 @@ public class RoomServlet extends HttpServlet {
 		List<TrangThai> tts = new TrangThaiDao().getAllTrangThai();
 		request.setAttribute("trangThais", tts);
 		
-		String idLoaiPhongStr = request.getParameter("room-type");
-		
-		List<Phong> phongs;
-		
-		if (idLoaiPhongStr == null || idLoaiPhongStr.equals("")) {
-			phongs = new PhongDao().getALLPhong();
-		} else {
-			LoaiPhong loaiPhong = new LoaiPhongDao().getLoaiPhongById(Integer.parseInt(idLoaiPhongStr));
-			phongs = new PhongDao().getPhongByLoaiPhong(loaiPhong);
-		}
-		
+		List<Phong> phongs = new PhongDao().getAllPhong();
 		request.setAttribute("phongs", phongs);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/room-admin/room-admin.jsp");

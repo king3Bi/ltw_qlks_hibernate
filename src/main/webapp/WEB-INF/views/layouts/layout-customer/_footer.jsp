@@ -26,15 +26,13 @@
 
         <div class="box">
             <h3>Mục</h3>
-            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> Trang chủ </a>
-            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> Tìm phòng </a>
-            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> Loại phòng </a>
-            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> Đặc trưng </a>
-            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> Đánh giá </a>
+            <a href="<c:url value='/#home'/>" class="links"> <i class="fas fa-arrow-right"></i> Trang chủ </a>
+            <a href="<c:url value='/#home'/>" class="links"> <i class="fas fa-arrow-right"></i> Tìm phòng </a>
+            <a href="<c:url value='/#room-type'/>" class="links"> <i class="fas fa-arrow-right"></i> Loại phòng </a>
+            <a href="<c:url value='/#review'/>" class="links"> <i class="fas fa-arrow-right"></i> Đánh giá </a>
+            <a href="<c:url value='/#contact'/>" class="links"> <i class="fas fa-arrow-right"></i> Liên hệ </a>
         </div>
 
     </div>
-
-    <div class="credit"> Created by <span>Dang Khoa</span> | All rights reserved </div>
 
 </section>

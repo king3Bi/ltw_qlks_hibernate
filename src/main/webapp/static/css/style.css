@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
-
 :root{
     --orange:#ff7800;
     --black:#130f40;
@@ -45,10 +44,32 @@ section{
 
 .heading span{
     background: var(--orange);
+    font-size: 3.5rem;
     color:#fff;
     display: inline-block;
     padding:.5rem 3rem;
     clip-path: polygon(100% 0, 93% 50%, 100% 99%, 0% 100%, 7% 50%, 0% 0%);
+}
+
+#btn-scroll {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    border: none;
+    outline: none;
+    background: var(--orange);
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+}
+#btn-scroll:hover {
+    transition: 0.3s;
+    opacity: 0.8;
 }
 
 .btn{
@@ -68,7 +89,7 @@ section{
 }
 
 .header{
-    position: fixed;
+    position: relative;
     top:0; left:0; right: 0;
     z-index: 1000;
     display: flex;
@@ -93,6 +114,7 @@ section{
     font-size: 1.7rem;
     margin:0 1rem;
     color:var(--black);
+    width: auto;
 }
 
 .header .navbar a:hover{
@@ -119,6 +141,21 @@ section{
 
 #menu-btn{
     display: none;
+}
+
+#msg{
+    display: block;
+    font-size: 1.5rem;
+}
+
+.error{
+    color:red;
+    display: block;
+    font-size: 1.5rem;
+}
+
+.success{
+    color:green;
 }
 
 .header .search-form{
@@ -328,7 +365,7 @@ section{
 }
 
 
-.home .form-container form{
+.home .form-container{
   margin-top: 8rem;
   padding:2rem;
   width:40rem;
@@ -350,7 +387,8 @@ section{
   display: block;
 }
 
-.home .form-container form input{
+.home .form-container input,
+.home .form-container button{
   width: 100%;
   padding:0 1rem;
   height:4rem;
@@ -363,7 +401,7 @@ section{
   border-radius: .5rem;
 }
 
-.home .form-container form input[type="submit"]{
+.home .form-container button[type="submit"]{
   color:#fff;
   background:var(--black);
   cursor: pointer;
@@ -372,10 +410,13 @@ section{
   transition: .2s linear;
 }
 
-.home .form-container form input[type="submit"]:hover{
+.home .form-container button[type="submit"]:hover{
   background: var(--orange);
 }
 
+.home .form-container button a{
+    color:var(--white);
+}
 
 .home .share {
     position:absolute;
@@ -403,7 +444,20 @@ section{
 /* start type_room */
 .card{
     border-radius: 1rem;
+   
 }
+.card .card-img{
+    height:20rem;
+    overflow: hidden;
+}
+
+.card .card-img img{
+    width:100%;
+    height:200px;
+    border-top-left-radius:1rem;
+    border-top-right-radius:1rem;
+}
+
 .pagination{
     justify-content: center;
 }
@@ -416,6 +470,54 @@ section{
 }
 /* end type_room */
 
+/* start review */
+
+
+.review .review-slider{
+    padding:1rem;
+}
+
+.review .review-slider .box{
+    background: #fff;
+    border-radius: .5rem;
+    text-align: center;
+    padding:3rem 2rem;
+    outline-offset: -1rem;
+    outline: var(--outline);
+    box-shadow: var(--box-shadow);
+    transition: .2s linear;
+}
+
+.review .review-slider .box:hover{
+    outline:var(--outline-hover);
+    outline-offset: 0rem;
+}
+
+.review .review-slider .box img{
+    height:10rem;
+    width:10rem;
+    border-radius: 50%;
+}
+
+.review .review-slider .box p{
+    padding:1rem 0;
+    line-height: 1.8;
+    color:var(--light-color);
+    font-size: 1.5rem;
+}
+
+.review .review-slider .box h3{
+    padding-bottom: .5rem;
+    color:var(--black);
+    font-size: 2.2rem;
+}
+
+.review .review-slider .box .stars i{
+    color:var(--orange);
+    font-size: 1.7rem;
+}
+
+/* end review */
 
 /* start footer */
 .footer{
@@ -443,6 +545,7 @@ section{
     font-size: 1.5rem;
     color:var(--light-color);
     padding:1rem 0;
+    text-align: left;
 }
 
 .footer .box-container .box .links i{
@@ -494,20 +597,6 @@ section{
     margin-top: 2rem;
     height: 3rem;
     display: block;
-}
-
-.footer .credit{
-    text-align: center;
-    margin-top: 2rem;
-    padding:1rem;
-    padding-top: 2.5rem;
-    font-size: 2rem;
-    color:var(--black);
-    border-top: var(--border);
-}
-
-.footer .credit span{
-    color:var(--orange);
 }
 /* end footer */
 
@@ -574,4 +663,9 @@ section{
   .footer .box-container .box .payment-img {
     margin: 2rem auto;
   }
+}
+
+
+.form-group{
+    font-size:1.5rem;
 }

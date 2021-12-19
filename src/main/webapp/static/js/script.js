@@ -43,6 +43,7 @@ function roomSearch() {
     })
 }
 
+
 function book(roomId, roomName) {
     if (document.querySelector('#check-in').value == '' ||
         document.querySelector('#check-out').value == '') {
@@ -126,8 +127,19 @@ function saveEditPhong() {
 	
 }
 
-function saveCreatePhong() {
+/*function saveCreatePhong() {
 	$( "#room-form" ).submit();
-}
+}*/
 
 // ----------------- End Phòng -----------------
+
+// ----------------- Tra cứu phòng -------------
+function openCreateBooking() {
+	$('#myModal').modal();
+}
+
+function createBooking() {
+	console.log("aaa");
+}
+
+// ----------------- End tra cứu phòng ---------

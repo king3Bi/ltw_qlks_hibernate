@@ -1,5 +1,6 @@
 package com.nhom2.qlks.hibernate.daos;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -11,36 +12,14 @@ import org.hibernate.Transaction;
 import com.nhom2.qlks.hibernate.HibernateUtils;
 import com.nhom2.qlks.hibernate.pojo.Booking;
 import com.nhom2.qlks.hibernate.pojo.HoaDon;
+import com.nhom2.qlks.hibernate.pojo.KhachHang;
 import com.nhom2.qlks.hibernate.pojo.LoaiPhong;
+import com.nhom2.qlks.hibernate.pojo.Phong;
 import com.nhom2.qlks.hibernate.pojo.TrangThai;
 
 public class BookingDao {
-	public String insertBooking(Booking booking) {
+	public String insertBooking(Booking booking, KhachHang[] dataKH) {
 		String err_msg = "";
-		
-		if (checkCheckIn(booking.getCheckIn())) {
-    		return err_msg = "Check in da ton tai";
-        }
-        
-        if (checkCheckOut(booking.getCheckOut())) {
-        	return err_msg = "Check out da ton tai";
-        }
-        
-        if (checkDonGia(booking.getDonGia())) {
-        	return err_msg = "Don gia da ton tai";
-        }
-        
-        if (checkSoNguoi(booking.getSoNguoi())) {
-        	return err_msg = "So nguoi da ton tai";
-        }
-        
-//        if (checkCoNguoiNuocNgoai(booking.isCoNguoiNuocNgoai())) {
-//        	return err_msg = "CÃ³ ngÆ°á»�i nÆ°á»›c ngoÃ i";
-//        }
-//        
-//        if (checkDatOnline(booking.setDatOnline())) {
-//        	return err_msg = "CÃ³ Ä‘áº·t online";
-//        }
 		
 		Transaction transaction = null;
         Session session = HibernateUtils.getFactory().openSession();
@@ -52,10 +31,25 @@ public class BookingDao {
             
             // save the student object
             session.save(booking);       
-            System.out.println("saved user");
+            System.out.println("saved booking");
+            System.out.printf("id booking: %d\n", booking.getIdBooking());
+            
+            
+            KhachHangDao khachHangDao = new KhachHangDao();
+            khachHangDao.insertKhachHangs(dataKH, booking, session);
+            System.out.println("saved khachHangs");
+            
+            Phong phong = booking.getPhong();
+            PhongDao phongDao = new PhongDao();
+            phongDao.bookRoom(phong, session);
+            System.out.println("updated room status");
+            
+            
             // commit transaction
             transaction.commit();
             System.out.println("commited transaction");
+            
+            System.out.printf("id booking: %d\n", booking.getIdBooking());
             
             err_msg = "successed";
         } catch (Exception e) {
@@ -71,7 +65,7 @@ public class BookingDao {
         return err_msg;
 	}
 	
-	public String updateBooking(int id,int songuoi,boolean conguoinuocngoai,Date checkin,Date checkout) {
+	public String insertBookingOnline(Booking booking) {
 		String err_msg = "";
 		
 		Transaction transaction = null;
@@ -82,9 +76,67 @@ public class BookingDao {
             transaction = session.beginTransaction();            
             System.out.println("created transaction");
             
-            Query query = session.createQuery("UPDATE Booking SET soNguoi=:songuoi,coNguoiNuocNgoai=:conguoinuocngoai,checkIn=:checkin,CheckOut=:checkout"
+            session.save(booking);       
+            System.out.println("saved booking");
+            System.out.printf("id booking: %d\n", booking.getIdBooking());                        
+            
+            // commit transaction
+            transaction.commit();
+            System.out.println("commited transaction");
+            
+            System.out.printf("id booking: %d\n", booking.getIdBooking());
+            
+            err_msg = "successed";
+        } catch (Exception e) {
+            if (transaction != null) {
+            	System.out.println("roll back transaction");
+                transaction.rollback();
+                err_msg = "failed";
+            }
+            e.printStackTrace();
+        } finally {
+        	   session.close();
+        }
+        return err_msg;
+	}
+	
+	public void payBookings(List<Booking> bookings, HoaDon hoaDon, Session session) {
+		for (Booking bk : bookings) {
+			
+			Query q = session.createQuery(
+					"UPDATE Booking "
+					+ "SET hoaDon=:hoaDon "
+					+ "WHERE idBooking=:idBooking");
+			
+			q.setParameter("hoaDon", hoaDon);
+			q.setParameter("idBooking", bk.getIdBooking());
+			
+			q.executeUpdate();
+			
+			Phong phong = bk.getPhong();
+			PhongDao phongDao = new PhongDao();
+			phongDao.checkOutRoom(phong, session);
+		}
+	}
+	
+	public String updateBooking(int id, int soNguoi, Date checkIn, Date checkOut) {
+		String err_msg = "";
+		
+		Transaction transaction = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();            
+            System.out.println("created transaction");
+            
+            Query query = session.createQuery(
+            		"UPDATE Booking "
+            		+ "SET soNguoi=:soNguoi, checkIn=:checkIn, checkOut=:checkOut"
             		+ " WHERE idBooking=:id");
-			query.setParameter("songuoi", songuoi);
+			query.setParameter("soNguoi", soNguoi);
+			query.setParameter("checkIn", checkIn);
+			query.setParameter("checkOut", checkOut);
 			query.setParameter("id", id);
 			int result = query.executeUpdate();
 			
@@ -143,11 +195,144 @@ public class BookingDao {
         return err_msg;
 	}
 	
+	public int tongSuDungPhong(String monthStr) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q;
+		
+		if (monthStr == null) {
+			q = session.createNativeQuery("SELECT "
+					+ "SUM(DATEDIFF(bk.check_out, bk.check_in)) "
+					+ "FROM booking bk ");
+		} else {
+			monthStr = monthStr.concat("-01");
+			System.out.println(monthStr);
+			
+			q = session.createNativeQuery("SELECT "
+					+ "SUM(temp.so_ngay) "
+					+ "FROM ( "
+					+ "SELECT "
+					+ "(CASE "
+					+ "WHEN bk.check_in < :month "
+						+ "AND bk.check_out >= :month "
+						+ "AND bk.check_out <= last_day(:month) "
+						+ "THEN DATEDIFF(bk.check_out, :month) "
+					+ "WHEN bk.check_out > last_day(:month) "
+						+ "AND bk.check_in >= :month "
+						+ "AND bk.check_in <= last_day(:month) "
+						+ "THEN DATEDIFF(last_day(:month), bk.check_in) "
+					+ "WHEN bk.check_in >= :month AND bk.check_in <= last_day(:month) "
+						+ "AND bk.check_out >= :month AND bk.check_out <= last_day(:month) "
+						+ "THEN DATEDIFF(bk.check_out, bk.check_in) "
+					+ "ELSE 0 "
+					+ "END) AS so_ngay "
+					+ "FROM booking bk "
+					+ ") AS temp");
+			
+			q.setParameter("month", monthStr);
+		}
+		
+		
+		Object rs = q.getSingleResult();
+		
+		int tongTGSuDung = 0;
+		if (rs != null) {
+			tongTGSuDung = ((BigDecimal) rs).intValue();
+		}
+		
+		System.out.println(tongTGSuDung);
+		
+		session.close();
+		
+		return tongTGSuDung;
+	}
+	
+	public List<Object[]> thongKeMatDoSuDungPhong(String monthStr) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q;
+		if (monthStr == null) {
+			q = session.createNativeQuery("SELECT "
+					+ "p.id_phong, "
+					+ "p.ten_phong, "
+					+ "(CASE "
+					+ "WHEN bk.id_booking is NULL THEN 0 "
+					+ "ELSE SUM(DATEDIFF(bk.check_out, bk.check_in)) "
+					+ "END) "
+					+ "FROM phong p left join booking bk "
+					+ "ON p.id_phong = bk.id_phong "
+					+ "GROUP BY p.id_phong, p.ten_phong");
+		} else {
+			monthStr = monthStr.concat("-01");
+			System.out.println(monthStr);
+			
+			q = session.createNativeQuery("SELECT "
+					+ "temp.id_phong, "
+					+ "temp.ten_phong, "
+					+ "SUM(temp.so_ngay) "
+					+ "FROM ( "
+					+ "SELECT p.id_phong, p.ten_phong, "
+					+ "(CASE "
+					+ "WHEN bk.check_in < :month "
+						+ "AND bk.check_out >= :month "
+						+ "AND bk.check_out <= last_day(:month) "
+						+ "THEN DATEDIFF(bk.check_out, :month) "
+					+ "WHEN bk.check_out > last_day(:month) "
+						+ "AND bk.check_in >= :month "
+						+ "AND bk.check_in <= last_day(:month) "
+						+ "THEN DATEDIFF(last_day(:month), bk.check_in) "
+					+ "WHEN bk.check_in >= :month AND bk.check_in <= last_day(:month) "
+						+ "AND bk.check_out >= :month AND bk.check_out <= last_day(:month) "
+						+ "THEN DATEDIFF(bk.check_out, bk.check_in) "
+					+ "ELSE 0 "
+					+ "END) AS so_ngay "
+					+ "FROM phong p left join booking bk "
+					+ "ON p.id_phong = bk.id_phong ) temp "
+					+ "GROUP BY temp.id_phong, temp.ten_phong");
+			
+			q.setParameter("month", monthStr);
+		}
+		
+		List<Object[]> thongKe = (List<Object[]>) q.getResultList();
+		
+		thongKe.forEach(x -> {
+			System.out.printf("%d, %s, %f\n", x[0], x[1], x[2]);
+		});
+		
+		session.close();
+		
+		return thongKe;
+	}
+	
 	public List<Booking> getAllBooking() {
 		Session session = HibernateUtils.getFactory().openSession();
 		Query q = session.createQuery("FROM Booking");//HQL
 		
 		List<Booking> bookings = q.getResultList();
+		
+		session.close();
+		
+		return bookings;
+	}
+	
+	public List<Booking> getAllBookingOffline() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE datOnline=0");//HQL
+		
+		List<Booking> bookings = q.getResultList();
+		
+		session.close();
+		
+		return bookings;
+	}
+	
+	public List<Booking> getAllBookingOnline() {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE datOnline=1");//HQL
+		
+		List<Booking> bookings = q.getResultList();
+		
+		session.close();
 		
 		return bookings;
 	}
@@ -166,7 +351,48 @@ public class BookingDao {
 			return bookings.get(0);
 		}
 		
+		session.close();
+		
 		return null;
+	}
+	
+	public List<Booking> getBookingsByRoomName(String roomName) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q = session.createQuery("FROM Booking "
+				+ "WHERE phong.tenPhong LIKE :roomName "
+				+ "AND hoaDon is null");//HQL
+		
+		q.setParameter("roomName", "%" + roomName + "%");
+		
+		List<Booking> bookings = q.getResultList();
+		
+		session.close();
+		
+		return bookings;
+	}
+	
+	public List<Booking> getBookingsByIdUser(int idUser) {
+		Session session = HibernateUtils.getFactory().openSession();
+		
+		Query q = session.createQuery("FROM Booking "
+				+ "WHERE user.id LIKE :idUser "
+				+ "AND hoaDon is null");//HQL
+		
+		q.setParameter("idUser",  idUser );
+		
+		List<Booking> bookings = q.getResultList();		
+		session.close();
+		
+		return bookings;
+	}
+	
+	private boolean checkRoomBooked(int idPhong, Date checkIn, Date checkOut) {
+		Session session = HibernateUtils.getFactory().openSession();
+		Query q = session.createQuery("FROM Booking WHERE checkIn=:checkin");//HQL
+		
+		session.close();
+		return false;
 	}
 	
 	private boolean checkCheckIn(Date checkin) {
@@ -189,6 +415,8 @@ public class BookingDao {
 		if (bookings.size() > 0) {
 			return bookings.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}
@@ -213,6 +441,8 @@ public class BookingDao {
 		if (bookings.size() > 0) {
 			return bookings.get(0);
 		}
+		
+		session.close();
 		
 		return null;
 	}
@@ -239,78 +469,10 @@ public class BookingDao {
 			return bookings.get(0);
 		}
 		
-		return null;
-	}
-	
-	private boolean checkSoNguoi(int checksonguoi) {
-		if (getCheckSoNguoi(checksonguoi) != null) {
-			return true;
-		}
-		return false;
-	}
-	
-	public Booking getCheckSoNguoi(int songuoi) {
-		Session session = HibernateUtils.getFactory().openSession();
-		Query q = session.createQuery("FROM Booking WHERE soNguoi=:songuoi");//HQL
-		
-		q.setParameter("songuoi", songuoi);
-		q.setFirstResult(0);
-		q.setMaxResults(1);
-		
-		List<Booking> bookings = q.getResultList();
-		
-		if (bookings.size() > 0) {
-			return bookings.get(0);
-		}
+		session.close();
 		
 		return null;
 	}
 	
-//	private boolean checkCoNguoiNuocNgoai(Boolean conguoinuocngoai) {
-//		if (getCheckCoNguoiNuocNgoai(conguoinuocngoai) != null) {
-//			return true;
-//		}
-//		return false;
-//	}
-//	
-//	public Booking getCheckCoNguoiNuocNgoai(Boolean conguoinuocngoai) {
-//		Session session = HibernateUtils.getFactory().openSession();
-//		Query q = session.createQuery("FROM Booking WHERE coNguoiNuocNgoai=:conguoinuocngoai");//HQL
-//		
-//		q.setParameter("conguoinuocngoai", conguoinuocngoai);
-//		q.setFirstResult(0);
-//		q.setMaxResults(1);
-//		
-//		List<Booking> bookings = q.getResultList();
-//		
-//		if (bookings.size() > 0) {
-//			return bookings.get(0);
-//		}
-//		
-//		return null;
-//	}
-	
-//	private boolean checkDatOnline(Boolean datonline) {
-//	if (getcheckDatOnline(datonline) != null) {
-//		return true;
-//		}
-//	return false;
-//	}
-//
-//	public Booking getcheckDatOnline(Boolean datonline) {
-//	Session session = HibernateUtils.getFactory().openSession();
-//	Query q = session.createQuery("FROM Booking WHERE datOnline=:datonline");//HQL
-//	
-//	q.setParameter("datonline", datonline);
-//	q.setFirstResult(0);
-//	q.setMaxResults(1);
-//	
-//	List<Booking> bookings = q.getResultList();
-//	
-//	if (bookings.size() > 0) {
-//		return bookings.get(0);
-//		}
-//	
-//	return null;
-//	}
+
 }
