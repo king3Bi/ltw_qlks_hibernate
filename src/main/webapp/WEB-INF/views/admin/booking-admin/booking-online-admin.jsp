@@ -37,29 +37,6 @@
 			$( "li:nth-child(3)").addClass('menu-is-opening menu-open');
 			$( "li:nth-child(3) > ul > li:nth-child(2)" ).children().addClass('active');
 									
-			/* function openCustomerList(bookingId) {
-				var url = "<c:url value='booking-offline/customer'/>?booking-id=" + bookingId;
-				$.ajax({
-					type: "GET",
-			    	url: url,
-			     	success: function(data)
-			    	{
-			        	if (data.code == 200) {
-			        		console.log(data);
-			        		document.querySelector("#ten-phong-pt").value = data.data.tenPhong;
-			        		document.querySelector("#check-in-pt").value = data.data.checkIn;
-			        		document.querySelector("#check-out-pt").value = data.data.checkOut;
-			        		document.querySelector("#so-nguoi-pt").value = data.data.soNguoi;
-			        		   
-			        		$("#room-form").attr("action", url);
-			   				$("#customerListModal").modal();
-			        	} else {
-			        		$("#room-form").attr("action", url);
-			   				$("#customerListModal").modal();
-			       		}
-			     	}
-				});
-			} */
 		</script>
 
 		<div class="content-wrapper">
@@ -101,7 +78,10 @@
 									<td><c:out value="${booking.soNguoi}"></c:out></td>								
 									<td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkIn}"/></td>
 									<td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkOut}"/></td>			
-									<td><c:out value="${booking.phong.loaiPhong.donGia}"></c:out></td>
+									<td>
+										<fmt:formatNumber type = "number" 
+					                    		maxFractionDigits = "0" 
+					                    		value = "${booking.phong.loaiPhong.donGia}" /> VNĐ</td>
 									<td><c:out value="${booking.phong.tenPhong}"></c:out></td>
 									<td><c:out value="${booking.user.tenDangNhap}"></c:out></td>															
 									<td><c:out value="${booking.hoaDon.idHD}"></c:out></td>															

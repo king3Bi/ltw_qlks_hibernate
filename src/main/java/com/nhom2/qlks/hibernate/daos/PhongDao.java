@@ -55,6 +55,29 @@ public class PhongDao {
         return err_msg;
 	}
 	
+	public void bookRoom(Phong phong, Session session) {
+		// trạng thái đang ở
+		TrangThai trangThai = new TrangThaiDao().getTrangThaiById(2);
+		
+		Query query = session.createQuery("UPDATE Phong SET trangThai=:trangThai "
+				+ "WHERE idPhong=:idPhong");
+		
+		query.setParameter("trangThai", trangThai);
+		query.setParameter("idPhong", phong.getIdPhong());
+		int result = query.executeUpdate();
+	}
+	
+	public void checkOutRoom(Phong phong, Session session) {
+		TrangThai trangThai = new TrangThaiDao().getTrangThaiById(1);
+		
+		Query query = session.createQuery("UPDATE Phong SET trangThai=:trangThai "
+				+ "WHERE idPhong=:idPhong");
+		
+		query.setParameter("trangThai", trangThai);
+		query.setParameter("idPhong", phong.getIdPhong());
+		int result = query.executeUpdate();
+	}
+	
 	public String updatePhong(int roomId, String roomName, LoaiPhong roomType, TrangThai roomStatus) {
 		String err_msg = "";
 		
@@ -143,13 +166,15 @@ public class PhongDao {
 	
 	public List<Phong> searchRoomsByRoomType(int idRoomType, Date checkIn, Date checkOut) {
 		Session session = HibernateUtils.getFactory().openSession();
-		
+		TrangThaiDao trangThaiDao = new TrangThaiDao();
+		TrangThai dangSua = trangThaiDao.getTrangThaiById(3);
 		Query q;
 		
 		q = session.createQuery("FROM Phong "
-				+ "WHERE loaiPhong.idLoaiPhong=:idRoomType");//HQL
+				+ "WHERE loaiPhong.idLoaiPhong=:idRoomType "
+				+ "AND trangThai != :dangSua ");//HQL
 		q.setParameter("idRoomType", idRoomType);
-		
+		q.setParameter("dangSua", dangSua);
 		
 		List<Phong> phongs = q.getResultList();
 		List<Phong> phongsCp = new ArrayList<>(phongs);
@@ -178,14 +203,23 @@ public class PhongDao {
 	public List<Phong> timPhong(int soNguoi, Date checkIn, Date checkOut) {
 		Session session = HibernateUtils.getFactory().openSession();
 		
+		TrangThaiDao trangThaiDao = new TrangThaiDao();
+	
+		TrangThai dangSua = trangThaiDao.getTrangThaiById(3);
+		
 		Query q;
 		if (soNguoi == 0) {
-			q = session.createQuery("FROM Phong");//HQL
+			q = session.createQuery("FROM Phong "
+					+ "WHERE trangThai != : dangSua ");//HQL
 		} else {
 			q = session.createQuery("FROM Phong "
-					+ "WHERE loaiPhong.soNguoi=:soNguoi");//HQL
+					+ "WHERE loaiPhong.soNguoi=:soNguoi "
+						+ "AND trangThai != :dangSua ");//HQL
 			q.setParameter("soNguoi", soNguoi);
 		}
+		
+		
+		q.setParameter("dangSua", dangSua);
 		
 		List<Phong> phongs = q.getResultList();
 		List<Phong> phongsCp = new ArrayList<>(phongs);
@@ -213,7 +247,8 @@ public class PhongDao {
 	
 	public List<LoaiPhong> searchRoomTypes(int numPeople, Date checkIn, Date checkOut) {
 		Session session = HibernateUtils.getFactory().openSession();
-		
+		TrangThaiDao trangThaiDao = new TrangThaiDao();
+		TrangThai dangSua = trangThaiDao.getTrangThaiById(3);
 		Query q1;
 		Query q2;
 		
@@ -225,9 +260,10 @@ public class PhongDao {
 		List<LoaiPhong> loaiPhongsCp = new ArrayList<LoaiPhong>(); 
 		System.out.print("))))))))))"+loaiPhongsCp);
 		q2 = session.createQuery("FROM Phong "
-				+ "WHERE loaiPhong.soNguoi <= :numPeople");//HQL
+				+ "WHERE loaiPhong.soNguoi <= :numPeople "
+				+ "AND trangThai != :dangSua ");//HQL
 		q2.setParameter("numPeople", numPeople);		
-		
+		q2.setParameter("dangSua", dangSua);
 		List<Phong> phongs = q2.getResultList();
 		List<Phong> phongsCp = new ArrayList<>(phongs);
 		

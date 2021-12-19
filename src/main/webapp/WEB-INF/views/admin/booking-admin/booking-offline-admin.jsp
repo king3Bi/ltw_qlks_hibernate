@@ -103,7 +103,10 @@
 									<td><c:out value="${booking.soNguoi}"></c:out></td>								
 									<td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkIn}"/></td>
 									<td><fmt:formatDate pattern = "yyyy-MM-dd" value="${booking.checkOut}"/></td>			
-									<td><c:out value="${booking.phong.loaiPhong.donGia}"></c:out></td>
+									<td>
+										<fmt:formatNumber type = "number" 
+					                    		maxFractionDigits = "0" 
+					                    		value = "${booking.phong.loaiPhong.donGia}" /> VNĐ</td>
 									<td><c:out value="${booking.phong.tenPhong}"></c:out></td>
 									<td><c:out value="${booking.user.tenDangNhap}"></c:out></td>															
 									<td><c:out value="${booking.hoaDon.idHD}"></c:out></td>															
