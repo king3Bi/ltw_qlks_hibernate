@@ -77,6 +77,10 @@ public class BookingDao {
 			q.setParameter("idBooking", bk.getIdBooking());
 			
 			q.executeUpdate();
+			
+			Phong phong = bk.getPhong();
+			PhongDao phongDao = new PhongDao();
+			phongDao.checkOutRoom(phong, session);
 		}
 	}
 	

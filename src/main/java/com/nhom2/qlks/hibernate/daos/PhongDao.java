@@ -65,6 +65,17 @@ public class PhongDao {
 		int result = query.executeUpdate();
 	}
 	
+	public void checkOutRoom(Phong phong, Session session) {
+		TrangThai trangThai = new TrangThaiDao().getTrangThaiById(1);
+		
+		Query query = session.createQuery("UPDATE Phong SET trangThai=:trangThai "
+				+ "WHERE idPhong=:idPhong");
+		
+		query.setParameter("trangThai", trangThai);
+		query.setParameter("idPhong", phong.getIdPhong());
+		int result = query.executeUpdate();
+	}
+	
 	public String updatePhong(int roomId, String roomName, LoaiPhong roomType, TrangThai roomStatus) {
 		String err_msg = "";
 		
@@ -185,14 +196,25 @@ public class PhongDao {
 //			System.out.printf("idPhong: %d, checkIn: %s, checkOut: %s\n", x[0], x[1], x[2]);
 //		});
 		
+		TrangThaiDao trangThaiDao = new TrangThaiDao();
+		TrangThai dangO = trangThaiDao.getTrangThaiById(2);
+		TrangThai dangSua = trangThaiDao.getTrangThaiById(3);
+		
 		Query q;
 		if (soNguoi == 0) {
-			q = session.createQuery("FROM Phong");//HQL
+			q = session.createQuery("FROM Phong "
+					+ "WHERE trangThai != : dangO "
+						+ "AND trangThai != :dangSua");//HQL
 		} else {
 			q = session.createQuery("FROM Phong "
-					+ "WHERE loaiPhong.soNguoi=:soNguoi");//HQL
+					+ "WHERE loaiPhong.soNguoi=:soNguoi "
+						+ "AND trangThai != : dangO "
+						+ "AND trangThai != :dangSua");//HQL
 			q.setParameter("soNguoi", soNguoi);
 		}
+		
+		q.setParameter("dangO", dangO);
+		q.setParameter("dangSua", dangSua);
 		
 		List<Phong> phongs = q.getResultList();
 		List<Phong> phongsCp = new ArrayList<>(phongs);
