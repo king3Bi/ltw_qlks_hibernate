@@ -34,12 +34,15 @@ public class StatsRevenueServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
 		
+		String monthStr = request.getParameter("month");
+		
 		HoaDonDao hoaDonDao = new HoaDonDao();
-		List<Object[]> thongKe = hoaDonDao.thongKeDoanhThuTheoLoaiPhong();
-		float tongDoangThu = hoaDonDao.tongDoanhThu();
+		List<Object[]> thongKe = hoaDonDao.thongKeDoanhThuTheoLoaiPhong(monthStr);
+		float tongDoangThu = hoaDonDao.tongDoanhThu(monthStr);
 		
 		request.setAttribute("thongKe", thongKe);
 		request.setAttribute("tongDoanhThu", tongDoangThu);
+		request.setAttribute("month", monthStr);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/stats/stats-revenue-admin.jsp");
 		dispatcher.forward(request, response);

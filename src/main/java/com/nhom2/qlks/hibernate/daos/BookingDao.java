@@ -149,14 +149,50 @@ public class BookingDao {
         return err_msg;
 	}
 	
-	public int tongSuDungPhong() {
+	public int tongSuDungPhong(String monthStr) {
 		Session session = HibernateUtils.getFactory().openSession();
 		
-		Query q = session.createNativeQuery("SELECT "
-				+ "SUM(DATEDIFF(bk.check_out, bk.check_in)) "
-				+ "FROM booking bk ");
+		Query q;
 		
-		int tongTGSuDung = ((BigDecimal) q.getSingleResult()).intValue();
+		if (monthStr == null) {
+			q = session.createNativeQuery("SELECT "
+					+ "SUM(DATEDIFF(bk.check_out, bk.check_in)) "
+					+ "FROM booking bk ");
+		} else {
+			monthStr = monthStr.concat("-01");
+			System.out.println(monthStr);
+			
+			q = session.createNativeQuery("SELECT "
+					+ "SUM(temp.so_ngay) "
+					+ "FROM ( "
+					+ "SELECT "
+					+ "(CASE "
+					+ "WHEN bk.check_in < :month "
+						+ "AND bk.check_out >= :month "
+						+ "AND bk.check_out <= last_day(:month) "
+						+ "THEN DATEDIFF(bk.check_out, :month) "
+					+ "WHEN bk.check_out > last_day(:month) "
+						+ "AND bk.check_in >= :month "
+						+ "AND bk.check_in <= last_day(:month) "
+						+ "THEN DATEDIFF(last_day(:month), bk.check_in) "
+					+ "WHEN bk.check_in >= :month AND bk.check_in <= last_day(:month) "
+						+ "AND bk.check_out >= :month AND bk.check_out <= last_day(:month) "
+						+ "THEN DATEDIFF(bk.check_out, bk.check_in) "
+					+ "ELSE 0 "
+					+ "END) AS so_ngay "
+					+ "FROM booking bk "
+					+ ") AS temp");
+			
+			q.setParameter("month", monthStr);
+		}
+		
+		
+		Object rs = q.getSingleResult();
+		
+		int tongTGSuDung = 0;
+		if (rs != null) {
+			tongTGSuDung = ((BigDecimal) rs).intValue();
+		}
 		
 		System.out.println(tongTGSuDung);
 		
@@ -165,19 +201,51 @@ public class BookingDao {
 		return tongTGSuDung;
 	}
 	
-	public List<Object[]> thongKeMatDoSuDungPhong() {
+	public List<Object[]> thongKeMatDoSuDungPhong(String monthStr) {
 		Session session = HibernateUtils.getFactory().openSession();
 		
-		Query q = session.createNativeQuery("SELECT "
-				+ "p.id_phong, "
-				+ "p.ten_phong, "
-				+ "(CASE "
-				+ "WHEN bk.id_booking is NULL THEN 0 "
-				+ "ELSE SUM(DATEDIFF(bk.check_out, bk.check_in)) "
-				+ "END) "
-				+ "FROM phong p left join booking bk "
-				+ "ON p.id_phong = bk.id_phong "
-				+ "GROUP BY p.id_phong, p.ten_phong");
+		Query q;
+		if (monthStr == null) {
+			q = session.createNativeQuery("SELECT "
+					+ "p.id_phong, "
+					+ "p.ten_phong, "
+					+ "(CASE "
+					+ "WHEN bk.id_booking is NULL THEN 0 "
+					+ "ELSE SUM(DATEDIFF(bk.check_out, bk.check_in)) "
+					+ "END) "
+					+ "FROM phong p left join booking bk "
+					+ "ON p.id_phong = bk.id_phong "
+					+ "GROUP BY p.id_phong, p.ten_phong");
+		} else {
+			monthStr = monthStr.concat("-01");
+			System.out.println(monthStr);
+			
+			q = session.createNativeQuery("SELECT "
+					+ "temp.id_phong, "
+					+ "temp.ten_phong, "
+					+ "SUM(temp.so_ngay) "
+					+ "FROM ( "
+					+ "SELECT p.id_phong, p.ten_phong, "
+					+ "(CASE "
+					+ "WHEN bk.check_in < :month "
+						+ "AND bk.check_out >= :month "
+						+ "AND bk.check_out <= last_day(:month) "
+						+ "THEN DATEDIFF(bk.check_out, :month) "
+					+ "WHEN bk.check_out > last_day(:month) "
+						+ "AND bk.check_in >= :month "
+						+ "AND bk.check_in <= last_day(:month) "
+						+ "THEN DATEDIFF(last_day(:month), bk.check_in) "
+					+ "WHEN bk.check_in >= :month AND bk.check_in <= last_day(:month) "
+						+ "AND bk.check_out >= :month AND bk.check_out <= last_day(:month) "
+						+ "THEN DATEDIFF(bk.check_out, bk.check_in) "
+					+ "ELSE 0 "
+					+ "END) AS so_ngay "
+					+ "FROM phong p left join booking bk "
+					+ "ON p.id_phong = bk.id_phong ) temp "
+					+ "GROUP BY temp.id_phong, temp.ten_phong");
+			
+			q.setParameter("month", monthStr);
+		}
 		
 		List<Object[]> thongKe = (List<Object[]>) q.getResultList();
 		

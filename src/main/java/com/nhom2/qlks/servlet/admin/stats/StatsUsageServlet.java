@@ -34,13 +34,15 @@ public class StatsUsageServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
 		
-		BookingDao bookingDao = new BookingDao();
+		String monthStr = request.getParameter("month");
 		
-		List<Object[]> thongKe = bookingDao.thongKeMatDoSuDungPhong();
-		float tongTGSD = (float) bookingDao.tongSuDungPhong();
+		BookingDao bookingDao = new BookingDao();
+		List<Object[]> thongKe = bookingDao.thongKeMatDoSuDungPhong(monthStr);
+		float tongTGSD = (float) bookingDao.tongSuDungPhong(monthStr);
 		
 		request.setAttribute("thongKe", thongKe);
 		request.setAttribute("tongTGSD", tongTGSD);
+		request.setAttribute("month", monthStr);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/stats/stats-usage-admin.jsp");
 		dispatcher.forward(request, response);

@@ -149,18 +149,39 @@ public class HoaDonDao {
 		return null;
 	}
 	
-	public float tongDoanhThu() {
+	public float tongDoanhThu(String monthStr) {
 		Session session = HibernateUtils.getFactory().openSession();
 		
-		Query q = session.createNativeQuery("SELECT "
-				+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
-				+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
-				+ "WHERE  "
-				+ "hd.id_HD = bk.id_HD "
-				+ "AND bk.id_phong = p.id_phong "
-				+ "AND p.id_loai_phong = lp.id_loai_phong");
+		Query q;
+		if (monthStr == null) {
+			q = session.createNativeQuery("SELECT "
+					+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+					+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+					+ "WHERE  "
+					+ "hd.id_HD = bk.id_HD "
+					+ "AND bk.id_phong = p.id_phong "
+					+ "AND p.id_loai_phong = lp.id_loai_phong");
+		} else {
+			monthStr = monthStr.concat("-01");
+			
+			q = session.createNativeQuery("SELECT "
+					+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+					+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+					+ "WHERE "
+					+ "hd.ngay_tao >= :month AND hd.ngay_tao <= last_day(:month) "
+					+ "AND hd.id_HD = bk.id_HD "
+					+ "AND bk.id_phong = p.id_phong "
+					+ "AND p.id_loai_phong = lp.id_loai_phong");
+			
+			q.setParameter("month", monthStr);
+		}
 		
-		float sum = ((Double) q.getSingleResult()).floatValue();
+		Object rs = q.getSingleResult();
+		
+		float sum = 0.f;
+		if (rs != null) {
+			sum = ((Double) rs).floatValue();
+		}
 		
 		System.out.println(sum);
 		
@@ -169,27 +190,56 @@ public class HoaDonDao {
 		return sum;
 	}
 	
-	public List<Object[]> thongKeDoanhThuTheoLoaiPhong() {
+	public List<Object[]> thongKeDoanhThuTheoLoaiPhong(String monthStr) {
 		Session session = HibernateUtils.getFactory().openSession();
 		
-		Query q = session.createNativeQuery("SELECT "
-				+ "lp.id_loai_phong, "
-				+ "lp.ten_loai_phong, "
-				+ "(CASE "
-				+ "WHEN temp.tong_tien is NULL THEN 0 "
-				+ "ELSE temp.tong_tien "
-				+ "END) "
-				+ "FROM loai_phong lp left join ("
-				+ "SELECT "
-				+ "lp.id_loai_phong, "
-				+ "lp.ten_loai_phong, "
-				+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
-				+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
-				+ "WHERE  "
-				+ "hd.id_HD = bk.id_HD "
-				+ "AND bk.id_phong = p.id_phong "
-				+ "AND p.id_loai_phong = lp.id_loai_phong "
-				+ "GROUP BY lp.id_loai_phong, lp.ten_loai_phong) temp on lp.id_loai_phong = temp.id_loai_phong ");
+		Query q;
+		
+		if (monthStr == null) {
+			q = session.createNativeQuery("SELECT "
+					+ "lp.id_loai_phong, "
+					+ "lp.ten_loai_phong, "
+					+ "(CASE "
+					+ "WHEN temp.tong_tien is NULL THEN 0 "
+					+ "ELSE temp.tong_tien "
+					+ "END) "
+					+ "FROM loai_phong lp left join ("
+					+ "SELECT "
+					+ "lp.id_loai_phong, "
+					+ "lp.ten_loai_phong, "
+					+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+					+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+					+ "WHERE  "
+					+ "hd.id_HD = bk.id_HD "
+					+ "AND bk.id_phong = p.id_phong "
+					+ "AND p.id_loai_phong = lp.id_loai_phong "
+					+ "GROUP BY lp.id_loai_phong, lp.ten_loai_phong) temp on lp.id_loai_phong = temp.id_loai_phong ");
+		} else {
+			monthStr = monthStr.concat("-01");
+			System.out.println(monthStr);
+			
+			q = session.createNativeQuery("SELECT "
+					+ "lp.id_loai_phong, "
+					+ "lp.ten_loai_phong, "
+					+ "(CASE "
+					+ "WHEN temp.tong_tien is NULL THEN 0 "
+					+ "ELSE temp.tong_tien "
+					+ "END) "
+					+ "FROM loai_phong lp left join ("
+					+ "SELECT "
+					+ "lp.id_loai_phong, "
+					+ "lp.ten_loai_phong, "
+					+ "SUM(lp.don_gia * DATEDIFF(bk.check_out, bk.check_in)) AS tong_tien "
+					+ "FROM hoa_don hd, booking bk, phong p, loai_phong lp "
+					+ "WHERE "
+					+ "hd.ngay_tao >= :month AND hd.ngay_tao <= last_day(:month) "
+					+ "AND hd.id_HD = bk.id_HD "
+					+ "AND bk.id_phong = p.id_phong "
+					+ "AND p.id_loai_phong = lp.id_loai_phong "
+					+ "GROUP BY lp.id_loai_phong, lp.ten_loai_phong) temp on lp.id_loai_phong = temp.id_loai_phong ");
+			
+			q.setParameter("month", monthStr);
+		}
 		
 		List<Object[]> thongKe = (List<Object[]>) q.getResultList();
 		

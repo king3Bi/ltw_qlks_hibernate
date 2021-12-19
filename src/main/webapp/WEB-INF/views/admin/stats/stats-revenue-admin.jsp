@@ -59,9 +59,9 @@
 					            <a href="<%=request.getContextPath()%>/admin/stats-revenue" class="btn btn-primary">Tất cả</a>
 					        </form>
 					        
-					        <!-- <script>
-					            document.getElementById('month').value = '{{ month }}';
-					        </script> -->
+					        <script>
+					            document.getElementById('month').value = '<%=request.getAttribute("month")%>';
+					        </script>
 					        
 					        <table class="table table-striped">
 					            <thead>
@@ -89,6 +89,17 @@
 					                    	
 					                </tr>
 					            </c:forEach>
+					            	<tr>
+					            		<td></td>
+					            		<td><strong>Tổng</strong></td>
+					            		<td>
+					            			<strong>
+						            			<fmt:formatNumber type = "number" 
+						                    		maxFractionDigits = "0" 
+						                    		value = "${tongDoanhThu}" /> VNĐ</td>
+						                    </strong>
+					            		<td><strong>100 %</strong></td>
+					            	</tr>
 					            </tbody>
 					        </table>
 					    </div>

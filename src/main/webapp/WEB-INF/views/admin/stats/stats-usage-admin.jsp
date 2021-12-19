@@ -59,11 +59,11 @@
 					            <input type="month" name="month" id="month" onchange="document.getElementById('option').submit();">
 					            <a href="<%=request.getContextPath()%>/admin/stats-usage" class="btn btn-primary">Tất cả</a>
 					        </form>
-					        <!-- 
+					        
 					        <script>
-					            document.getElementById('month').value = '{{ month }}';
+					            document.getElementById('month').value = '<%=request.getAttribute("month")%>';
 					        </script>
-					         -->
+					        
 					        <table class="table table-striped">
 					            <thead>
 					                <tr>
@@ -78,7 +78,7 @@
 					                <tr>
 					                    <td><c:out value="${phong[0]}"></c:out></td>
 					                    <td><c:out value="${phong[1]}"></c:out></td>
-					                    <td><c:out value="${phong[2]}"></c:out></td>
+					                    <td><c:out value="${phong[2]}"></c:out> Ngày</td>
 					                    <td>
 					                    	<fmt:parseNumber var = "temp" type = "number" 
 					                    		value = "${phong[2]}" />
@@ -88,6 +88,19 @@
 					                    				value = "${100 * temp / tongTGSD}" /> %</td>
 					                </tr>
 					            </c:forEach>
+					            	<tr>
+					            		<td></td>
+					            		<td><strong>Tổng</strong></td>
+					            		<td>
+					            			<strong>
+					            				<fmt:formatNumber type = "number" 
+					                    				groupingUsed = "false" 
+					                    				maxFractionDigits = "0"
+					                    				value = "${tongTGSD}" /> Ngày
+					                    	</strong>
+					                    </td>
+					            		<td><strong>100 %</strong></td>
+					            	</tr>
 					            </tbody>
 					        </table>
 					    </div>
